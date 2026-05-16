@@ -1,0 +1,93 @@
+{
+  "protocol_version": "1.0",
+  "response_type": "reverse_lookup_result",
+  "batch_id": "batch-01",
+  "results": [
+    {
+      "claim_id": "c-002",
+      "status": "completed",
+      "candidates": [
+        {
+          "candidate_id": "cand-strong-001",
+          "reference": {
+            "ref_id": "ref-001",
+            "title": "平台规则与数字市场治理",
+            "authors": ["模拟作者甲"],
+            "year": 2021,
+            "source": "法学研究",
+            "pages": "33-49"
+          },
+          "support_assessment": {
+            "strength": "strong_support",
+            "confidence": 0.91,
+            "reasoning": "直接讨论平台规则对表达和市场进入的影响。"
+          },
+          "match_details": {
+            "matched_snippet": "平台规则会同时影响用户表达空间与市场进入条件。",
+            "snippet_page": 36
+          },
+          "risks": []
+        }
+      ]
+    },
+    {
+      "claim_id": "c-005",
+      "status": "completed",
+      "candidates": [
+        {
+          "candidate_id": "cand-partial-001",
+          "reference": {
+            "ref_id": "ref-002",
+            "title": "比例原则的审查结构",
+            "authors": ["模拟作者乙"],
+            "year": 2019,
+            "source": "行政法评论",
+            "pages": "12-30"
+          },
+          "support_assessment": {
+            "strength": "partial_support",
+            "confidence": 0.68,
+            "reasoning": "支持比例原则的递进审查结构，但未直接讨论平台治理。"
+          },
+          "match_details": {
+            "matched_snippet": "比例原则通常包含目的、适当性、必要性与均衡性审查。",
+            "snippet_page": null
+          },
+          "risks": ["page_missing", "concept_approximate"]
+        }
+      ]
+    },
+    {
+      "claim_id": "c-009",
+      "status": "completed",
+      "candidates": []
+    },
+    {
+      "claim_id": "c-011",
+      "status": "completed",
+      "candidates": [
+        {
+          "candidate_id": "cand-conflict-001",
+          "reference": {
+            "ref_id": "ref-003",
+            "title": "算法治理中的透明度限度",
+            "authors": ["模拟作者丙"],
+            "year": 2022,
+            "source": "网络法学",
+            "pages": "80-95"
+          },
+          "support_assessment": {
+            "strength": "conflict",
+            "confidence": 0.74,
+            "reasoning": "该文主张透明度义务可能损害平台安全机制。"
+          },
+          "match_details": {
+            "matched_snippet": "过度透明可能削弱平台风控系统。",
+            "snippet_page": 88
+          },
+          "risks": []
+        }
+      ]
+    }
+  ]
+}

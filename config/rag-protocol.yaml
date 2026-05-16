@@ -1,0 +1,17 @@
+protocol_version: "1.0"
+request_type: reverse_lookup
+response_type: reverse_lookup_result
+support_strengths:
+  - strong_support
+  - partial_support
+  - background_only
+  - conflict
+  - no_support
+risks:
+  - page_missing
+  - ocr_uncertain
+  - secondhand_citation
+  - concept_approximate
+  - temporal_mismatch
+  - discipline_cross
+  - translation_gap

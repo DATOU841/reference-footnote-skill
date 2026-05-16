@@ -1,0 +1,4 @@
+target: ubuntu@beijing
+staging_status: blocked
+production_status: blocked
+notes: "No server deployment in 0.1.0-dev."

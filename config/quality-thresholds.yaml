@@ -1,0 +1,7 @@
+critical_claim_coverage_min: 0.8
+important_claim_coverage_min: 0.6
+high_risk_citation_ratio_max: 0.2
+page_missing_ratio_max: 0.3
+reference_format_consistency_required: true
+footnote_number_continuity_required: true
+ghost_citation_allowed: false

@@ -1,0 +1,5 @@
+default: chinese_legal_journal
+styles:
+  - chinese_legal_journal
+  - gb_t_7714
+  - author_date

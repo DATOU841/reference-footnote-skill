@@ -1,0 +1,6 @@
+name: 参考文献补注
+english_name: ReferenceFootnote
+version: 0.1.0-dev
+mode: offline_first
+staging_status: blocked
+production_status: blocked

@@ -1,0 +1,24 @@
+{
+  "completion_id": "completion-fixture-01",
+  "handoff_id": "search-handoff-batch-01",
+  "batch_id": "batch-01",
+  "status": "completed",
+  "results": [
+    {
+      "request_id": "si-c-009",
+      "status": "ingested",
+      "items_found": 2,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-004",
+          "title": "平台申诉机制的实证研究",
+          "authors": ["模拟作者丁"],
+          "year": 2023,
+          "rag_indexed": true
+        }
+      ],
+      "failure_reasons": []
+    }
+  ]
+}

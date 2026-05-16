@@ -1,0 +1,19 @@
+{
+  "fixtures": [
+    "article-intake-basic",
+    "claim-segmentation-law",
+    "rag-strong-support",
+    "rag-partial-support",
+    "rag-no-support-handoff",
+    "post-ingestion-relookup",
+    "page-missing-risk",
+    "evidence-conflict",
+    "no-force-insert",
+    "footnote-plan-complete",
+    "quality-gate-pass",
+    "quality-gate-fail",
+    "boundary-no-cnki",
+    "boundary-no-server",
+    "multi-round-closure"
+  ]
+}

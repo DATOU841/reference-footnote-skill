@@ -1,0 +1,10 @@
+{
+  "protocol_version": "1.0",
+  "request_type": "search_intake_gap",
+  "source_skill": "参考文献补注",
+  "target_skill": "检索入库",
+  "staging_status": "blocked",
+  "handoff_id": "",
+  "batch_id": "",
+  "requests": []
+}

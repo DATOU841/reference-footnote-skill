@@ -1,0 +1,17 @@
+forbidden:
+  - cnki
+  - wos
+  - zotero
+  - pdf_retrieval
+  - rag_ingestion
+  - live_rag_lookup
+  - openclaw-cnki-takeover
+  - localhost:22
+  - writing-pool
+  - advance-pool
+  - mimo
+  - production_deploy
+allowed:
+  - offline_fixtures
+  - json_handoffs
+  - local_runtime_after_review
