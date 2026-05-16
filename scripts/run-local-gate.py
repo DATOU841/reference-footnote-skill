@@ -22,7 +22,7 @@ def check_scripts() -> list[str]:
 
 def check_forbidden_tokens() -> list[str]:
     errors = []
-    forbidden = ["cu" + "rl ", "wg" + "et ", "sc" + "p ", "rs" + "ync ", "localhost" + ":22", "openclaw" + "-cnki-takeover"]
+    forbidden = ["cu" + "rl ", "wg" + "et ", "ss" + "h ", "sc" + "p ", "rs" + "ync ", "localhost" + ":22", "openclaw" + "-cnki-takeover"]
     for base in ["scripts", "agents"]:
         for path in (ROOT / base).glob("**/*"):
             if path.is_file():

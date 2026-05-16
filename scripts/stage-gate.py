@@ -23,13 +23,18 @@ STAGE_FILES = {
 }
 
 
+def stage_number(stage: str) -> int:
+    return int(stage[1:])
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--task-dir", required=True, type=Path)
     parser.add_argument("--stage", required=True, choices=sorted(STAGE_FILES))
     args = parser.parse_args()
     task = ensure_task(args.task_dir)
-    missing = [rel for stage, rel in STAGE_FILES.items() if stage <= args.stage and not (task / rel).exists()]
+    target_stage = stage_number(args.stage)
+    missing = [rel for stage, rel in STAGE_FILES.items() if stage_number(stage) <= target_stage and not (task / rel).exists()]
     data = result("failed" if missing else "passed", stage=args.stage, missing=missing)
     print_json(data)
     return 1 if missing else 0
