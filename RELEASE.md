@@ -9,6 +9,7 @@ Status: pre-Claude-review development build.
 - Offline stage machine and protocol implementation.
 - Fixture-driven RAG reverse lookup, evidence interpretation, search-intake handoff, footnote planning, and delivery package generation.
 - Local runtime install support after review.
+- Public Chinese introduction for demonstration and stakeholder-facing feature overview.
 
 ### Blocked
 
