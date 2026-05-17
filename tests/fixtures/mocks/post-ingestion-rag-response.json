@@ -1,0 +1,34 @@
+{
+  "protocol_version": "1.0",
+  "response_type": "reverse_lookup_result",
+  "batch_id": "post-ingestion-01",
+  "results": [
+    {
+      "claim_id": "c-009",
+      "status": "completed",
+      "candidates": [
+        {
+          "candidate_id": "cand-post-001",
+          "reference": {
+            "ref_id": "ref-004",
+            "title": "平台申诉机制的实证研究",
+            "authors": ["模拟作者丁"],
+            "year": 2023,
+            "source": "法学评论",
+            "pages": "101-122"
+          },
+          "support_assessment": {
+            "strength": "strong_support",
+            "confidence": 0.88,
+            "reasoning": "补库文献直接讨论平台申诉机制与救济可及性。"
+          },
+          "match_details": {
+            "matched_snippet": "平台申诉机制的程序透明度会影响用户救济可及性。",
+            "snippet_page": 109
+          },
+          "risks": []
+        }
+      ]
+    }
+  ]
+}

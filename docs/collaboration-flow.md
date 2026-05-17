@@ -1,6 +1,6 @@
 # Collaboration Flow
 
-`0.2.0-dev` adds a collaboration layer for calling `检索入库` and then preparing post-ingestion RAG reverse lookup. The core rule is unchanged: ReferenceFootnote prepares structured packages; it does not execute real CNKI/WoS/Zotero/PDF/RAG work.
+`0.3.0-dev` extends the collaboration layer for calling `检索入库` and then preparing post-ingestion RAG reverse lookup. The core rule is unchanged: ReferenceFootnote prepares structured packages; it does not execute real CNKI/WoS/Zotero/PDF/RAG work.
 
 ## Flow
 
@@ -14,6 +14,8 @@
 8. A RAG platform operator returns `reverse_lookup_result`.
 9. Validate returned RAG response with `validate-rag-response.py`.
 10. Rebuild evidence map, footnote plan, quality report, and delivery package.
+
+`tests/run-fixtures.py` includes an offline closure fixture for steps 7-10. It verifies that a post-ingestion RAG response for a previously unsupported claim can update the evidence map and produce an insertion plan without any live RAG call.
 
 ## Search-Intake Call Package
 
@@ -35,6 +37,7 @@ The JSON package contains:
 - source and target skill names
 - execution status `prepared_not_executed`
 - explicit requirement for user authorization before real search
+- optional `allowed_server_entry_if_authorized`, which is metadata for `检索入库` and must not be executed by ReferenceFootnote
 - the original `handoff.requests[]`
 - expected `intake_completion` schema
 - forbidden actions for ReferenceFootnote

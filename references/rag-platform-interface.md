@@ -4,7 +4,7 @@ ReferenceFootnote uses RAG only through reverse-lookup request and response pack
 
 ## Before Ingestion
 
-`build-rag-request.py` prepares reverse lookup requests for claims whose citation need is critical, important, or recommended. In 0.2.0-dev this remains offline.
+`build-rag-request.py` prepares reverse lookup requests for claims whose citation need is critical, important, or recommended. In 0.3.0-dev this remains offline.
 
 ## After Search Intake
 
@@ -36,3 +36,15 @@ RAG responses must use:
 Missing page numbers, OCR uncertainty, secondhand citation, approximate concepts, temporal mismatch, cross-discipline use, and translation gaps must be preserved as risks.
 
 RAG hits are candidates only. They become citation suggestions only after `validate-rag-response.py`, `build-evidence-map.py`, and `validate-citation-plan.py` pass.
+
+## Offline Closure Fixture
+
+`tests/fixtures/mocks/post-ingestion-rag-response.json` demonstrates a post-ingestion response for a previously unsupported claim. The fixture flow is:
+
+1. Build post-ingestion call package.
+2. Validate the returned RAG response.
+3. Rebuild evidence map.
+4. Confirm the claim moves from `no_support` to `strong_support`.
+5. Rebuild footnote insertion plan.
+
+This verifies closure mechanics without any live RAG query.

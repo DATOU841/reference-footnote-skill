@@ -15,6 +15,7 @@ ARTICLE = ROOT / "tests" / "fixtures" / "articles" / "sample-law-article.md"
 RAG = ROOT / "tests" / "fixtures" / "mocks" / "rag-service-mock.json"
 COMPLETION = ROOT / "tests" / "fixtures" / "mocks" / "intake-completion.json"
 FULL_COMPLETION = ROOT / "tests" / "fixtures" / "fixture-intake-completion-full.json"
+POST_INGESTION_RAG = ROOT / "tests" / "fixtures" / "mocks" / "post-ingestion-rag-response.json"
 
 
 def run(args: list[str]) -> tuple[int, dict]:
@@ -213,12 +214,33 @@ def fixture_18(base: Path) -> None:
     assert package["claims"]
 
 
+def fixture_19(base: Path) -> None:
+    task = base / "post-ingestion-evidence-closure"
+    base_flow(task)
+    code, data = run(["python3", "scripts/build-post-ingestion-rag-call.py", "--task-dir", str(task), "--batch-id", "post-ingestion-01"])
+    assert code == 0, data
+    request = task / "state" / "rag-calls" / "post-ingestion-01.json"
+    code, data = run(["python3", "scripts/validate-rag-response.py", "--task-dir", str(task), "--request", str(request), "--response", str(POST_INGESTION_RAG)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/build-evidence-map.py", "--task-dir", str(task)])
+    assert code == 0, data
+    evidence = read(task / "state" / "evidence-map.json")
+    claim = next(item for item in evidence["claim_evidence"] if item["claim_id"] == "c-009")
+    assert claim["evidence_status"] == "strong_support"
+    assert claim["candidates"][0]["reference"]["ref_id"] == "ref-004"
+    code, data = run(["python3", "scripts/plan-footnotes.py", "--task-dir", str(task)])
+    assert code == 0, data
+    plan = read(task / "state" / "insertion-plan.json")
+    assert any(item["claim_id"] == "c-009" for item in plan["insertions"])
+
+
 FIXTURES = [
     fixture_01, fixture_02, fixture_03, fixture_04, fixture_05,
     fixture_06, fixture_07, fixture_08, fixture_09, fixture_10,
     fixture_11, fixture_12, fixture_13, fixture_14, fixture_15,
     fixture_16,
     fixture_17, fixture_18,
+    fixture_19,
 ]
 
 

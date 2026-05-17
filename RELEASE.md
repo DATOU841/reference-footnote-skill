@@ -1,5 +1,19 @@
 # Release Notes
 
+## 0.3.0-dev
+
+Status: pre-Claude-review development build.
+
+### Scope
+
+- Offline post-ingestion RAG closure fixture.
+- Expanded A7.5/A8.5 agent guidance.
+- Documented collaboration call package schemas.
+
+### Required Before Publication
+
+Run local gates, request Claude review, fix P0/P1, commit, tag `0.3.0-dev`, and push.
+
 ## 0.2.0-dev
 
 Status: pre-Claude-review development build.

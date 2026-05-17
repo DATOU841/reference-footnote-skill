@@ -17,6 +17,7 @@
     "multi-round-closure",
     "full-intake-completion-schema",
     "search-intake-call-package",
-    "post-ingestion-rag-call"
+    "post-ingestion-rag-call",
+    "post-ingestion-evidence-closure"
   ]
 }

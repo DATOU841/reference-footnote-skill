@@ -64,7 +64,7 @@ ReferenceFootnote 本身不运行 CNKI、WoS、Zotero、PDF 获取或 RAG 导库
 
 ### 7. 补库后二轮反查
 
-当 `检索入库` 返回入库完成状态后，ReferenceFootnote 可以记录完成结果，并为补库后的再次 RAG 反查建立闭环。0.2.0-dev 版本会生成二轮 RAG 反查调用包，只把已确认 `rag_indexed=true` 的来源纳入再次反查。
+当 `检索入库` 返回入库完成状态后，ReferenceFootnote 可以记录完成结果，并为补库后的再次 RAG 反查建立闭环。0.3.0-dev 版本会生成二轮 RAG 反查调用包，只把已确认 `rag_indexed=true` 的来源纳入再次反查，并用离线 fixture 验证返回结果如何更新证据映射和脚注计划。
 
 ### 8. 脚注与参考文献补充计划
 
@@ -141,6 +141,6 @@ ReferenceFootnote 的边界很清楚：
 
 ## 当前版本状态
 
-`0.2.0-dev` 是协同调用增强版本，在离线优先的基础上增加了 `检索入库` 调用包和补库后二轮 RAG 反查调用包。它可以说明“下一步应由哪个 skill 或系统执行”，并生成 JSON 包和中文提示词，但仍不直接运行真实检索、入库或 RAG 查询。staging 和 production 默认保持 blocked。
+`0.3.0-dev` 是协同闭环增强版本，在离线优先的基础上增加了 `检索入库` 调用包、补库后二轮 RAG 反查调用包，以及二轮 RAG 返回后的证据重建 fixture。它可以说明“下一步应由哪个 skill 或系统执行”，并生成 JSON 包和中文提示词，但仍不直接运行真实检索、入库或 RAG 查询。staging 和 production 默认保持 blocked。
 
 这个版本适合用于展示 ReferenceFootnote 的工作流、协议边界和离线验证能力；正式文章补注和真实外部服务集成应在后续版本中逐步开放。

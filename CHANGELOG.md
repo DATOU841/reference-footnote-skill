@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.3.0-dev - 2026-05-17
+
+- Added an offline post-ingestion RAG closure fixture that validates the returned RAG response, rebuilds the evidence map, and regenerates the insertion plan.
+- Expanded coordinator and RAG interpreter agent guidance for A7.5/A8.5 collaboration stages.
+- Documented search-intake and post-ingestion RAG call package schemas, including downstream-only server entry metadata.
+
 ## 0.2.0-dev - 2026-05-17
 
 - Added offline collaboration call packages for invoking `检索入库` through structured JSON and a generated Chinese prompt.

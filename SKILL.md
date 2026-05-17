@@ -5,7 +5,7 @@ description: Use for ReferenceFootnote workflows on already-written academic art
 
 # 参考文献补注 Skill
 
-版本：0.2.0-dev
+版本：0.3.0-dev
 
 ## 硬边界
 

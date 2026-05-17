@@ -12,7 +12,7 @@ Top-level fields:
 | `request_type` | yes | 固定为 `search_intake_gap` |
 | `source_skill` | yes | 固定为 `参考文献补注` |
 | `target_skill` | yes | 固定为 `检索入库` |
-| `staging_status` | yes | 0.2.0-dev 固定为 `blocked` |
+| `staging_status` | yes | 0.3.0-dev 固定为 `blocked` |
 | `handoff_id` | yes | 本批交接 ID |
 | `batch_id` | yes | 分批 ID |
 | `macro_round` | yes | `round1` 或 `round2` |
@@ -115,3 +115,34 @@ Top-level fields:
 - `rewrite_suggestion`
 
 `no_insert_zones[]` should include `no_insert_reason` and optional `writer_action` so writer can decide whether to mark author opinion, lower claim strength, delete, or send to human review.
+
+## Search-Intake Call Package Schema
+
+`build-search-intake-call.py` wraps a search-intake handoff for an external `检索入库` run.
+
+| Field | Meaning |
+| --- | --- |
+| `call_type` | `skill_handoff_call` |
+| `call_id` | call package ID |
+| `source_skill` | `参考文献补注` |
+| `target_skill` | `检索入库` |
+| `execution_status` | fixed `prepared_not_executed` |
+| `requires_user_authorization_for_real_search` | true |
+| `allowed_real_executor` | `检索入库` |
+| `allowed_server_entry_if_authorized` | optional metadata for the downstream executor; ReferenceFootnote must not execute it |
+| `forbidden_for_referencefootnote[]` | forbidden external actions |
+| `handoff` | original search-intake request |
+| `expected_completion_schema` | completion fields that `apply-intake-completion.py` validates |
+
+## Post-Ingestion RAG Call Package Schema
+
+`build-post-ingestion-rag-call.py` prepares a second RAG lookup after ingestion.
+
+| Field | Meaning |
+| --- | --- |
+| `call_type` | `rag_reverse_lookup_after_ingestion` |
+| `target_system` | `RAG platform` |
+| `execution_status` | fixed `prepared_not_executed` |
+| `requires_external_rag_operator` | true |
+| `claims[]` | only claims whose completion row has `import_status.rag_indexed=true` |
+| `return_contract` | required RAG response fields and risk policy |

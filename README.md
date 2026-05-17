@@ -2,13 +2,13 @@
 
 `参考文献补注 / ReferenceFootnote` 是一个面向已写文章的 Codex skill，用于系统诊断引用需求、构建 RAG 文献反查请求、解释候选证据、生成 `检索入库` 补库交接、规划脚注/参考文献插入方案，并打包 citation QA 交付物。
 
-版本：`0.2.0-dev`
+版本：`0.3.0-dev`
 
 公开展示版中文介绍见：[docs/public-introduction.zh.md](docs/public-introduction.zh.md)。
 
 当前版本是离线优先开发版，不运行正式文章任务、CNKI/WoS/Zotero/PDF 获取、RAG 导库、写作池、推进池、mimo、服务器部署或 production 工作流。
 
-`0.2.0-dev` 增加协同调用层：ReferenceFootnote 可以为必要文献检索和入库生成 `检索入库` skill 调用包，并在入库完成后生成二轮 RAG 文献反查调用包。调用包只负责准备 JSON 和提示词，真实执行仍由对应 skill 或平台完成。
+`0.3.0-dev` 增强协同闭环：ReferenceFootnote 可以为必要文献检索和入库生成 `检索入库` skill 调用包，在入库完成后生成二轮 RAG 文献反查调用包，并用离线 fixture 验证二轮 RAG 返回后重建证据映射和脚注计划。调用包只负责准备 JSON 和提示词，真实执行仍由对应 skill 或平台完成。
 
 本地校验：
 

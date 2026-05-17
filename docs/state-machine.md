@@ -19,4 +19,4 @@ ReferenceFootnote uses an offline-first stage machine:
 | A10 | citation quality gate | insertion plan | `quality-report.json` | blocking issues identified |
 | A11 | delivery package | all prior outputs | `delivery/` | required artifacts copied |
 
-Stages are deterministic in 0.2.0-dev. Collaboration stages produce call packages only; they do not execute real search, ingestion, or RAG queries. Failures must be captured as offline fixtures before script or skill changes.
+Stages are deterministic in 0.3.0-dev. Collaboration stages produce call packages only; they do not execute real search, ingestion, or RAG queries. Failures must be captured as offline fixtures before script or skill changes.

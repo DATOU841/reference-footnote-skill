@@ -1,6 +1,6 @@
 # Architecture
 
-ReferenceFootnote is a deterministic offline protocol skill in 0.2.0-dev. Scripts read and write JSON artifacts under a task directory. External systems are represented by request/response and collaboration-call files only.
+ReferenceFootnote is a deterministic offline protocol skill in 0.3.0-dev. Scripts read and write JSON artifacts under a task directory. External systems are represented by request/response and collaboration-call files only.
 
 Core layers:
 
