@@ -1,6 +1,6 @@
 # Boundary Rules
 
-Forbidden in 0.1.0-dev:
+Forbidden in 0.2.0-dev:
 
 - CNKI, WoS, Zotero, PDF retrieval, or RAG ingestion.
 - Live RAG reverse lookup.

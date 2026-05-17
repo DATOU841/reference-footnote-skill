@@ -26,7 +26,7 @@ Status: pre-Claude-review development build.
 - Public Chinese introduction for demonstration and stakeholder-facing feature overview.
 - Expanded handoff compatibility with `检索入库` and `正文写作`, including round, gap, KB routing, evidence type, source role, consumption depth, and GB/T 7714 footnote fields.
 
-### Planned For 0.2.0
+### Planned After 0.2.0
 
 - Multi-round RAG reverse lookup closure.
 - Existing-reference merge with Zotero reference master.

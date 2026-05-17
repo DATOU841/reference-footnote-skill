@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
-from reflib import copy_if_exists, ensure_task, print_json, read_json, result, write_json
+from reflib import VERSION, copy_if_exists, ensure_task, print_json, read_json, result, write_json
 
 
 def main() -> int:
@@ -41,7 +41,7 @@ def main() -> int:
         "high_risk_unsupported": evidence.get("high_risk_unsupported", []),
         "unresolved_critical_claims": unresolved,
         "existing_references_merge_status": {
-            "status": "not_implemented_in_0.1.0-dev",
+            "status": f"not_implemented_in_{VERSION}",
             "existing_references_verified": plan.get("reference_list", {}).get("existing_references_verified", []),
             "zotero_reference_master_merge": "pending_manual_or_writer_side_merge",
         },
@@ -55,7 +55,7 @@ def main() -> int:
     write_json(delivery / "handoff_to_writing.json", handoff)
     write_json(delivery / "statistics.json", {"insertions": len(plan["insertions"]), "no_insert_zones": len(plan["no_insert_zones"])})
     (delivery / "summary.md").write_text(f"# ReferenceFootnote Delivery\n\nQuality status: {quality['status']}\n", encoding="utf-8")
-    (delivery / "changelog.md").write_text("# Citation Change Log\n\nGenerated offline by ReferenceFootnote 0.1.0-dev.\n", encoding="utf-8")
+    (delivery / "changelog.md").write_text(f"# Citation Change Log\n\nGenerated offline by ReferenceFootnote {VERSION}.\n", encoding="utf-8")
     print_json(result("passed", output=str(delivery)))
     return 0
 

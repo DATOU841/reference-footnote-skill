@@ -12,7 +12,7 @@ Top-level fields:
 | `request_type` | yes | 固定为 `search_intake_gap` |
 | `source_skill` | yes | 固定为 `参考文献补注` |
 | `target_skill` | yes | 固定为 `检索入库` |
-| `staging_status` | yes | 0.1.0-dev 固定为 `blocked` |
+| `staging_status` | yes | 0.2.0-dev 固定为 `blocked` |
 | `handoff_id` | yes | 本批交接 ID |
 | `batch_id` | yes | 分批 ID |
 | `macro_round` | yes | `round1` 或 `round2` |
