@@ -29,8 +29,28 @@ def main() -> int:
         "rewrite_suggestions": [i for i in plan["insertions"] if i.get("requires_rewrite")],
         "risk_citations": [i for i in plan["insertions"] if i["evidence_basis"].get("risks")],
         "no_support_critical": evidence.get("critical_gaps", []),
+        "high_risk_unsupported": evidence.get("high_risk_unsupported", []),
     }
-    handoff = {"target_skill": "正文写作", "insertions": plan["insertions"], "no_insert_zones": plan["no_insert_zones"], "quality_status": quality["status"]}
+    unresolved = [gap for gap in evidence.get("critical_gaps", []) if gap.get("need_level") == "critical"]
+    handoff = {
+        "target_skill": "正文写作",
+        "protocol_version": "1.0",
+        "quality_status": quality["status"],
+        "insertions": plan["insertions"],
+        "no_insert_zones": plan["no_insert_zones"],
+        "high_risk_unsupported": evidence.get("high_risk_unsupported", []),
+        "unresolved_critical_claims": unresolved,
+        "existing_references_merge_status": {
+            "status": "not_implemented_in_0.1.0-dev",
+            "existing_references_verified": plan.get("reference_list", {}).get("existing_references_verified", []),
+            "zotero_reference_master_merge": "pending_manual_or_writer_side_merge",
+        },
+        "writer_consumption_notes": {
+            "r2_a1_gap_routing": "unsupported critical/important claims may become gap-routing-table entries",
+            "r2_a2_search_plan": "search-intake requests can be transformed into round2-search-plan rows",
+            "citation_hygiene": "gbt7714_footnote and risks are provided for writer-side citation checks",
+        },
+    }
     write_json(delivery / "human_review_needed.json", human_review)
     write_json(delivery / "handoff_to_writing.json", handoff)
     write_json(delivery / "statistics.json", {"insertions": len(plan["insertions"]), "no_insert_zones": len(plan["no_insert_zones"])})

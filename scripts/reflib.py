@@ -21,6 +21,60 @@ RISK_FLAGS = {
 }
 
 
+def search_dimensions_for_text(text: str) -> dict:
+    terms = [w for w in ["平台", "规则", "比例原则", "产权", "自动化审核", "申诉", "透明度"] if w in text]
+    english = {
+        "平台": "platform",
+        "规则": "rules",
+        "比例原则": "proportionality principle",
+        "产权": "property rights",
+        "自动化审核": "automated review",
+        "申诉": "appeal mechanism",
+        "透明度": "transparency",
+    }
+    return {
+        "semantic": {"query": text, "weight": 0.4},
+        "keyword": {"terms": terms or [text[:12]], "weight": 0.2},
+        "keyword_en": {"terms": [english[t] for t in terms if t in english], "weight": 0.1},
+        "concept": {"concepts": terms, "ontology_hints": [], "weight": 0.2},
+        "author": {"names": [], "weight": 0.1},
+        "theory": {"terms": [t for t in terms if t in {"比例原则", "产权"}], "weight": 0.1},
+        "citation_network": {"known_refs": [], "weight": 0.1},
+    }
+
+
+def infer_evidence_type(claim_type: str, ref: dict | None = None) -> str:
+    ref = ref or {}
+    if claim_type in {"theoretical_claim", "academic_judgment", "definition"}:
+        return "后设归纳"
+    if claim_type in {"factual_claim", "data_judgment", "historical_narrative"}:
+        return "材料依据"
+    if ref.get("source_type") == "primary_source":
+        return "一手材料"
+    return "文本证据"
+
+
+def infer_source_role(claim_type: str, citation_type: str | None = None) -> str:
+    if citation_type == "authority" or claim_type == "theoretical_claim":
+        return "理论锚点"
+    if claim_type == "definition":
+        return "概念界定"
+    if claim_type in {"academic_judgment", "historical_narrative"}:
+        return "学术史定位"
+    if claim_type in {"factual_claim", "data_judgment"}:
+        return "材料依据"
+    if claim_type == "policy_judgment":
+        return "关键争议"
+    return "旁证补充"
+
+
+def consumption_depth_for_strength(strength: str, risks: list[str] | None = None) -> str:
+    risks = risks or []
+    if strength == "strong_support" and not risks:
+        return "深度消费"
+    return "浅要参考"
+
+
 def now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 

@@ -6,5 +6,38 @@
   "staging_status": "blocked",
   "handoff_id": "",
   "batch_id": "",
-  "requests": []
+  "macro_round": "round1",
+  "priority": "P0",
+  "requests": [
+    {
+      "request_id": "",
+      "macro_round": "round1",
+      "gap_id": "",
+      "claim_id": "",
+      "claim_text": "",
+      "claim_type": "",
+      "need_level": "critical",
+      "source_need": "secondary_source",
+      "priority": "P0",
+      "source_direction": "",
+      "purpose": "",
+      "minimum_requirement": "",
+      "ideal_requirement": "",
+      "search_strategy": {
+        "keywords_zh": [],
+        "keywords_en": [],
+        "author_hints": [],
+        "theory_hints": [],
+        "databases": ["CNKI", "WoS"],
+        "source_types": ["journal_article", "monograph"],
+        "discipline": "",
+        "constraints": {
+          "gap_driven_only": true,
+          "no_general_pool_expansion": true,
+          "requires_pdf_when_available": true,
+          "target_kb": "B"
+        }
+      }
+    }
+  ]
 }

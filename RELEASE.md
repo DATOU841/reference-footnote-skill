@@ -10,6 +10,15 @@ Status: pre-Claude-review development build.
 - Fixture-driven RAG reverse lookup, evidence interpretation, search-intake handoff, footnote planning, and delivery package generation.
 - Local runtime install support after review.
 - Public Chinese introduction for demonstration and stakeholder-facing feature overview.
+- Expanded handoff compatibility with `检索入库` and `正文写作`, including round, gap, KB routing, evidence type, source role, consumption depth, and GB/T 7714 footnote fields.
+
+### Planned For 0.2.0
+
+- Multi-round RAG reverse lookup closure.
+- Existing-reference merge with Zotero reference master.
+- Source concentration report and source consumption priority map generation.
+- Writer scan output conversion for citation hygiene and critical claim checks.
+- GitHub release gate script for staging/production promotion.
 
 ### Blocked
 

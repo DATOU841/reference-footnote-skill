@@ -14,6 +14,7 @@
     "quality-gate-fail",
     "boundary-no-cnki",
     "boundary-no-server",
-    "multi-round-closure"
+    "multi-round-closure",
+    "full-intake-completion-schema"
   ]
 }

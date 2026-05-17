@@ -3,5 +3,29 @@
   "handoff_id": "",
   "batch_id": "",
   "status": "completed",
-  "results": []
+  "results": [
+    {
+      "request_id": "",
+      "claim_id": "",
+      "status": "completed",
+      "sources_found": [],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": ""
+      },
+      "pdf_status": {
+        "required": true,
+        "available": false,
+        "verified": false
+      },
+      "import_status": {
+        "stage25_ready": false,
+        "rag_indexed": false,
+        "import_batch_id": null
+      },
+      "zotero_id": null,
+      "ref_metadata": null
+    }
+  ]
 }

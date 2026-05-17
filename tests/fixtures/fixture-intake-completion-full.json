@@ -1,0 +1,101 @@
+{
+  "completion_id": "completion-full-fixture-01",
+  "handoff_id": "search-handoff-batch-01",
+  "batch_id": "batch-01",
+  "status": "partial",
+  "results": [
+    {
+      "request_id": "si-c-009",
+      "claim_id": "c-009",
+      "status": "completed",
+      "sources_found": [
+        {
+          "source_id": "src-001",
+          "title": "平台申诉机制的实证研究",
+          "match_status": "direct"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-import-01"
+      },
+      "zotero_id": "ABC123",
+      "ref_metadata": {
+        "title": "平台申诉机制的实证研究",
+        "authors": ["模拟作者丁"],
+        "year": 2023,
+        "source": "法学评论",
+        "pages": "101-122"
+      }
+    },
+    {
+      "request_id": "si-c-010",
+      "claim_id": "c-010",
+      "status": "partial",
+      "sources_found": [
+        {
+          "source_id": "src-002",
+          "title": "平台透明度义务研究",
+          "match_status": "background"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": false,
+        "verified": false
+      },
+      "import_status": {
+        "stage25_ready": false,
+        "rag_indexed": false,
+        "import_batch_id": null
+      },
+      "zotero_id": "DEF456",
+      "ref_metadata": {
+        "title": "平台透明度义务研究",
+        "authors": ["模拟作者戊"],
+        "year": 2022,
+        "source": "网络法学",
+        "pages": "44-66"
+      }
+    },
+    {
+      "request_id": "si-c-011",
+      "claim_id": "c-011",
+      "status": "failed",
+      "sources_found": [],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": null
+      },
+      "pdf_status": {
+        "required": true,
+        "available": false,
+        "verified": false
+      },
+      "import_status": {
+        "stage25_ready": false,
+        "rag_indexed": false,
+        "import_batch_id": null
+      },
+      "zotero_id": null,
+      "ref_metadata": null
+    }
+  ]
+}

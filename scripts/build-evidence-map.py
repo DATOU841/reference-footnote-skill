@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
-from reflib import ensure_task, print_json, read_json, result, write_json
+from reflib import ensure_task, print_json, read_json, result, search_dimensions_for_text, write_json
 
 
 def main() -> int:
@@ -41,7 +41,7 @@ def main() -> int:
             risks = []
             candidates = []
         summary[strength] = summary.get(strength, 0) + 1
-        entry = {**need, "evidence_status": strength, "risks": risks, "candidates": candidates}
+        entry = {**need, "evidence_status": strength, "risks": risks, "candidates": candidates, "search_dimensions": search_dimensions_for_text(need["text"])}
         entries.append(entry)
         if strength == "no_support" and need["need_level"] in {"critical", "important"}:
             critical_gaps.append(entry)

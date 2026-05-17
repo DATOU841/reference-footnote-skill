@@ -6,7 +6,38 @@
   "results": [
     {
       "request_id": "si-c-009",
+      "claim_id": "c-009",
       "status": "ingested",
+      "sources_found": [
+        {
+          "source_id": "src-001",
+          "title": "平台申诉机制的实证研究",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-import-01"
+      },
+      "zotero_id": "ABC123",
+      "ref_metadata": {
+        "title": "平台申诉机制的实证研究",
+        "authors": ["模拟作者丁"],
+        "year": 2023,
+        "source": "法学评论",
+        "pages": "101-122"
+      },
       "items_found": 2,
       "items_ingested": 1,
       "ingested_refs": [

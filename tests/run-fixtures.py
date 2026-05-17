@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ARTICLE = ROOT / "tests" / "fixtures" / "articles" / "sample-law-article.md"
 RAG = ROOT / "tests" / "fixtures" / "mocks" / "rag-service-mock.json"
 COMPLETION = ROOT / "tests" / "fixtures" / "mocks" / "intake-completion.json"
+FULL_COMPLETION = ROOT / "tests" / "fixtures" / "fixture-intake-completion-full.json"
 
 
 def run(args: list[str]) -> tuple[int, dict]:
@@ -175,12 +176,27 @@ def fixture_15(base: Path) -> None:
     delivery = task / "delivery"
     assert (delivery / "handoff_to_writing.json").exists()
     assert (delivery / "human_review_needed.json").exists()
+    handoff = read(delivery / "handoff_to_writing.json")
+    assert "unresolved_critical_claims" in handoff
+    assert "existing_references_merge_status" in handoff
+
+
+def fixture_16(base: Path) -> None:
+    task = base / "full-intake-completion-schema"
+    code, data = run(["python3", "scripts/startup.py", "--task-dir", str(task)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/apply-intake-completion.py", "--task-dir", str(task), "--completion", str(FULL_COMPLETION)])
+    assert code == 0, data
+    intake = read(task / "state" / "intake-status.json")
+    assert len(intake["results"]) == 3
+    assert intake["results"][0]["kb_routing"]["target_kb"] == "B"
 
 
 FIXTURES = [
     fixture_01, fixture_02, fixture_03, fixture_04, fixture_05,
     fixture_06, fixture_07, fixture_08, fixture_09, fixture_10,
     fixture_11, fixture_12, fixture_13, fixture_14, fixture_15,
+    fixture_16,
 ]
 
 
