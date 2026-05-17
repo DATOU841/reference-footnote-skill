@@ -33,14 +33,34 @@ def check_forbidden_tokens() -> list[str]:
     return errors
 
 
+def review_path() -> Path:
+    return Path(os.environ.get("REFERENCEFOOTNOTE_REVIEW_PATH", ROOT / ".handoff" / "claude" / f"{VERSION}-review.md"))
+
+
 def check_claude_review(required: bool) -> list[str]:
-    review = Path(os.environ.get("REFERENCEFOOTNOTE_REVIEW_PATH", ROOT / ".handoff" / "claude" / f"{VERSION}-review.md"))
+    review = review_path()
     if not review.exists():
         return ["Claude review missing"] if required else []
     text = review.read_text(encoding="utf-8")
     if "APPROVED_WITH_NOTES" in text or "APPROVED" in text:
         return []
     return ["Claude review exists but is not approved"]
+
+
+def check_pre_review_handoff() -> list[str]:
+    errors = []
+    prompt = ROOT / ".handoff" / "claude" / f"{VERSION}-review-prompt.md"
+    context = ROOT / ".handoff" / "claude" / f"{VERSION}-review-context.md"
+    if not prompt.exists():
+        errors.append(f"Claude review prompt missing: {prompt.relative_to(ROOT)}")
+    if not context.exists():
+        errors.append(f"Claude review context missing: {context.relative_to(ROOT)}")
+    review = review_path()
+    if review.exists():
+        text = review.read_text(encoding="utf-8")
+        if "APPROVED_WITH_NOTES" in text or "APPROVED" in text or "CHANGES_REQUESTED" in text:
+            errors.append(f"pre-review mode must not contain a completed Claude verdict: {review.relative_to(ROOT)}")
+    return errors
 
 
 def check_git_release() -> list[str]:
@@ -77,8 +97,7 @@ def main() -> int:
         errors.extend(check_claude_review(required=True))
         errors.extend(check_git_release())
     else:
-        if not check_claude_review(required=True):
-            errors.append("pre-review mode expected Claude review to be absent or unpublished")
+        errors.extend(check_pre_review_handoff())
     print_json(result("failed" if errors else "passed", mode="release" if args.release else "pre-review", errors=errors))
     return 1 if errors else 0
 
