@@ -5,7 +5,7 @@ description: Use for ReferenceFootnote workflows on already-written academic art
 
 # 参考文献补注 Skill
 
-版本：0.1.0-dev
+版本：0.2.0-dev
 
 ## 硬边界
 
@@ -29,16 +29,19 @@ description: Use for ReferenceFootnote workflows on already-written academic art
 6. A5 RAG 证据解释：用 `scripts/validate-rag-response.py` 验证 fixture 或外部交回的离线响应。
 7. A6 证据映射：用 `scripts/build-evidence-map.py` 汇总支撑强度、风险和缺口。
 8. A7 检索入库交接：用 `scripts/build-search-handoff.py` 为无支撑关键 claim 生成分批请求。
-9. A8 补库完成应用：用 `scripts/apply-intake-completion.py` 记录 `检索入库` 返回状态。
-10. A9 脚注方案：用 `scripts/plan-footnotes.py` 生成插入建议、参考文献表和 no-insert zones。
-11. A10 质量门禁：用 `scripts/validate-citation-plan.py` 生成质量报告。
-12. A11 交付包：用 `scripts/build-delivery.py` 生成 delivery package。
+9. A7.5 检索入库调用包：用 `scripts/build-search-intake-call.py` 生成交给 `检索入库` 的 JSON 调用包和中文提示词，等待用户授权或外部执行。
+10. A8 补库完成应用：用 `scripts/apply-intake-completion.py` 记录 `检索入库` 返回状态。
+11. A8.5 补库后二轮 RAG 调用包：用 `scripts/build-post-ingestion-rag-call.py` 为已入库来源生成二轮 RAG 反查调用包。
+12. A9 脚注方案：用 `scripts/plan-footnotes.py` 生成插入建议、参考文献表和 no-insert zones。
+13. A10 质量门禁：用 `scripts/validate-citation-plan.py` 生成质量报告。
+14. A11 交付包：用 `scripts/build-delivery.py` 生成 delivery package。
 
 ## 何时读取参考文件
 
 - 需要阶段机细节时读 `docs/state-machine.md`。
 - 需要 RAG 反查请求/响应格式时读 `docs/rag-protocol.md`。
 - 需要与 `检索入库` 或 `正文写作` 交接时读 `docs/handoff-protocol.md`。
+- 需要理解检索入库调用包和补库后二轮 RAG 调用时读 `docs/collaboration-flow.md`。
 - 需要判断证据强度和风险时读 `docs/evidence-classification.md`。
 - 需要发布或部署边界时读 `docs/quality-gates.md` 和 `docs/boundary-rules.md`。
 

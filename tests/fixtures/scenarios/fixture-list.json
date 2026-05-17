@@ -15,6 +15,8 @@
     "boundary-no-cnki",
     "boundary-no-server",
     "multi-round-closure",
-    "full-intake-completion-schema"
+    "full-intake-completion-schema",
+    "search-intake-call-package",
+    "post-ingestion-rag-call"
   ]
 }

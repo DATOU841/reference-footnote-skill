@@ -11,8 +11,10 @@ REQUIRED = [
     "docs/architecture.md", "docs/state-machine.md", "docs/rag-protocol.md",
     "docs/handoff-protocol.md", "docs/evidence-classification.md", "docs/claim-taxonomy.md",
     "docs/quality-gates.md", "docs/boundary-rules.md", "docs/glossary.md",
+    "docs/collaboration-flow.md",
     "references/scholar-polish-protocol.md", "references/search-intake-interface.md",
-    "references/writing-skill-interface.md", "config/skill.yaml", "config/boundaries.yaml",
+    "references/writing-skill-interface.md", "references/rag-platform-interface.md",
+    "config/skill.yaml", "config/boundaries.yaml",
     "config/quality-thresholds.yaml", "config/claim-types.yaml", "config/citation-styles.yaml",
     "config/rag-protocol.yaml", "agents/claim-segmenter.md", "agents/citation-diagnostician.md",
     "agents/rag-interpreter.md", "agents/footnote-planner.md", "agents/quality-auditor.md",
@@ -22,7 +24,8 @@ REQUIRED = [
     "templates/rag-lookup-request.template.json", "templates/rag-lookup-response.template.json",
     "templates/evidence-map.template.json", "templates/search-intake-request.template.json",
     "templates/intake-completion.template.json", "templates/insertion-plan.template.json",
-    "templates/quality-report.template.json", "tests/fixtures/README.md",
+    "templates/quality-report.template.json", "scripts/build-search-intake-call.py",
+    "scripts/build-post-ingestion-rag-call.py", "tests/fixtures/README.md",
 ]
 
 

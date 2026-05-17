@@ -1,5 +1,19 @@
 # Release Notes
 
+## 0.2.0-dev
+
+Status: pre-Claude-review development build.
+
+### Scope
+
+- Offline collaboration call package for `检索入库`.
+- Offline post-ingestion RAG reverse-lookup call package.
+- Explicit boundary that ReferenceFootnote prepares calls but never executes real CNKI/WoS/Zotero/PDF/RAG work.
+
+### Required Before Publication
+
+Run local gates, request Claude review, fix P0/P1, commit, tag `0.2.0-dev`, and push.
+
 ## 0.1.0-dev
 
 Status: pre-Claude-review development build.

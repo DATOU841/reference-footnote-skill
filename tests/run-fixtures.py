@@ -192,11 +192,33 @@ def fixture_16(base: Path) -> None:
     assert intake["results"][0]["kb_routing"]["target_kb"] == "B"
 
 
+def fixture_17(base: Path) -> None:
+    task = base / "search-intake-call-package"
+    base_flow(task)
+    code, data = run(["python3", "scripts/build-search-intake-call.py", "--task-dir", str(task), "--batch-id", "batch-01"])
+    assert code == 0, data
+    package = read(task / "state" / "search-intake-calls" / "batch-01.json")
+    assert package["target_skill"] == "检索入库"
+    assert package["execution_status"] == "prepared_not_executed"
+    assert (task / "state" / "search-intake-calls" / "batch-01.prompt.md").exists()
+
+
+def fixture_18(base: Path) -> None:
+    task = base / "post-ingestion-rag-call"
+    base_flow(task)
+    code, data = run(["python3", "scripts/build-post-ingestion-rag-call.py", "--task-dir", str(task), "--batch-id", "post-ingestion-01"])
+    assert code == 0, data
+    package = read(task / "state" / "rag-calls" / "post-ingestion-01.json")
+    assert package["target_system"] == "RAG platform"
+    assert package["claims"]
+
+
 FIXTURES = [
     fixture_01, fixture_02, fixture_03, fixture_04, fixture_05,
     fixture_06, fixture_07, fixture_08, fixture_09, fixture_10,
     fixture_11, fixture_12, fixture_13, fixture_14, fixture_15,
     fixture_16,
+    fixture_17, fixture_18,
 ]
 
 
