@@ -11,7 +11,9 @@
     "monograph_chapter": ">=5",
     "policy_document": ">=5",
     "primary_source": ">=3",
-    "english_article": ">=5"
+    "english_article": ">=5",
+    "classic_foundational": ">=3",
+    "patent_or_standard": "按需"
   },
   "directions": [
     {

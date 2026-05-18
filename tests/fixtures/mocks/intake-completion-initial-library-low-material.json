@@ -14,7 +14,7 @@
       "classic_foundational": 3
     },
     "rag_indexed_count": 34,
-    "pool_avg_usable_text_chars": 120
+    "pool_avg_usable_text_chars": 115.0
   },
   "results": [
     {
@@ -45,8 +45,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 300,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 80,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z001",
       "ref_metadata": {
         "ref_id": "ref-lib-001",
@@ -99,8 +99,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 350,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 90,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z002",
       "ref_metadata": {
         "ref_id": "ref-lib-002",
@@ -153,8 +153,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 400,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 100,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z003",
       "ref_metadata": {
         "ref_id": "ref-lib-003",
@@ -207,8 +207,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 450,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 110,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z004",
       "ref_metadata": {
         "ref_id": "ref-lib-004",
@@ -261,8 +261,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 500,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 120,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z005",
       "ref_metadata": {
         "ref_id": "ref-lib-005",
@@ -315,8 +315,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 550,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 130,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z006",
       "ref_metadata": {
         "ref_id": "ref-lib-006",
@@ -369,8 +369,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 250,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 140,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z007",
       "ref_metadata": {
         "ref_id": "ref-lib-007",
@@ -423,8 +423,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 300,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 150,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z008",
       "ref_metadata": {
         "ref_id": "ref-lib-008",
@@ -477,8 +477,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 350,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 80,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z009",
       "ref_metadata": {
         "ref_id": "ref-lib-009",
@@ -531,8 +531,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 400,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 90,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z010",
       "ref_metadata": {
         "ref_id": "ref-lib-010",
@@ -585,8 +585,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 450,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 100,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z011",
       "ref_metadata": {
         "ref_id": "ref-lib-011",
@@ -639,8 +639,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 500,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 110,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z012",
       "ref_metadata": {
         "ref_id": "ref-lib-012",
@@ -693,8 +693,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 550,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 120,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z013",
       "ref_metadata": {
         "ref_id": "ref-lib-013",
@@ -747,8 +747,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 250,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 130,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z014",
       "ref_metadata": {
         "ref_id": "ref-lib-014",
@@ -801,8 +801,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 300,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 140,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z015",
       "ref_metadata": {
         "ref_id": "ref-lib-015",
@@ -855,8 +855,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 350,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 150,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z016",
       "ref_metadata": {
         "ref_id": "ref-lib-016",
@@ -909,8 +909,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 400,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 80,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z017",
       "ref_metadata": {
         "ref_id": "ref-lib-017",
@@ -963,8 +963,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 450,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 90,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z018",
       "ref_metadata": {
         "ref_id": "ref-lib-018",
@@ -1017,8 +1017,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 500,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 100,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z019",
       "ref_metadata": {
         "ref_id": "ref-lib-019",
@@ -1071,8 +1071,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 550,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 110,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z020",
       "ref_metadata": {
         "ref_id": "ref-lib-020",
@@ -1125,8 +1125,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 250,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 120,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z021",
       "ref_metadata": {
         "ref_id": "ref-lib-021",
@@ -1179,8 +1179,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 300,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 130,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z022",
       "ref_metadata": {
         "ref_id": "ref-lib-022",
@@ -1233,8 +1233,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 350,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 140,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z023",
       "ref_metadata": {
         "ref_id": "ref-lib-023",
@@ -1287,8 +1287,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 400,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 150,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z024",
       "ref_metadata": {
         "ref_id": "ref-lib-024",
@@ -1341,8 +1341,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 450,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 80,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z025",
       "ref_metadata": {
         "ref_id": "ref-lib-025",
@@ -1395,8 +1395,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 500,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 90,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z026",
       "ref_metadata": {
         "ref_id": "ref-lib-026",
@@ -1449,8 +1449,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 550,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 100,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z027",
       "ref_metadata": {
         "ref_id": "ref-lib-027",
@@ -1503,8 +1503,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 250,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 110,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z028",
       "ref_metadata": {
         "ref_id": "ref-lib-028",
@@ -1557,8 +1557,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 300,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 120,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z029",
       "ref_metadata": {
         "ref_id": "ref-lib-029",
@@ -1611,8 +1611,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 350,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 130,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z030",
       "ref_metadata": {
         "ref_id": "ref-lib-030",
@@ -1665,8 +1665,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 400,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 140,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z031",
       "ref_metadata": {
         "ref_id": "ref-lib-031",
@@ -1719,8 +1719,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 450,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 150,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z032",
       "ref_metadata": {
         "ref_id": "ref-lib-032",
@@ -1773,8 +1773,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 500,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 80,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z033",
       "ref_metadata": {
         "ref_id": "ref-lib-033",
@@ -1827,8 +1827,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 550,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 90,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z034",
       "ref_metadata": {
         "ref_id": "ref-lib-034",
@@ -1881,8 +1881,8 @@
         "rag_indexed": false,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 250,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 100,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z035",
       "ref_metadata": {
         "ref_id": "ref-lib-035",
@@ -1935,8 +1935,8 @@
         "rag_indexed": false,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 300,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 110,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z036",
       "ref_metadata": {
         "ref_id": "ref-lib-036",
@@ -1989,8 +1989,8 @@
         "rag_indexed": false,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 350,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 120,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z037",
       "ref_metadata": {
         "ref_id": "ref-lib-037",
@@ -2043,8 +2043,8 @@
         "rag_indexed": false,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 400,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 130,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z038",
       "ref_metadata": {
         "ref_id": "ref-lib-038",
@@ -2097,8 +2097,8 @@
         "rag_indexed": false,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 450,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 140,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z039",
       "ref_metadata": {
         "ref_id": "ref-lib-039",
@@ -2151,8 +2151,8 @@
         "rag_indexed": false,
         "import_batch_id": "fixture-initial-library"
       },
-      "usable_text_chars": 500,
-      "usable_text_source": "fixture_pdf_excerpt",
+      "usable_text_chars": 150,
+      "usable_text_source": "fixture_low_material_excerpt",
       "zotero_id": "Z040",
       "ref_metadata": {
         "ref_id": "ref-lib-040",
