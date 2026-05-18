@@ -25,10 +25,18 @@ def main() -> int:
     critical_supported = [c for c in critical if c["evidence_status"] in {"strong_support", "partial_support"}]
     high_risk = [ins for ins in plan["insertions"] if ins["evidence_basis"].get("risks")]
     page_missing = [ins for ins in high_risk if "page_missing" in ins["evidence_basis"].get("risks", [])]
+    footnote_like = [ins for ins in plan["insertions"] if ins.get("note_type", "footnote") in {"footnote", "endnote"}]
+    references = plan.get("reference_list", {}).get("new_references", [])
+    intake_path = task / "state" / "intake-status.json"
+    intake = read_json(intake_path) if intake_path.exists() else {}
     metrics = {
         "critical_claim_coverage": len(critical_supported) / len(critical) if critical else 1,
         "high_risk_citation_ratio": len(high_risk) / len(plan["insertions"]) if plan["insertions"] else 0,
         "page_missing_ratio": len(page_missing) / len(plan["insertions"]) if plan["insertions"] else 0,
+        "footnote_count": len(footnote_like),
+        "reference_count": len(references),
+        "pool_avg_usable_text_chars": intake.get("pool_avg_usable_text_chars"),
+        "pool_material_status": intake.get("pool_material_status", "not_reported"),
     }
     blocking = []
     warnings = []
@@ -38,6 +46,21 @@ def main() -> int:
         warnings.append("high-risk citation ratio above 20%")
     if metrics["page_missing_ratio"] > 0.3:
         warnings.append("page missing ratio above 30%")
+    if metrics["footnote_count"] < 10:
+        warnings.append("footnote count below expected 10-20 range")
+    if metrics["footnote_count"] > 20:
+        blocking.append("footnote count above 20; prune unnecessary notes")
+    if metrics["reference_count"] < 20:
+        warnings.append("reference count below expected 25-30 range")
+    if metrics["reference_count"] > 35:
+        warnings.append("reference count above 35; prune weak or unconsumed references")
+    if metrics["reference_count"] > 40:
+        blocking.append("reference count above 40")
+    if metrics["pool_material_status"] == "insufficient":
+        warnings.append("average usable text below 200 chars per source pool")
+    for ins in plan["insertions"]:
+        if ins.get("annotation_purpose") == "reference_only" and ins.get("note_type") in {"footnote", "endnote"}:
+            blocking.append(f"{ins.get('insertion_id')} reference_only cannot enter footnote/endnote body")
     status = "failed" if blocking else "passed"
     report = {"status": status, "blocking_issues": blocking, "warnings": warnings, "metrics": metrics}
     out = task / "state" / "quality-report.json"

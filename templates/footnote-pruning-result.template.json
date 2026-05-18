@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "target_final_count": 15,
+  "kept": [],
+  "removed": [
+    {
+      "candidate_id": "fnc-002",
+      "pruning_reason": "background_without_necessary_supplement"
+    }
+  ],
+  "warnings": []
+}

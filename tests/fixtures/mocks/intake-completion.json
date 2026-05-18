@@ -30,6 +30,8 @@
         "rag_indexed": true,
         "import_batch_id": "fixture-import-01"
       },
+      "usable_text_chars": 260,
+      "usable_text_source": "rag_snippet_plus_pdf_excerpt",
       "zotero_id": "ABC123",
       "ref_metadata": {
         "title": "平台申诉机制的实证研究",

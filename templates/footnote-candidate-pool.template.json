@@ -1,0 +1,17 @@
+{
+  "article_id": "article-id",
+  "target_candidate_range": {"min": 15, "max": 25},
+  "candidates": [
+    {
+      "candidate_id": "fnc-001",
+      "claim_id": "c-001",
+      "note_type": "footnote",
+      "annotation_purpose": "evidence",
+      "necessity_score": 80,
+      "material_flag": "normal",
+      "usable_text_chars": 260,
+      "authenticity_status": "not_checked"
+    }
+  ],
+  "rejected_before_pool": []
+}

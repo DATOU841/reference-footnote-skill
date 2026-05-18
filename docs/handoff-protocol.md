@@ -78,8 +78,10 @@ Top-level fields:
 | `import_status.import_batch_id` | 导库批次 |
 | `zotero_id` | Zotero key 或条目 ID |
 | `ref_metadata` | title、authors、year、source、pages |
+| `usable_text_chars` | 可供 RAG 命中、人工判断和脚注撰写的正文级材料字数 |
+| `usable_text_source` | 可消费文本来源，如 PDF 摘录、RAG snippet、人工录入 |
 
-`apply-intake-completion.py` 只验证并记录这些字段，不触发真实导库或二轮查询。
+`apply-intake-completion.py` 只验证并记录这些字段，不触发真实导库或二轮查询。0.4.0-dev 会计算 `pool_avg_usable_text_chars`，池均值低于 200 字/篇时标注 `pool_material_status: insufficient`，并对单篇材料标注 `very_low`、`below_average` 或 `normal`。
 
 ## To 正文写作 Or Human
 
@@ -113,8 +115,27 @@ Top-level fields:
 - `evidence_basis.risks`
 - `requires_rewrite`
 - `rewrite_suggestion`
+- `note_type`
+- `annotation_purpose`
+- `necessity_score`
+- `material_flag`
+- `usable_text_chars`
+- `authenticity_status`
 
 `no_insert_zones[]` should include `no_insert_reason` and optional `writer_action` so writer can decide whether to mark author opinion, lower claim strength, delete, or send to human review.
+
+## Authenticity Verification Package
+
+`build-authenticity-verification-request.py` prepares `authenticity-verification-request.json` for external PDF + RAG dual checking. It is a request only.
+
+| Field | Meaning |
+| --- | --- |
+| `request_type` | `footnote_authenticity_verification` |
+| `execution_status` | fixed `prepared_not_executed` |
+| `items[]` | final footnote/endnote insertions requiring verification |
+| `checks_required[]` | reference existence, metadata, PDF content, RAG-PDF consistency, page/OCR, claim fit, insertion position |
+
+`apply-authenticity-verification-result.py` consumes `authenticity-verification-result.json` and writes `authenticity-issues.json`. A `failed` authenticity status blocks consistency; `human_review` is allowed only as an explicit review item.
 
 ## Search-Intake Call Package Schema
 

@@ -17,24 +17,29 @@ STAGE_FILES = {
     "A6": "state/evidence-map.json",
     "A7": "state/search-intake-requests/batch-01.json",
     "A8": "state/intake-status.json",
+    "A9a": "state/footnote-candidate-pool.json",
+    "A9b": "state/footnote-pruning-result.json",
+    "A9c": "state/reference-pruning-plan.json",
     "A9": "state/insertion-plan.json",
     "A10": "state/quality-report.json",
+    "A10a": "state/authenticity-verification-request.json",
+    "A10b": "state/authenticity-verification-result.json",
+    "A10c": "state/consistency-gate-result.json",
     "A11": "delivery/summary.md",
 }
 
 
-def stage_number(stage: str) -> int:
-    return int(stage[1:])
+STAGE_ORDER = ["A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9a", "A9b", "A9c", "A9", "A10", "A10a", "A10b", "A10c", "A11"]
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--task-dir", required=True, type=Path)
-    parser.add_argument("--stage", required=True, choices=sorted(STAGE_FILES))
+    parser.add_argument("--stage", required=True, choices=STAGE_ORDER)
     args = parser.parse_args()
     task = ensure_task(args.task_dir)
-    target_stage = stage_number(args.stage)
-    missing = [rel for stage, rel in STAGE_FILES.items() if stage_number(stage) <= target_stage and not (task / rel).exists()]
+    target_stage = STAGE_ORDER.index(args.stage)
+    missing = [STAGE_FILES[stage] for stage in STAGE_ORDER[:target_stage + 1] if not (task / STAGE_FILES[stage]).exists()]
     data = result("failed" if missing else "passed", stage=args.stage, missing=missing)
     print_json(data)
     return 1 if missing else 0

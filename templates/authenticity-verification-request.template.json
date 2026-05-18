@@ -1,0 +1,19 @@
+{
+  "request_type": "footnote_authenticity_verification",
+  "batch_id": "authenticity-01",
+  "execution_status": "prepared_not_executed",
+  "target_executor": "检索入库/PDF核验/RAG平台或人工",
+  "items": [
+    {
+      "insertion_id": "ins-001",
+      "checks_required": [
+        "reference_exists",
+        "bibliographic_metadata_matches_pdf",
+        "pdf_contains_cited_content",
+        "rag_snippet_matches_pdf",
+        "claim_fit",
+        "insertion_position_fit"
+      ]
+    }
+  ]
+}

@@ -1,5 +1,20 @@
 # Release Notes
 
+## 0.4.0-dev
+
+Status: pre-Claude-review development build.
+
+### Scope
+
+- Footnote candidate pool, necessity pruning, and reference pruning.
+- Search-intake material quality fields and pool-average warning gate.
+- Offline authenticity verification request/result protocol for PDF + RAG dual checks.
+- Footnote/endnote/reference-only boundary validation.
+
+### Required Before Publication
+
+Run local gates, request Claude review, fix P0/P1, commit, tag `0.4.0-dev`, and push.
+
 ## 0.3.0-dev
 
 Status: pre-Claude-review development build.

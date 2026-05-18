@@ -16,6 +16,7 @@ RAG = ROOT / "tests" / "fixtures" / "mocks" / "rag-service-mock.json"
 COMPLETION = ROOT / "tests" / "fixtures" / "mocks" / "intake-completion.json"
 FULL_COMPLETION = ROOT / "tests" / "fixtures" / "fixture-intake-completion-full.json"
 POST_INGESTION_RAG = ROOT / "tests" / "fixtures" / "mocks" / "post-ingestion-rag-response.json"
+AUTHENTICITY = ROOT / "tests" / "fixtures" / "mocks" / "authenticity-verification-result.json"
 
 
 def run(args: list[str]) -> tuple[int, dict]:
@@ -29,6 +30,11 @@ def run(args: list[str]) -> tuple[int, dict]:
 
 def read(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def write(path: Path, data: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def base_flow(task: Path, *, include_rag: bool = True, allow_fail: bool = True) -> None:
@@ -52,7 +58,34 @@ def base_flow(task: Path, *, include_rag: bool = True, allow_fail: bool = True) 
     assert code == 0, data
     code, data = run(["python3", "scripts/apply-intake-completion.py", "--task-dir", str(task), "--completion", str(COMPLETION)])
     assert code == 0, data
+    code, data = run(["python3", "scripts/build-footnote-candidate-pool.py", "--task-dir", str(task)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/prune-footnotes.py", "--task-dir", str(task)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/prune-references.py", "--task-dir", str(task)])
+    assert code == 0, data
     code, data = run(["python3", "scripts/plan-footnotes.py", "--task-dir", str(task)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/build-authenticity-verification-request.py", "--task-dir", str(task)])
+    assert code == 0, data
+    request = read(task / "state" / "authenticity-verification-request.json")
+    auth_results = []
+    for idx, item in enumerate(request.get("items", []), start=1):
+        auth_results.append({
+            "insertion_id": item["insertion_id"],
+            "authenticity_status": "human_review" if idx == 2 else "verified",
+            "pdf_check": {"reference_exists": True, "metadata_matches": True, "page": 36 if idx != 2 else None, "contains_cited_content": True if idx != 2 else "uncertain"},
+            "rag_pdf_consistency": "consistent" if idx != 2 else "uncertain",
+            "claim_fit": "fits" if idx != 2 else "partial",
+            "insertion_position_fit": "fits",
+            "risks": [] if idx != 2 else ["page_missing", "ocr_uncertain"],
+            "resolution_required": None if idx != 2 else "manual_page_check",
+        })
+    auth_path = task / "state" / "fixture-authenticity-result.json"
+    write(auth_path, {"status": "completed", "batch_id": "authenticity-01", "results": auth_results})
+    code, data = run(["python3", "scripts/apply-authenticity-verification-result.py", "--task-dir", str(task), "--verification", str(auth_path)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/validate-note-reference-consistency.py", "--task-dir", str(task), "--allow-fail"])
     assert code == 0, data
     cmd = ["python3", "scripts/validate-citation-plan.py", "--task-dir", str(task)]
     if allow_fail:
@@ -191,6 +224,8 @@ def fixture_16(base: Path) -> None:
     intake = read(task / "state" / "intake-status.json")
     assert len(intake["results"]) == 3
     assert intake["results"][0]["kb_routing"]["target_kb"] == "B"
+    assert intake["pool_avg_usable_text_chars"] == 113.33
+    assert intake["pool_material_status"] == "insufficient"
 
 
 def fixture_17(base: Path) -> None:
@@ -228,10 +263,151 @@ def fixture_19(base: Path) -> None:
     claim = next(item for item in evidence["claim_evidence"] if item["claim_id"] == "c-009")
     assert claim["evidence_status"] == "strong_support"
     assert claim["candidates"][0]["reference"]["ref_id"] == "ref-004"
+    code, data = run(["python3", "scripts/build-footnote-candidate-pool.py", "--task-dir", str(task)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/prune-footnotes.py", "--task-dir", str(task)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/prune-references.py", "--task-dir", str(task)])
+    assert code == 0, data
     code, data = run(["python3", "scripts/plan-footnotes.py", "--task-dir", str(task)])
     assert code == 0, data
     plan = read(task / "state" / "insertion-plan.json")
     assert any(item["claim_id"] == "c-009" for item in plan["insertions"])
+
+
+def synthetic_pool(count: int = 20) -> dict:
+    candidates = []
+    for idx in range(1, count + 1):
+        candidates.append({
+            "candidate_id": f"fnc-{idx:03d}",
+            "claim_id": f"c-{idx:03d}",
+            "claim_type": "theoretical_claim",
+            "need_level": "critical" if idx <= 4 else "important",
+            "text": f"模拟论断 {idx}",
+            "target_location": {"paragraph_id": "p-001", "sentence_id": f"s-{idx:03d}"},
+            "reference": {"ref_id": f"ref-{idx:03d}", "title": f"模拟文献{idx}", "authors": ["作者"], "year": 2024, "source": "模拟期刊", "pages": "1-20"},
+            "note_type": "footnote",
+            "annotation_purpose": "source_anchor" if idx <= 4 else "evidence",
+            "support_strength": "strong_support",
+            "confidence": 0.9,
+            "risks": [],
+            "usable_text_chars": 260,
+            "usable_text_source": "fixture",
+            "material_flag": "normal",
+            "necessity_score": 100 - idx,
+            "candidate_note_text": f"模拟脚注补充内容 {idx}",
+            "authenticity_status": "not_checked",
+        })
+    return {"article_id": "synthetic", "target_candidate_range": {"min": 15, "max": 25}, "candidates": candidates, "rejected_before_pool": []}
+
+
+def fixture_20(base: Path) -> None:
+    task = base / "usable-text-material-flags"
+    code, data = run(["python3", "scripts/startup.py", "--task-dir", str(task)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/apply-intake-completion.py", "--task-dir", str(task), "--completion", str(FULL_COMPLETION)])
+    assert code == 0, data
+    intake = read(task / "state" / "intake-status.json")
+    assert intake["results"][1]["material_flag"] == "below_average"
+    assert intake["results"][2]["material_flag"] == "very_low"
+
+
+def fixture_21(base: Path) -> None:
+    task = base / "prune-20-to-15"
+    write(task / "state" / "footnote-candidate-pool.json", synthetic_pool(20))
+    code, data = run(["python3", "scripts/prune-footnotes.py", "--task-dir", str(task), "--target", "15"])
+    assert code == 0, data
+    pruning = read(task / "state" / "footnote-pruning-result.json")
+    assert len(pruning["kept"]) == 15
+    assert len(pruning["removed"]) == 5
+
+
+def fixture_22(base: Path) -> None:
+    task = base / "prune-background-vacuous"
+    pool = synthetic_pool(3)
+    pool["candidates"][0]["annotation_purpose"] = "background"
+    pool["candidates"][0]["necessity_score"] = 30
+    write(task / "state" / "footnote-candidate-pool.json", pool)
+    code, data = run(["python3", "scripts/prune-footnotes.py", "--task-dir", str(task), "--target", "2"])
+    assert code == 0, data
+    removed = read(task / "state" / "footnote-pruning-result.json")["removed"]
+    assert any(item["pruning_reason"] == "background_without_necessary_supplement" for item in removed)
+
+
+def fixture_23(base: Path) -> None:
+    task = base / "reference-only-barred"
+    pool = synthetic_pool(1)
+    pool["candidates"][0]["annotation_purpose"] = "reference_only"
+    pool["candidates"][0]["note_type"] = "footnote"
+    write(task / "state" / "footnote-candidate-pool.json", pool)
+    code, data = run(["python3", "scripts/prune-footnotes.py", "--task-dir", str(task)])
+    assert code == 0, data
+    assert read(task / "state" / "footnote-pruning-result.json")["removed"][0]["pruning_reason"] == "reference_only_barred_from_footnote_body"
+
+
+def fixture_24(base: Path) -> None:
+    task = base / "reference-prune-30"
+    write(task / "state" / "footnote-candidate-pool.json", synthetic_pool(35))
+    code, data = run(["python3", "scripts/prune-references.py", "--task-dir", str(task), "--target-max", "30"])
+    assert code == 0, data
+    plan = read(task / "state" / "reference-pruning-plan.json")
+    assert len(plan["kept_references"]) == 30
+
+
+def fixture_25(base: Path) -> None:
+    task = base / "authenticity-request-result"
+    base_flow(task)
+    request = read(task / "state" / "authenticity-verification-request.json")
+    result_data = read(task / "state" / "authenticity-verification-result.json")
+    assert request["execution_status"] == "prepared_not_executed"
+    assert result_data["issues"]
+
+
+def fixture_26(base: Path) -> None:
+    task = base / "authenticity-conflict-blocks"
+    base_flow(task)
+    bad = read(task / "state" / "authenticity-verification-result.json")
+    bad["results"][0]["authenticity_status"] = "failed"
+    bad["results"][0]["risks"] = ["pdf_rag_conflict"]
+    write(task / "bad-auth.json", bad)
+    code, data = run(["python3", "scripts/apply-authenticity-verification-result.py", "--task-dir", str(task), "--verification", str(task / "bad-auth.json")])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/validate-note-reference-consistency.py", "--task-dir", str(task), "--allow-fail"])
+    assert code == 0, data
+    gate = read(task / "state" / "consistency-gate-result.json")
+    assert gate["status"] == "failed"
+
+
+def fixture_27(base: Path) -> None:
+    task = base / "wrong-position-risk"
+    base_flow(task)
+    bad = read(task / "state" / "authenticity-verification-result.json")
+    bad["results"][0]["authenticity_status"] = "human_review"
+    bad["results"][0]["risks"] = ["wrong_insertion_position"]
+    write(task / "position-auth.json", bad)
+    code, data = run(["python3", "scripts/apply-authenticity-verification-result.py", "--task-dir", str(task), "--verification", str(task / "position-auth.json")])
+    assert code == 0, data
+    issues = read(task / "state" / "authenticity-issues.json")["issues"]
+    assert any("wrong_insertion_position" in item["risks"] for item in issues)
+
+
+def fixture_28(base: Path) -> None:
+    task = base / "unconsumed-reference-warning"
+    base_flow(task)
+    plan = read(task / "state" / "insertion-plan.json")
+    plan["reference_list"]["new_references"].append({"ref_id": "ref-unused", "title": "未消费文献"})
+    write(task / "state" / "insertion-plan.json", plan)
+    code, data = run(["python3", "scripts/validate-note-reference-consistency.py", "--task-dir", str(task), "--allow-fail"])
+    assert code == 0, data
+    gate = read(task / "state" / "consistency-gate-result.json")
+    assert "ref-unused" in ",".join(gate["warnings"])
+
+
+def fixture_29(base: Path) -> None:
+    task = base / "delivery-includes-authenticity"
+    base_flow(task)
+    assert (task / "delivery" / "authenticity-verification-request.json").exists()
+    assert (task / "delivery" / "consistency-gate-result.json").exists()
 
 
 FIXTURES = [
@@ -241,6 +417,8 @@ FIXTURES = [
     fixture_16,
     fixture_17, fixture_18,
     fixture_19,
+    fixture_20, fixture_21, fixture_22, fixture_23, fixture_24,
+    fixture_25, fixture_26, fixture_27, fixture_28, fixture_29,
 ]
 
 

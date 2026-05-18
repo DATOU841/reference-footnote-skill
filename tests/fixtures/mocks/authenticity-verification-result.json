@@ -1,0 +1,36 @@
+{
+  "status": "completed",
+  "batch_id": "authenticity-01",
+  "results": [
+    {
+      "insertion_id": "ins-001",
+      "authenticity_status": "verified",
+      "pdf_check": {
+        "reference_exists": true,
+        "metadata_matches": true,
+        "page": 36,
+        "contains_cited_content": true
+      },
+      "rag_pdf_consistency": "consistent",
+      "claim_fit": "fits",
+      "insertion_position_fit": "fits",
+      "risks": [],
+      "resolution_required": null
+    },
+    {
+      "insertion_id": "ins-002",
+      "authenticity_status": "human_review",
+      "pdf_check": {
+        "reference_exists": true,
+        "metadata_matches": true,
+        "page": null,
+        "contains_cited_content": "uncertain"
+      },
+      "rag_pdf_consistency": "uncertain",
+      "claim_fit": "partial",
+      "insertion_position_fit": "fits",
+      "risks": ["page_missing", "ocr_uncertain"],
+      "resolution_required": "manual_page_check"
+    }
+  ]
+}

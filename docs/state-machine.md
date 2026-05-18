@@ -13,10 +13,16 @@ ReferenceFootnote uses an offline-first stage machine:
 | A6 | evidence map | citation needs + interpretations | `evidence-map.json` | coverage summary complete |
 | A7 | search-intake handoff | evidence map | `search-intake-requests/*.json` | unsupported critical/important claims converted |
 | A7.5 | search-intake skill call | search-intake request | `search-intake-calls/*.json` and `.prompt.md` | call package prepared, not executed |
-| A8 | intake completion | completion response | `intake-status.json` | completion status recorded |
+| A8 | intake completion | completion response | `intake-status.json` | completion status and usable text metrics recorded |
 | A8.5 | post-ingestion RAG call | intake completion + citation needs | `rag-calls/*.json` | RAG call package prepared for indexed sources |
-| A9 | footnote plan | evidence map + article | `insertion-plan.json` | no forced citation on unsupported claims |
+| A9a | footnote candidate pool | evidence map + intake status | `footnote-candidate-pool.json` | 15-25 candidates prepared where available |
+| A9b | footnote necessity pruning | candidate pool | `footnote-pruning-result.json` | empty, repetitive, background-only, and invalid candidates removed |
+| A9c | reference candidate pruning | candidate pool + kept footnotes | `reference-pruning-plan.json` | 25-30 important references targeted |
+| A9 | footnote plan | pruning results + evidence map | `insertion-plan.json` | no forced citation on unsupported claims |
 | A10 | citation quality gate | insertion plan | `quality-report.json` | blocking issues identified |
+| A10a | authenticity request | insertion plan | `authenticity-verification-request.json` | PDF + RAG check package prepared, not executed |
+| A10b | authenticity result | external/synthetic verification result | `authenticity-verification-result.json` | result schema and issue list validated |
+| A10c | consistency gate | insertion plan + verification result | `consistency-gate-result.json` | note/reference boundaries checked |
 | A11 | delivery package | all prior outputs | `delivery/` | required artifacts copied |
 
-Stages are deterministic in 0.3.0-dev. Collaboration stages produce call packages only; they do not execute real search, ingestion, or RAG queries. Failures must be captured as offline fixtures before script or skill changes.
+Stages are deterministic in 0.4.0-dev. Collaboration and verification stages produce call packages or consume offline回执 only; they do not execute real search, ingestion, PDF checks, or RAG queries. Failures must be captured as offline fixtures before script or skill changes.

@@ -1,3 +1,13 @@
 # Quality Auditor
 
 Audit citation plans for coverage, high-risk citations, missing page numbers, ghost references, duplicated references, and no-insert violations.
+
+## 0.4.0-dev Checks
+
+- Confirm final footnote/endnote count is in the 10-20 range; around 15 is the target.
+- Confirm final references target 25-30; over 35 is a warning and over 40 is blocking.
+- Confirm `pool_avg_usable_text_chars` is reported; below 200 chars/source pool is a material warning.
+- Confirm `reference_only` never appears as footnote/endnote body text.
+- Confirm authenticity verification results cover every requested insertion.
+- Treat `authenticity_status: failed` as blocking; treat `human_review` as an explicit review item.
+- Confirm unconsumed references are deleted or explained in `consistency-gate-result.json`.

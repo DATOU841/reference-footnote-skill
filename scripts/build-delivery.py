@@ -20,7 +20,12 @@ def main() -> int:
     quality = read_json(quality_path)
     delivery = task / "delivery"
     delivery.mkdir(parents=True, exist_ok=True)
-    for name in ["evidence-map.json", "insertion-plan.json", "quality-report.json", "intake-status.json"]:
+    for name in [
+        "evidence-map.json", "insertion-plan.json", "quality-report.json", "intake-status.json",
+        "footnote-candidate-pool.json", "footnote-pruning-result.json", "reference-pruning-plan.json",
+        "authenticity-verification-request.json", "authenticity-verification-result.json",
+        "authenticity-issues.json", "consistency-gate-result.json",
+    ]:
         copy_if_exists(task / "state" / name, delivery / name)
     evidence = read_json(task / "state" / "evidence-map.json")
     plan = read_json(task / "state" / "insertion-plan.json")
@@ -28,6 +33,7 @@ def main() -> int:
         "page_numbers_to_verify": [i for i in plan["insertions"] if "page_missing" in i["evidence_basis"].get("risks", [])],
         "rewrite_suggestions": [i for i in plan["insertions"] if i.get("requires_rewrite")],
         "risk_citations": [i for i in plan["insertions"] if i["evidence_basis"].get("risks")],
+        "authenticity_issues": read_json(task / "state" / "authenticity-issues.json").get("issues", []) if (task / "state" / "authenticity-issues.json").exists() else [],
         "no_support_critical": evidence.get("critical_gaps", []),
         "high_risk_unsupported": evidence.get("high_risk_unsupported", []),
     }
@@ -49,11 +55,17 @@ def main() -> int:
             "r2_a1_gap_routing": "unsupported critical/important claims may become gap-routing-table entries",
             "r2_a2_search_plan": "search-intake requests can be transformed into round2-search-plan rows",
             "citation_hygiene": "gbt7714_footnote and risks are provided for writer-side citation checks",
+            "footnote_boundary": "footnote/endnote text is only for necessary content supplements; reference_only entries must not become footnote prose",
         },
     }
     write_json(delivery / "human_review_needed.json", human_review)
     write_json(delivery / "handoff_to_writing.json", handoff)
-    write_json(delivery / "statistics.json", {"insertions": len(plan["insertions"]), "no_insert_zones": len(plan["no_insert_zones"])})
+    write_json(delivery / "statistics.json", {
+        "insertions": len(plan["insertions"]),
+        "no_insert_zones": len(plan["no_insert_zones"]),
+        "references": len(plan.get("reference_list", {}).get("new_references", [])),
+        "footnote_pruning_applied": plan.get("footnote_pruning_applied", False),
+    })
     (delivery / "summary.md").write_text(f"# ReferenceFootnote Delivery\n\nQuality status: {quality['status']}\n", encoding="utf-8")
     (delivery / "changelog.md").write_text(f"# Citation Change Log\n\nGenerated offline by ReferenceFootnote {VERSION}.\n", encoding="utf-8")
     print_json(result("passed", output=str(delivery)))

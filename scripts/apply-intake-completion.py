@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
-from reflib import ensure_task, print_json, read_json, result, write_json
+from reflib import ensure_task, material_flag, pool_material_status, print_json, read_json, result, write_json
 
 
 REQUIRED_RESULT_FIELDS = {"request_id", "claim_id", "status", "sources_found", "kb_routing", "pdf_status", "import_status"}
@@ -32,6 +32,27 @@ def main() -> int:
             errors.append(f"results[{idx}] invalid status: {item.get('status')}")
         if not isinstance(item.get("sources_found", []), list):
             errors.append(f"results[{idx}].sources_found must be a list")
+    results = completion.get("results", [])
+    total_chars = 0
+    for item in results:
+        chars = int(item.get("usable_text_chars") or 0)
+        total_chars += chars
+        item["usable_text_chars"] = chars
+        item.setdefault("usable_text_source", "not_reported")
+        item["material_flag"] = material_flag(chars)
+    avg = total_chars / len(results) if results else 0
+    completion["pool_avg_usable_text_chars"] = round(avg, 2)
+    completion["pool_material_status"] = pool_material_status(avg)
+    completion["material_warnings"] = [
+        {
+            "claim_id": item.get("claim_id"),
+            "request_id": item.get("request_id"),
+            "usable_text_chars": item.get("usable_text_chars", 0),
+            "material_flag": item.get("material_flag"),
+        }
+        for item in results
+        if item.get("material_flag") in {"very_low", "below_average"}
+    ]
     out = task / "state" / "intake-status.json"
     write_json(out, completion)
     print_json(result("failed" if errors else "passed", output=str(out), errors=errors))

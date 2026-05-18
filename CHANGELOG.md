@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.4.0-dev - 2026-05-18
+
+- Added material quality tracking for search-intake completion rows with `usable_text_chars`, `material_flag`, and pool average status.
+- Added A9a/A9b/A9c scripts for footnote candidate pools, necessity pruning, and reference pruning.
+- Added A10a/A10b/A10c scripts for authenticity verification requests, synthetic verification result application, and footnote/reference consistency gates.
+- Updated insertion plans to distinguish `footnote`, `endnote`, and `reference_only`, and to carry annotation purpose, necessity score, material risk, authenticity status, and pruning audit data.
+- Expanded offline fixtures from 19 to 29 to cover material thresholds, pruning, reference-only blocking, PDF/RAG authenticity risks, wrong insertion positions, unconsumed references, and delivery package propagation.
+
 ## 0.3.0-dev - 2026-05-17
 
 - Added an offline post-ingestion RAG closure fixture that validates the returned RAG response, rebuilds the evidence map, and regenerates the insertion plan.

@@ -17,8 +17,15 @@ PROTECTED_TYPES = {"author_opinion", "common_knowledge", "transitional"}
 SUPPORT_STRENGTHS = {"strong_support", "partial_support", "background_only", "conflict", "no_support"}
 RISK_FLAGS = {
     "page_missing", "ocr_uncertain", "secondhand_citation", "concept_approximate",
-    "temporal_mismatch", "discipline_cross", "translation_gap"
+    "temporal_mismatch", "discipline_cross", "translation_gap", "pdf_rag_conflict",
+    "wrong_insertion_position", "reference_only_in_footnote", "low_material"
 }
+NOTE_TYPES = {"footnote", "endnote", "reference_only"}
+ANNOTATION_PURPOSES = {
+    "evidence", "clarification", "supplement", "source_anchor", "counter_view",
+    "background", "reference_only"
+}
+AUTHENTICITY_STATUSES = {"verified", "human_review", "failed", "not_checked"}
 
 
 def search_dimensions_for_text(text: str) -> dict:
@@ -73,6 +80,51 @@ def consumption_depth_for_strength(strength: str, risks: list[str] | None = None
     if strength == "strong_support" and not risks:
         return "深度消费"
     return "浅要参考"
+
+
+def material_flag(chars: int | None) -> str:
+    chars = int(chars or 0)
+    if chars < 50:
+        return "very_low"
+    if chars < 150:
+        return "below_average"
+    return "normal"
+
+
+def pool_material_status(avg_chars: float) -> str:
+    return "sufficient" if avg_chars >= 200 else "insufficient"
+
+
+def annotation_purpose_for(entry: dict, candidate: dict | None = None) -> str:
+    candidate = candidate or {}
+    strength = candidate.get("support_assessment", {}).get("strength", entry.get("evidence_status"))
+    if strength == "conflict":
+        return "counter_view"
+    if entry.get("claim_type") == "definition":
+        return "clarification"
+    if entry.get("need_level") == "critical":
+        return "source_anchor"
+    if entry.get("evidence_status") == "partial_support":
+        return "supplement"
+    return "evidence"
+
+
+def necessity_score(entry: dict, candidate: dict | None = None, material: dict | None = None) -> float:
+    candidate = candidate or {}
+    material = material or {}
+    score = 0.0
+    score += {"critical": 45, "important": 32, "recommended": 22, "not_needed": 0}.get(entry.get("need_level"), 12)
+    score += {"strong_support": 30, "partial_support": 15, "background_only": 5, "conflict": 8}.get(entry.get("evidence_status"), 0)
+    confidence = candidate.get("support_assessment", {}).get("confidence", 0) or 0
+    score += min(float(confidence), 1.0) * 10
+    risks = candidate.get("risks", entry.get("risks", [])) or []
+    score -= min(len(risks) * 4, 16)
+    flag = material.get("material_flag")
+    if flag == "very_low":
+        score -= 14
+    elif flag == "below_average":
+        score -= 6
+    return round(max(score, 0.0), 2)
 
 
 def now() -> str:

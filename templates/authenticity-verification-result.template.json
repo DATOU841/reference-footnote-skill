@@ -1,0 +1,15 @@
+{
+  "status": "completed",
+  "batch_id": "authenticity-01",
+  "results": [
+    {
+      "insertion_id": "ins-001",
+      "authenticity_status": "verified",
+      "pdf_check": {"status": "verified", "page": 36},
+      "rag_pdf_consistency": "consistent",
+      "claim_fit": "fits",
+      "risks": [],
+      "resolution_required": null
+    }
+  ]
+}

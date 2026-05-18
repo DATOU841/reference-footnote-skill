@@ -5,7 +5,7 @@ description: Use for ReferenceFootnote workflows on already-written academic art
 
 # 参考文献补注 Skill
 
-版本：0.3.0-dev
+版本：0.4.0-dev
 
 ## 硬边界
 
@@ -32,9 +32,15 @@ description: Use for ReferenceFootnote workflows on already-written academic art
 9. A7.5 检索入库调用包：用 `scripts/build-search-intake-call.py` 生成交给 `检索入库` 的 JSON 调用包和中文提示词，等待用户授权或外部执行。
 10. A8 补库完成应用：用 `scripts/apply-intake-completion.py` 记录 `检索入库` 返回状态。
 11. A8.5 补库后二轮 RAG 调用包：用 `scripts/build-post-ingestion-rag-call.py` 为已入库来源生成二轮 RAG 反查调用包。
-12. A9 脚注方案：用 `scripts/plan-footnotes.py` 生成插入建议、参考文献表和 no-insert zones。
-13. A10 质量门禁：用 `scripts/validate-citation-plan.py` 生成质量报告。
-14. A11 交付包：用 `scripts/build-delivery.py` 生成 delivery package。
+12. A9a 脚注候选池：用 `scripts/build-footnote-candidate-pool.py` 准备 15-25 个候选脚注。
+13. A9b 必要性裁剪：用 `scripts/prune-footnotes.py` 删除空泛、重复、弱支撑和 reference_only 误入脚注正文的候选，目标约 15 个。
+14. A9c 参考文献裁剪：用 `scripts/prune-references.py` 保留 25-30 篇最重要、已消费或必须保留的参考文献。
+15. A9 脚注方案：用 `scripts/plan-footnotes.py` 生成最终插入建议、参考文献表和 no-insert zones。
+16. A10 质量门禁：用 `scripts/validate-citation-plan.py` 生成质量报告，检查脚注数、参考文献数和入库材料均值。
+17. A10a 真实性复核请求：用 `scripts/build-authenticity-verification-request.py` 生成 PDF + RAG 双核验请求，不执行真实核验。
+18. A10b 真实性回执应用：用 `scripts/apply-authenticity-verification-result.py` 接收离线回执并输出问题清单。
+19. A10c 边界一致性门禁：用 `scripts/validate-note-reference-consistency.py` 检查脚注/尾注/参考文献边界。
+20. A11 交付包：用 `scripts/build-delivery.py` 生成 delivery package。
 
 ## 何时读取参考文件
 
@@ -52,3 +58,6 @@ description: Use for ReferenceFootnote workflows on already-written academic art
 - `conflict` 不能作为支撑引用，只能作为反对观点或风险提示。
 - 作者原创观点、过渡句、常识句不得强行补注。
 - 仍无证据的 critical claim 必须进入高风险清单，不得伪造脚注。
+- 脚注和尾注是正文内容的必要补充，不是参考文献罗列；`reference_only` 禁止进入脚注正文。
+- 入库完成回执应报告 `usable_text_chars`，文献池平均可消费正文级材料低于 200 字/篇时必须标注材料风险。
+- 最终插入和参考文献整理后，必须通过外部 PDF + RAG 回执逐条复核真实性、页码/OCR、位置和契合性。

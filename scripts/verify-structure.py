@@ -24,7 +24,11 @@ REQUIRED = [
     "templates/rag-lookup-request.template.json", "templates/rag-lookup-response.template.json",
     "templates/evidence-map.template.json", "templates/search-intake-request.template.json",
     "templates/intake-completion.template.json", "templates/insertion-plan.template.json",
-    "templates/quality-report.template.json", "scripts/build-search-intake-call.py",
+    "templates/quality-report.template.json", "templates/footnote-candidate-pool.template.json",
+    "templates/footnote-pruning-result.template.json", "templates/reference-pruning-plan.template.json",
+    "templates/authenticity-verification-request.template.json",
+    "templates/authenticity-verification-result.template.json",
+    "templates/consistency-gate-result.template.json", "scripts/build-search-intake-call.py",
     "scripts/build-post-ingestion-rag-call.py", "tests/fixtures/README.md",
 ]
 

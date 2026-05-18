@@ -18,6 +18,16 @@
     "full-intake-completion-schema",
     "search-intake-call-package",
     "post-ingestion-rag-call",
-    "post-ingestion-evidence-closure"
+    "post-ingestion-evidence-closure",
+    "usable-text-material-flags",
+    "prune-20-to-15",
+    "prune-background-vacuous",
+    "reference-only-barred",
+    "reference-prune-30",
+    "authenticity-request-result",
+    "authenticity-conflict-blocks",
+    "wrong-position-risk",
+    "unconsumed-reference-warning",
+    "delivery-includes-authenticity"
   ]
 }

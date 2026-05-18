@@ -1,0 +1,12 @@
+{
+  "status": "passed",
+  "target_final_range": {"min": 25, "max": 30},
+  "kept_references": [],
+  "removed_references": [
+    {
+      "reference": {"ref_id": "ref-extra"},
+      "pruning_reason": "unconsumed_or_lower_priority_reference"
+    }
+  ],
+  "warnings": []
+}
