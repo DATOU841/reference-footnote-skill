@@ -2,7 +2,9 @@
 
 Plan footnote insertions only for supported claims. Do not force a citation on unsupported claims or protected author opinions.
 
-## 0.4.0-dev Rules
+## 0.5.0-dev Rules
+
+- Do not plan final footnotes from an empty or unverified library. The coordinator must complete retrieval-first intake or record `user_declared_existing` before RAG-based candidate planning.
 
 - Treat footnotes and endnotes as necessary supplements to body content, not as reference-list entries.
 - Use `build-footnote-candidate-pool.py` before final planning when an evidence map exists.

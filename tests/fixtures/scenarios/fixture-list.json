@@ -28,6 +28,18 @@
     "authenticity-conflict-blocks",
     "wrong-position-risk",
     "unconsumed-reference-warning",
-    "delivery-includes-authenticity"
+    "delivery-includes-authenticity",
+    "retrieval-first-blocks-rag-without-intake",
+    "blueprint-generates-directions",
+    "initial-library-handoff-from-blueprint",
+    "initial-library-call-package",
+    "intake-quality-gate-pass",
+    "intake-quality-gate-fail-pool-size",
+    "intake-quality-gate-fail-material",
+    "intake-quality-gate-fail-type-coverage",
+    "full-retrieval-first-flow",
+    "gap-round2-after-initial-library",
+    "validate-citation-plan-blocks-without-blueprint",
+    "delivery-includes-blueprint-and-intake-gate"
   ]
 }

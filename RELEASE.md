@@ -1,5 +1,21 @@
 # Release Notes
 
+## 0.5.0-dev
+
+Status: pre-Claude-review development build.
+
+### Scope
+
+- Retrieval-first stage machine and hard gates.
+- Article-level search blueprint before any RAG reverse lookup.
+- Initial `检索入库` library-build handoff and call package.
+- Intake quality gate for pool size, usable text, type coverage, and RAG indexing.
+- 41 offline fixtures covering legacy compatibility and retrieval-first behavior.
+
+### Required Before Publication
+
+Run local gates, request Claude review, fix P0/P1, commit, tag `0.5.0-dev`, and push.
+
 ## 0.4.0-dev
 
 Status: pre-Claude-review development build.

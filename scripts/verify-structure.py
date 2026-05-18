@@ -28,7 +28,10 @@ REQUIRED = [
     "templates/footnote-pruning-result.template.json", "templates/reference-pruning-plan.template.json",
     "templates/authenticity-verification-request.template.json",
     "templates/authenticity-verification-result.template.json",
-    "templates/consistency-gate-result.template.json", "scripts/build-search-intake-call.py",
+    "templates/consistency-gate-result.template.json", "templates/search-blueprint.template.json",
+    "templates/intake-quality-gate.template.json", "scripts/build-search-intake-call.py",
+    "scripts/build-search-blueprint.py", "scripts/build-initial-search-handoff.py",
+    "scripts/validate-intake-quality.py",
     "scripts/build-post-ingestion-rag-call.py", "tests/fixtures/README.md",
 ]
 

@@ -18,6 +18,7 @@ def main() -> int:
         print_json(result("failed", errors=["citation-needs.json missing"]))
         return 1
     needs = read_json(needs_path)
+    library_status = "built" if (task / "state" / "intake-status.json").exists() else "not_built"
     interp_by_claim = {}
     for path in sorted((task / "state" / "evidence-interpretations").glob("*.json")):
         for item in read_json(path).get("interpretations", []):
@@ -54,6 +55,7 @@ def main() -> int:
         "claim_evidence": entries,
         "critical_gaps": critical_gaps,
         "high_risk_unsupported": high_risk,
+        "library_status": library_status,
     }
     out = task / "state" / "evidence-map.json"
     write_json(out, out_data)

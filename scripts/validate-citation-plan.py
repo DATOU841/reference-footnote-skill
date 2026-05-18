@@ -7,6 +7,8 @@ import argparse
 from pathlib import Path
 from reflib import ensure_task, print_json, read_json, result, write_json
 
+ALLOWED_EVIDENCE_SOURCES = {"rag_verified", "intake_completed", "user_declared_existing", None}
+
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -29,6 +31,11 @@ def main() -> int:
     references = plan.get("reference_list", {}).get("new_references", [])
     intake_path = task / "state" / "intake-status.json"
     intake = read_json(intake_path) if intake_path.exists() else {}
+    blueprint_path = task / "state" / "search-blueprint.json"
+    initial_handoff = task / "state" / "search-intake-requests" / "initial-library.json"
+    status_path = task / "state" / "status.json"
+    user_declared_existing = status_path.exists() and read_json(status_path).get("rag_library_status") == "user_declared_existing"
+    intake_gate_path = task / "state" / "intake-quality-gate.json"
     metrics = {
         "critical_claim_coverage": len(critical_supported) / len(critical) if critical else 1,
         "high_risk_citation_ratio": len(high_risk) / len(plan["insertions"]) if plan["insertions"] else 0,
@@ -37,6 +44,8 @@ def main() -> int:
         "reference_count": len(references),
         "pool_avg_usable_text_chars": intake.get("pool_avg_usable_text_chars"),
         "pool_material_status": intake.get("pool_material_status", "not_reported"),
+        "retrieval_first_ready": user_declared_existing or (blueprint_path.exists() and initial_handoff.exists() and intake_path.exists()),
+        "library_provenance": "user_declared_not_skill_built" if user_declared_existing else "skill_built_or_required",
     }
     blocking = []
     warnings = []
@@ -58,9 +67,28 @@ def main() -> int:
         blocking.append("reference count above 40")
     if metrics["pool_material_status"] == "insufficient":
         warnings.append("average usable text below 200 chars per source pool")
+    if not user_declared_existing and not blueprint_path.exists():
+        blocking.append("retrieval blueprint missing; 必须先完成文章反推检索蓝图 (A3.5)")
+    elif user_declared_existing and not blueprint_path.exists():
+        warnings.append("retrieval blueprint missing because user declared existing RAG library")
+    if not user_declared_existing and not initial_handoff.exists():
+        blocking.append("initial library search handoff missing; 必须先完成初始文献库建设交接 (A4)")
+    elif user_declared_existing and not initial_handoff.exists():
+        warnings.append("initial library handoff missing because user declared existing RAG library")
+    if not user_declared_existing and not intake_path.exists():
+        blocking.append("intake completion missing before citation plan")
+    if intake_gate_path.exists():
+        intake_gate = read_json(intake_gate_path)
+        if intake_gate.get("status") == "failed":
+            warnings.append("入库质量验收未通过; 参考文献池可能不足")
+    elif not user_declared_existing:
+        warnings.append("intake-quality-gate.json missing")
     for ins in plan["insertions"]:
         if ins.get("annotation_purpose") == "reference_only" and ins.get("note_type") in {"footnote", "endnote"}:
             blocking.append(f"{ins.get('insertion_id')} reference_only cannot enter footnote/endnote body")
+        source = ins.get("evidence_basis", {}).get("evidence_source")
+        if source not in ALLOWED_EVIDENCE_SOURCES:
+            blocking.append(f"{ins.get('insertion_id')} invalid evidence_source: {source}")
     status = "failed" if blocking else "passed"
     report = {"status": status, "blocking_issues": blocking, "warnings": warnings, "metrics": metrics}
     out = task / "state" / "quality-report.json"

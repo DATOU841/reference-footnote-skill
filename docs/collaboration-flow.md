@@ -1,21 +1,22 @@
 # Collaboration Flow
 
-`0.3.0-dev` extends the collaboration layer for calling `检索入库` and then preparing post-ingestion RAG reverse lookup. The core rule is unchanged: ReferenceFootnote prepares structured packages; it does not execute real CNKI/WoS/Zotero/PDF/RAG work.
+`0.5.0-dev` uses a retrieval-first collaboration layer. ReferenceFootnote first derives article-level retrieval directions, then prepares an initial library-building package for `检索入库`. RAG reverse lookup happens only after structured ingestion completion and intake quality validation.
 
 ## Flow
 
-1. Build evidence gaps with `build-evidence-map.py`.
-2. Generate gap-driven search requests with `build-search-handoff.py`.
+1. Generate `search-blueprint.json` with `build-search-blueprint.py`.
+2. Generate `search_intake_library_build` with `build-initial-search-handoff.py`.
 3. Generate a skill call package with `build-search-intake-call.py`.
 4. A user or outer orchestrator authorizes `检索入库` to execute the package.
-5. `检索入库` returns `intake_completion` JSON.
+5. `检索入库` returns `intake_completion` JSON with `library_build_summary`.
 6. Record completion with `apply-intake-completion.py`.
-7. Generate post-ingestion RAG call package with `build-post-ingestion-rag-call.py`.
-8. A RAG platform operator returns `reverse_lookup_result`.
+7. Validate library quality with `validate-intake-quality.py`.
+8. Build RAG reverse lookup request with `build-rag-request.py`.
 9. Validate returned RAG response with `validate-rag-response.py`.
-10. Rebuild evidence map, footnote plan, quality report, and delivery package.
+10. Build evidence map and, if needed, create round2 gap requests with `build-search-handoff.py`.
+11. Generate footnote/reference plans, quality report, authenticity request, and delivery package.
 
-`tests/run-fixtures.py` includes an offline closure fixture for steps 7-10. It verifies that a post-ingestion RAG response for a previously unsupported claim can update the evidence map and produce an insertion plan without any live RAG call.
+`tests/run-fixtures.py` includes offline retrieval-first fixtures. They verify that RAG is blocked before ingestion, initial library handoff packages are produced, intake quality gates pass/fail deterministically, and delivery includes blueprint and intake gate artifacts.
 
 ## Search-Intake Call Package
 

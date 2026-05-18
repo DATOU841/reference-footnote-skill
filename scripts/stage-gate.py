@@ -12,11 +12,18 @@ STAGE_FILES = {
     "A1": "state/article-structure.json",
     "A2": "state/claim-segments.json",
     "A3": "state/citation-needs.json",
-    "A4": "state/rag-requests/batch-01.json",
-    "A5": "state/evidence-interpretations/batch-01.json",
-    "A6": "state/evidence-map.json",
-    "A7": "state/search-intake-requests/batch-01.json",
-    "A8": "state/intake-status.json",
+    "A3.5": "state/search-blueprint.json",
+    "A4": "state/search-intake-requests/initial-library.json",
+    "A4.5": "state/search-intake-calls/initial-library.json",
+    "A5": "state/intake-status.json",
+    "A5.5": "state/intake-quality-gate.json",
+    "A6": "state/rag-requests/batch-01.json",
+    "A6.5": "state/evidence-interpretations/batch-01.json",
+    "A7": "state/evidence-map.json",
+    "A7.5": "state/search-intake-requests/gap-round2.json",
+    "A7.6": "state/search-intake-calls/gap-round2.json",
+    "A8": "state/intake-status-round2.json",
+    "A8.5": "state/rag-calls/post-ingestion-01.json",
     "A9a": "state/footnote-candidate-pool.json",
     "A9b": "state/footnote-pruning-result.json",
     "A9c": "state/reference-pruning-plan.json",
@@ -29,7 +36,7 @@ STAGE_FILES = {
 }
 
 
-STAGE_ORDER = ["A0", "A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9a", "A9b", "A9c", "A9", "A10", "A10a", "A10b", "A10c", "A11"]
+STAGE_ORDER = ["A0", "A1", "A2", "A3", "A3.5", "A4", "A4.5", "A5", "A5.5", "A6", "A6.5", "A7", "A7.5", "A7.6", "A8", "A8.5", "A9a", "A9b", "A9c", "A9", "A10", "A10a", "A10b", "A10c", "A11"]
 
 
 def main() -> int:

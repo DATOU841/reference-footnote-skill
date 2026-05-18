@@ -76,6 +76,7 @@ def build_from_pruning(task: Path, style: str) -> dict | None:
                 "confidence": item.get("confidence", 0),
                 "risks": item.get("risks", []),
                 "source_ref_id": ref_id,
+                "evidence_source": item.get("evidence_source", "rag_verified"),
             },
             "requires_rewrite": item.get("support_strength") == "partial_support" or bool(item.get("risks")),
             "rewrite_suggestion": "建议限定表述或人工确认页码。" if item.get("support_strength") == "partial_support" or item.get("risks") else None,

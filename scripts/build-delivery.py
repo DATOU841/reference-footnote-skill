@@ -22,6 +22,7 @@ def main() -> int:
     delivery.mkdir(parents=True, exist_ok=True)
     for name in [
         "evidence-map.json", "insertion-plan.json", "quality-report.json", "intake-status.json",
+        "search-blueprint.json", "intake-quality-gate.json",
         "footnote-candidate-pool.json", "footnote-pruning-result.json", "reference-pruning-plan.json",
         "authenticity-verification-request.json", "authenticity-verification-result.json",
         "authenticity-issues.json", "consistency-gate-result.json",
@@ -29,6 +30,8 @@ def main() -> int:
         copy_if_exists(task / "state" / name, delivery / name)
     evidence = read_json(task / "state" / "evidence-map.json")
     plan = read_json(task / "state" / "insertion-plan.json")
+    intake_gate_path = task / "state" / "intake-quality-gate.json"
+    intake_gate = read_json(intake_gate_path) if intake_gate_path.exists() else {}
     human_review = {
         "page_numbers_to_verify": [i for i in plan["insertions"] if "page_missing" in i["evidence_basis"].get("risks", [])],
         "rewrite_suggestions": [i for i in plan["insertions"] if i.get("requires_rewrite")],
@@ -36,6 +39,7 @@ def main() -> int:
         "authenticity_issues": read_json(task / "state" / "authenticity-issues.json").get("issues", []) if (task / "state" / "authenticity-issues.json").exists() else [],
         "no_support_critical": evidence.get("critical_gaps", []),
         "high_risk_unsupported": evidence.get("high_risk_unsupported", []),
+        "library_gap_directions": intake_gate.get("suggested_补充_directions", []),
     }
     unresolved = [gap for gap in evidence.get("critical_gaps", []) if gap.get("need_level") == "critical"]
     handoff = {
@@ -51,6 +55,9 @@ def main() -> int:
             "existing_references_verified": plan.get("reference_list", {}).get("existing_references_verified", []),
             "zotero_reference_master_merge": "pending_manual_or_writer_side_merge",
         },
+        "library_status": "built" if (task / "state" / "intake-status.json").exists() else "not_built",
+        "library_gap_directions": intake_gate.get("suggested_补充_directions", []),
+        "manual_citation_tasks": human_review["page_numbers_to_verify"] + human_review["risk_citations"],
         "writer_consumption_notes": {
             "r2_a1_gap_routing": "unsupported critical/important claims may become gap-routing-table entries",
             "r2_a2_search_plan": "search-intake requests can be transformed into round2-search-plan rows",

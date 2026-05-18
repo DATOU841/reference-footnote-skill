@@ -17,6 +17,12 @@ COMPLETION = ROOT / "tests" / "fixtures" / "mocks" / "intake-completion.json"
 FULL_COMPLETION = ROOT / "tests" / "fixtures" / "fixture-intake-completion-full.json"
 POST_INGESTION_RAG = ROOT / "tests" / "fixtures" / "mocks" / "post-ingestion-rag-response.json"
 AUTHENTICITY = ROOT / "tests" / "fixtures" / "mocks" / "authenticity-verification-result.json"
+INITIAL_COMPLETION = ROOT / "tests" / "fixtures" / "mocks" / "intake-completion-initial-library.json"
+INITIAL_COMPLETION_SMALL = ROOT / "tests" / "fixtures" / "mocks" / "intake-completion-initial-library-small.json"
+INITIAL_COMPLETION_LOW = ROOT / "tests" / "fixtures" / "mocks" / "intake-completion-initial-library-low-material.json"
+INITIAL_COMPLETION_NARROW = ROOT / "tests" / "fixtures" / "mocks" / "intake-completion-initial-library-narrow.json"
+GAP_ROUND2_COMPLETION = ROOT / "tests" / "fixtures" / "mocks" / "intake-completion-gap-round2.json"
+RAG_AFTER_LIBRARY = ROOT / "tests" / "fixtures" / "mocks" / "rag-response-after-library.json"
 
 
 def run(args: list[str]) -> tuple[int, dict]:
@@ -43,7 +49,7 @@ def base_flow(task: Path, *, include_rag: bool = True, allow_fail: bool = True) 
         ["python3", "scripts/article-intake.py", "--task-dir", str(task), "--file", str(ARTICLE)],
         ["python3", "scripts/claim-segmentation.py", "--task-dir", str(task)],
         ["python3", "scripts/citation-need-diagnosis.py", "--task-dir", str(task)],
-        ["python3", "scripts/build-rag-request.py", "--task-dir", str(task), "--batch-id", "batch-01"],
+        ["python3", "scripts/build-rag-request.py", "--task-dir", str(task), "--batch-id", "batch-01", "--allow-pre-ingestion"],
     ]
     for step in steps:
         code, data = run(step)
@@ -54,7 +60,7 @@ def base_flow(task: Path, *, include_rag: bool = True, allow_fail: bool = True) 
         assert code == 0, data
     code, data = run(["python3", "scripts/build-evidence-map.py", "--task-dir", str(task)])
     assert code == 0, data
-    code, data = run(["python3", "scripts/build-search-handoff.py", "--task-dir", str(task), "--batch-id", "batch-01"])
+    code, data = run(["python3", "scripts/build-search-handoff.py", "--task-dir", str(task), "--batch-id", "batch-01", "--macro-round", "round1"])
     assert code == 0, data
     code, data = run(["python3", "scripts/apply-intake-completion.py", "--task-dir", str(task), "--completion", str(COMPLETION)])
     assert code == 0, data
@@ -93,6 +99,84 @@ def base_flow(task: Path, *, include_rag: bool = True, allow_fail: bool = True) 
     code, data = run(cmd)
     assert code == 0, data
     code, data = run(["python3", "scripts/build-delivery.py", "--task-dir", str(task)])
+    assert code == 0, data
+
+
+def base_flow_retrieval_first(task: Path, *, allow_fail: bool = True) -> None:
+    steps = [
+        ["python3", "scripts/startup.py", "--task-dir", str(task)],
+        ["python3", "scripts/article-intake.py", "--task-dir", str(task), "--file", str(ARTICLE)],
+        ["python3", "scripts/claim-segmentation.py", "--task-dir", str(task)],
+        ["python3", "scripts/citation-need-diagnosis.py", "--task-dir", str(task)],
+        ["python3", "scripts/build-search-blueprint.py", "--task-dir", str(task)],
+        ["python3", "scripts/build-initial-search-handoff.py", "--task-dir", str(task)],
+        ["python3", "scripts/build-search-intake-call.py", "--task-dir", str(task), "--batch-id", "initial-library"],
+        ["python3", "scripts/apply-intake-completion.py", "--task-dir", str(task), "--completion", str(INITIAL_COMPLETION)],
+        ["python3", "scripts/validate-intake-quality.py", "--task-dir", str(task)],
+        ["python3", "scripts/build-rag-request.py", "--task-dir", str(task), "--batch-id", "batch-01"],
+    ]
+    for step in steps:
+        code, data = run(step)
+        assert code == 0, data
+    req = task / "state" / "rag-requests" / "batch-01.json"
+    code, data = run(["python3", "scripts/validate-rag-response.py", "--task-dir", str(task), "--request", str(req), "--response", str(RAG_AFTER_LIBRARY)])
+    assert code == 0, data
+    for step in [
+        ["python3", "scripts/build-evidence-map.py", "--task-dir", str(task)],
+        ["python3", "scripts/build-search-handoff.py", "--task-dir", str(task)],
+        ["python3", "scripts/build-search-intake-call.py", "--task-dir", str(task), "--batch-id", "gap-round2"],
+        ["python3", "scripts/build-footnote-candidate-pool.py", "--task-dir", str(task)],
+        ["python3", "scripts/prune-footnotes.py", "--task-dir", str(task)],
+        ["python3", "scripts/prune-references.py", "--task-dir", str(task)],
+        ["python3", "scripts/plan-footnotes.py", "--task-dir", str(task)],
+        ["python3", "scripts/build-authenticity-verification-request.py", "--task-dir", str(task)],
+    ]:
+        code, data = run(step)
+        assert code == 0, data
+    request = read(task / "state" / "authenticity-verification-request.json")
+    auth_results = [{
+        "insertion_id": item["insertion_id"],
+        "authenticity_status": "verified",
+        "pdf_check": {"reference_exists": True, "metadata_matches": True, "page": 5, "contains_cited_content": True},
+        "rag_pdf_consistency": "consistent",
+        "claim_fit": "fits",
+        "insertion_position_fit": "fits",
+        "risks": [],
+        "resolution_required": None,
+    } for item in request.get("items", [])]
+    auth_path = task / "state" / "fixture-authenticity-result.json"
+    write(auth_path, {"status": "completed", "batch_id": "authenticity-01", "results": auth_results})
+    for step in [
+        ["python3", "scripts/apply-authenticity-verification-result.py", "--task-dir", str(task), "--verification", str(auth_path)],
+        ["python3", "scripts/validate-note-reference-consistency.py", "--task-dir", str(task), "--allow-fail"],
+    ]:
+        code, data = run(step)
+        assert code == 0, data
+    cmd = ["python3", "scripts/validate-citation-plan.py", "--task-dir", str(task)]
+    if allow_fail:
+        cmd.append("--allow-fail")
+    code, data = run(cmd)
+    assert code == 0, data
+    code, data = run(["python3", "scripts/build-delivery.py", "--task-dir", str(task)])
+    assert code == 0, data
+
+
+def prepare_blueprint(task: Path) -> None:
+    for step in [
+        ["python3", "scripts/article-intake.py", "--task-dir", str(task), "--file", str(ARTICLE)],
+        ["python3", "scripts/claim-segmentation.py", "--task-dir", str(task)],
+        ["python3", "scripts/citation-need-diagnosis.py", "--task-dir", str(task)],
+        ["python3", "scripts/build-search-blueprint.py", "--task-dir", str(task)],
+    ]:
+        code, data = run(step)
+        assert code == 0, data
+
+
+def prepare_initial_call(task: Path) -> None:
+    prepare_blueprint(task)
+    code, data = run(["python3", "scripts/build-initial-search-handoff.py", "--task-dir", str(task)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/build-search-intake-call.py", "--task-dir", str(task), "--batch-id", "initial-library"])
     assert code == 0, data
 
 
@@ -410,6 +494,121 @@ def fixture_29(base: Path) -> None:
     assert (task / "delivery" / "consistency-gate-result.json").exists()
 
 
+def fixture_30(base: Path) -> None:
+    task = base / "retrieval-first-blocks-rag-without-intake"
+    for step in [
+        ["python3", "scripts/startup.py", "--task-dir", str(task)],
+        ["python3", "scripts/article-intake.py", "--task-dir", str(task), "--file", str(ARTICLE)],
+        ["python3", "scripts/claim-segmentation.py", "--task-dir", str(task)],
+        ["python3", "scripts/citation-need-diagnosis.py", "--task-dir", str(task)],
+    ]:
+        code, data = run(step)
+        assert code == 0, data
+    code, data = run(["python3", "scripts/build-rag-request.py", "--task-dir", str(task)])
+    assert code != 0
+    assert "intake-status.json" in "".join(data.get("errors", []))
+
+
+def fixture_31(base: Path) -> None:
+    task = base / "blueprint-generates-directions"
+    prepare_blueprint(task)
+    bp = read(task / "state" / "search-blueprint.json")
+    assert len(bp["directions"]) >= 3
+    assert bp["type_coverage_minimum"] == 3
+    assert all("keywords_zh" in item and "source_types" in item for item in bp["directions"])
+
+
+def fixture_32(base: Path) -> None:
+    task = base / "initial-library-handoff-from-blueprint"
+    prepare_blueprint(task)
+    code, data = run(["python3", "scripts/build-initial-search-handoff.py", "--task-dir", str(task)])
+    assert code == 0, data
+    handoff = read(task / "state" / "search-intake-requests" / "initial-library.json")
+    assert handoff["request_type"] == "search_intake_library_build"
+    assert handoff["library_requirements"]["initial_pool_min_sources"] == 40
+
+
+def fixture_33(base: Path) -> None:
+    task = base / "initial-library-call-package"
+    prepare_initial_call(task)
+    pkg = read(task / "state" / "search-intake-calls" / "initial-library.json")
+    assert pkg["handoff"]["request_type"] == "search_intake_library_build"
+    prompt = (task / "state" / "search-intake-calls" / "initial-library.prompt.md").read_text(encoding="utf-8")
+    assert "初始文献库建设" in prompt
+
+
+def fixture_34(base: Path) -> None:
+    task = base / "intake-quality-gate-pass"
+    prepare_initial_call(task)
+    code, data = run(["python3", "scripts/apply-intake-completion.py", "--task-dir", str(task), "--completion", str(INITIAL_COMPLETION)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/validate-intake-quality.py", "--task-dir", str(task)])
+    assert code == 0, data
+    gate = read(task / "state" / "intake-quality-gate.json")
+    assert gate["status"] == "passed"
+
+
+def fixture_35(base: Path) -> None:
+    task = base / "intake-quality-gate-fail-pool-size"
+    prepare_initial_call(task)
+    code, data = run(["python3", "scripts/apply-intake-completion.py", "--task-dir", str(task), "--completion", str(INITIAL_COMPLETION_SMALL)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/validate-intake-quality.py", "--task-dir", str(task), "--allow-fail"])
+    assert code == 0, data
+    assert read(task / "state" / "intake-quality-gate.json")["status"] == "failed"
+
+
+def fixture_36(base: Path) -> None:
+    task = base / "intake-quality-gate-fail-material"
+    prepare_initial_call(task)
+    code, data = run(["python3", "scripts/apply-intake-completion.py", "--task-dir", str(task), "--completion", str(INITIAL_COMPLETION_LOW)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/validate-intake-quality.py", "--task-dir", str(task), "--allow-fail"])
+    assert code == 0, data
+    assert any("usable text" in item for item in read(task / "state" / "intake-quality-gate.json")["blocking"])
+
+
+def fixture_37(base: Path) -> None:
+    task = base / "intake-quality-gate-fail-type-coverage"
+    prepare_initial_call(task)
+    code, data = run(["python3", "scripts/apply-intake-completion.py", "--task-dir", str(task), "--completion", str(INITIAL_COMPLETION_NARROW)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/validate-intake-quality.py", "--task-dir", str(task), "--allow-fail"])
+    assert code == 0, data
+    assert read(task / "state" / "intake-quality-gate.json")["metrics"]["type_coverage"] == 1
+
+
+def fixture_38(base: Path) -> None:
+    task = base / "full-retrieval-first-flow"
+    base_flow_retrieval_first(task)
+    assert (task / "delivery" / "search-blueprint.json").exists()
+    assert (task / "delivery" / "intake-quality-gate.json").exists()
+
+
+def fixture_39(base: Path) -> None:
+    task = base / "gap-round2-after-initial-library"
+    base_flow_retrieval_first(task)
+    handoff = read(task / "state" / "search-intake-requests" / "gap-round2.json")
+    assert handoff["macro_round"] == "round2"
+    assert all(req["search_strategy"]["constraints"]["target_kb"] == "C" for req in handoff["requests"])
+
+
+def fixture_40(base: Path) -> None:
+    task = base / "validate-citation-plan-blocks-without-blueprint"
+    base_flow(task, allow_fail=True)
+    code, data = run(["python3", "scripts/validate-citation-plan.py", "--task-dir", str(task), "--allow-fail"])
+    assert code == 0, data
+    report = read(task / "state" / "quality-report.json")
+    assert any("retrieval blueprint missing" in item for item in report["blocking_issues"])
+
+
+def fixture_41(base: Path) -> None:
+    task = base / "delivery-includes-blueprint-and-intake-gate"
+    base_flow_retrieval_first(task)
+    assert (task / "delivery" / "search-blueprint.json").exists()
+    assert (task / "delivery" / "intake-quality-gate.json").exists()
+
+
 FIXTURES = [
     fixture_01, fixture_02, fixture_03, fixture_04, fixture_05,
     fixture_06, fixture_07, fixture_08, fixture_09, fixture_10,
@@ -419,6 +618,9 @@ FIXTURES = [
     fixture_19,
     fixture_20, fixture_21, fixture_22, fixture_23, fixture_24,
     fixture_25, fixture_26, fixture_27, fixture_28, fixture_29,
+    fixture_30, fixture_31, fixture_32, fixture_33, fixture_34,
+    fixture_35, fixture_36, fixture_37, fixture_38, fixture_39,
+    fixture_40, fixture_41,
 ]
 
 

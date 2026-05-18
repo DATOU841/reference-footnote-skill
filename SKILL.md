@@ -5,7 +5,7 @@ description: Use for ReferenceFootnote workflows on already-written academic art
 
 # 参考文献补注 Skill
 
-版本：0.4.0-dev
+版本：0.5.0-dev
 
 ## 硬边界
 
@@ -17,6 +17,7 @@ description: Use for ReferenceFootnote workflows on already-written academic art
 - 不运行 writing-pool、advance-pool、mimo。
 - 不使用正式文章任务目录作为测试场。
 - 真实检索和入库只能通过结构化请求交给 `检索入库`。
+- 对没有已声明可用 RAG 文献库的文章，必须先反推检索蓝图并交给 `检索入库` 建设初始文献库；不得在无库状态编造参考文献。
 - RAG 命中不能直接当成可靠引用，必须经过证据解释和风险门禁。
 
 ## 工作流
@@ -25,22 +26,19 @@ description: Use for ReferenceFootnote workflows on already-written academic art
 2. A1 文章导入：用 `scripts/article-intake.py` 生成 `article-structure.json`。
 3. A2 Claim 拆解：用 `scripts/claim-segmentation.py` 生成 `claim-segments.json`。
 4. A3 引用需求诊断：用 `scripts/citation-need-diagnosis.py` 生成 `citation-needs.json`。
-5. A4 RAG 反查请求：用 `scripts/build-rag-request.py` 生成离线请求，不执行真实查询。
-6. A5 RAG 证据解释：用 `scripts/validate-rag-response.py` 验证 fixture 或外部交回的离线响应。
-7. A6 证据映射：用 `scripts/build-evidence-map.py` 汇总支撑强度、风险和缺口。
-8. A7 检索入库交接：用 `scripts/build-search-handoff.py` 为无支撑关键 claim 生成分批请求。
-9. A7.5 检索入库调用包：用 `scripts/build-search-intake-call.py` 生成交给 `检索入库` 的 JSON 调用包和中文提示词，等待用户授权或外部执行。
-10. A8 补库完成应用：用 `scripts/apply-intake-completion.py` 记录 `检索入库` 返回状态。
-11. A8.5 补库后二轮 RAG 调用包：用 `scripts/build-post-ingestion-rag-call.py` 为已入库来源生成二轮 RAG 反查调用包。
-12. A9a 脚注候选池：用 `scripts/build-footnote-candidate-pool.py` 准备 15-25 个候选脚注。
-13. A9b 必要性裁剪：用 `scripts/prune-footnotes.py` 删除空泛、重复、弱支撑和 reference_only 误入脚注正文的候选，目标约 15 个。
-14. A9c 参考文献裁剪：用 `scripts/prune-references.py` 保留 25-30 篇最重要、已消费或必须保留的参考文献。
-15. A9 脚注方案：用 `scripts/plan-footnotes.py` 生成最终插入建议、参考文献表和 no-insert zones。
-16. A10 质量门禁：用 `scripts/validate-citation-plan.py` 生成质量报告，检查脚注数、参考文献数和入库材料均值。
-17. A10a 真实性复核请求：用 `scripts/build-authenticity-verification-request.py` 生成 PDF + RAG 双核验请求，不执行真实核验。
-18. A10b 真实性回执应用：用 `scripts/apply-authenticity-verification-result.py` 接收离线回执并输出问题清单。
-19. A10c 边界一致性门禁：用 `scripts/validate-note-reference-consistency.py` 检查脚注/尾注/参考文献边界。
-20. A11 交付包：用 `scripts/build-delivery.py` 生成 delivery package。
+5. A3.5 检索蓝图：用 `scripts/build-search-blueprint.py` 从文章整体反推研究方向、关键词、来源类型和文献池质量要求。
+6. A4 初始文献库建设交接：用 `scripts/build-initial-search-handoff.py` 生成 `search_intake_library_build` 请求。
+7. A4.5 初始文献库调用包：用 `scripts/build-search-intake-call.py` 生成交给 `检索入库` 的 JSON 调用包和中文提示词。
+8. A5 入库完成应用：用 `scripts/apply-intake-completion.py` 记录 `检索入库` 返回状态。
+9. A5.5 入库质量验收：用 `scripts/validate-intake-quality.py` 检查文献池数量、可消费材料、来源类型覆盖和 RAG 入库率。
+10. A6 入库后 RAG 反查请求：用 `scripts/build-rag-request.py` 生成离线请求；无入库完成或用户声明已有库时必须拒绝。
+11. A6.5 RAG 证据解释：用 `scripts/validate-rag-response.py` 验证 fixture 或外部交回的离线响应。
+12. A7 证据映射：用 `scripts/build-evidence-map.py` 汇总支撑强度、风险和缺口。
+13. A7.5 缺口二轮补库交接：用 `scripts/build-search-handoff.py` 为 RAG 后仍无支撑的关键 claim 生成 `round2` gap 请求。
+14. A7.6 缺口补库调用包：用 `scripts/build-search-intake-call.py` 生成二轮交接包。
+15. A8/A8.5 可用于二轮入库完成和二轮 RAG 回流。
+16. A9a-A9c 脚注候选池、必要性裁剪和参考文献裁剪。
+17. A9-A11 脚注方案、质量门禁、真实性复核、边界一致性和交付包。
 
 ## 何时读取参考文件
 
@@ -58,6 +56,7 @@ description: Use for ReferenceFootnote workflows on already-written academic art
 - `conflict` 不能作为支撑引用，只能作为反对观点或风险提示。
 - 作者原创观点、过渡句、常识句不得强行补注。
 - 仍无证据的 critical claim 必须进入高风险清单，不得伪造脚注。
+- RAG 反查必须发生在初始文献库建设和入库质量验收之后；旧版 pre-ingestion RAG 仅允许 fixture bypass 或用户明确声明已有 RAG 库。
 - 脚注和尾注是正文内容的必要补充，不是参考文献罗列；`reference_only` 禁止进入脚注正文。
 - 入库完成回执应报告 `usable_text_chars`，文献池平均可消费正文级材料低于 200 字/篇时必须标注材料风险。
 - 最终插入和参考文献整理后，必须通过外部 PDF + RAG 回执逐条复核真实性、页码/OCR、位置和契合性。

@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.0-dev - 2026-05-18
+
+- Reworked the workflow into a retrieval-first pipeline: article-derived search blueprint, initial library-building handoff to `检索入库`, intake completion, intake quality gate, then RAG reverse lookup.
+- Added `build-search-blueprint.py`, `build-initial-search-handoff.py`, and `validate-intake-quality.py`.
+- Made `build-rag-request.py` block pre-ingestion RAG unless the user declared an existing RAG library or a legacy fixture explicitly bypasses it.
+- Added `search_intake_library_build` protocol fields and library quality requirements.
+- Expanded offline fixtures from 29 to 41, including retrieval-first blocking, initial library quality pass/fail, round2 gap handoff, and delivery propagation.
+
 ## 0.4.0-dev - 2026-05-18
 
 - Added material quality tracking for search-intake completion rows with `usable_text_chars`, `material_flag`, and pool average status.

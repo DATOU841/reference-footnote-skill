@@ -1,6 +1,6 @@
 # RAG Reverse Lookup Protocol
 
-The skill only builds and validates reverse-lookup payloads. It does not query a live RAG service in 0.3.0-dev.
+The skill only builds and validates reverse-lookup payloads. It does not query a live RAG service in 0.5.0-dev. RAG reverse lookup is blocked until initial library intake is complete, unless the user explicitly declared an existing RAG library.
 
 ## Request
 

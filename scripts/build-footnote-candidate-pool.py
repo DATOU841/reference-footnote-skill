@@ -70,6 +70,7 @@ def main() -> int:
                 "note_type": note_type,
                 "annotation_purpose": purpose,
                 "support_strength": support.get("strength", entry.get("evidence_status")),
+                "evidence_source": "rag_verified",
                 "confidence": support.get("confidence", 0),
                 "risks": risks,
                 "usable_text_chars": mat["usable_text_chars"],

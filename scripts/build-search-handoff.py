@@ -19,9 +19,10 @@ def terms(dimensions: dict, key: str, field: str = "terms") -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--task-dir", required=True, type=Path)
-    parser.add_argument("--batch-id", default="batch-01")
+    parser.add_argument("--batch-id", default="gap-round2")
     parser.add_argument("--priority", default="P0")
-    parser.add_argument("--macro-round", default="round1")
+    parser.add_argument("--macro-round", default="round2")
+    parser.add_argument("--request-type", default="search_intake_gap")
     args = parser.parse_args()
     task = ensure_task(args.task_dir)
     evidence_path = task / "state" / "evidence-map.json"
@@ -65,8 +66,8 @@ def main() -> int:
             },
         })
     handoff = {
-        "protocol_version": "1.0",
-        "request_type": "search_intake_gap",
+        "protocol_version": "1.1",
+        "request_type": args.request_type,
         "source_skill": "参考文献补注",
         "target_skill": "检索入库",
         "staging_status": "blocked",
@@ -74,6 +75,8 @@ def main() -> int:
         "batch_id": args.batch_id,
         "macro_round": args.macro_round,
         "priority": args.priority,
+        "retrieval_first": False,
+        "gap_driven": True,
         "requests": requests,
     }
     out = task / "state" / "search-intake-requests" / f"{args.batch_id}.json"

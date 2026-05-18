@@ -1,0 +1,2181 @@
+{
+  "completion_id": "completion-initial-library-small",
+  "handoff_id": "search-handoff-initial-library",
+  "batch_id": "initial-library",
+  "status": "completed",
+  "library_build_summary": {
+    "total_sources_ingested": 10,
+    "type_breakdown": {
+      "journal_article": 14,
+      "monograph_chapter": 6,
+      "policy_document": 6,
+      "primary_source": 4,
+      "english_article": 7,
+      "classic_foundational": 3
+    },
+    "rag_indexed_count": 34,
+    "pool_avg_usable_text_chars": 400.0
+  },
+  "results": [
+    {
+      "request_id": "lib-dir-001",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "journal_article",
+      "sources_found": [
+        {
+          "source_id": "src-001",
+          "title": "初始文献1",
+          "source_type": "journal_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 300,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z001",
+      "ref_metadata": {
+        "ref_id": "ref-lib-001",
+        "title": "初始文献1",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "journal_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-001",
+          "title": "初始文献1",
+          "rag_indexed": true,
+          "source_type": "journal_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-002",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "journal_article",
+      "sources_found": [
+        {
+          "source_id": "src-002",
+          "title": "初始文献2",
+          "source_type": "journal_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 350,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z002",
+      "ref_metadata": {
+        "ref_id": "ref-lib-002",
+        "title": "初始文献2",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "journal_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-002",
+          "title": "初始文献2",
+          "rag_indexed": true,
+          "source_type": "journal_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-003",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "journal_article",
+      "sources_found": [
+        {
+          "source_id": "src-003",
+          "title": "初始文献3",
+          "source_type": "journal_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 400,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z003",
+      "ref_metadata": {
+        "ref_id": "ref-lib-003",
+        "title": "初始文献3",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "journal_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-003",
+          "title": "初始文献3",
+          "rag_indexed": true,
+          "source_type": "journal_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-004",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "journal_article",
+      "sources_found": [
+        {
+          "source_id": "src-004",
+          "title": "初始文献4",
+          "source_type": "journal_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 450,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z004",
+      "ref_metadata": {
+        "ref_id": "ref-lib-004",
+        "title": "初始文献4",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "journal_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-004",
+          "title": "初始文献4",
+          "rag_indexed": true,
+          "source_type": "journal_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-001",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "journal_article",
+      "sources_found": [
+        {
+          "source_id": "src-005",
+          "title": "初始文献5",
+          "source_type": "journal_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 500,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z005",
+      "ref_metadata": {
+        "ref_id": "ref-lib-005",
+        "title": "初始文献5",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "journal_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-005",
+          "title": "初始文献5",
+          "rag_indexed": true,
+          "source_type": "journal_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-002",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "journal_article",
+      "sources_found": [
+        {
+          "source_id": "src-006",
+          "title": "初始文献6",
+          "source_type": "journal_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 550,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z006",
+      "ref_metadata": {
+        "ref_id": "ref-lib-006",
+        "title": "初始文献6",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "journal_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-006",
+          "title": "初始文献6",
+          "rag_indexed": true,
+          "source_type": "journal_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-003",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "journal_article",
+      "sources_found": [
+        {
+          "source_id": "src-007",
+          "title": "初始文献7",
+          "source_type": "journal_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 250,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z007",
+      "ref_metadata": {
+        "ref_id": "ref-lib-007",
+        "title": "初始文献7",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "journal_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-007",
+          "title": "初始文献7",
+          "rag_indexed": true,
+          "source_type": "journal_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-004",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "journal_article",
+      "sources_found": [
+        {
+          "source_id": "src-008",
+          "title": "初始文献8",
+          "source_type": "journal_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 300,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z008",
+      "ref_metadata": {
+        "ref_id": "ref-lib-008",
+        "title": "初始文献8",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "journal_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-008",
+          "title": "初始文献8",
+          "rag_indexed": true,
+          "source_type": "journal_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-001",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "journal_article",
+      "sources_found": [
+        {
+          "source_id": "src-009",
+          "title": "初始文献9",
+          "source_type": "journal_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 350,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z009",
+      "ref_metadata": {
+        "ref_id": "ref-lib-009",
+        "title": "初始文献9",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "journal_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-009",
+          "title": "初始文献9",
+          "rag_indexed": true,
+          "source_type": "journal_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-002",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "journal_article",
+      "sources_found": [
+        {
+          "source_id": "src-010",
+          "title": "初始文献10",
+          "source_type": "journal_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 400,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z010",
+      "ref_metadata": {
+        "ref_id": "ref-lib-010",
+        "title": "初始文献10",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "journal_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-010",
+          "title": "初始文献10",
+          "rag_indexed": true,
+          "source_type": "journal_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-003",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "journal_article",
+      "sources_found": [
+        {
+          "source_id": "src-011",
+          "title": "初始文献11",
+          "source_type": "journal_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 450,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z011",
+      "ref_metadata": {
+        "ref_id": "ref-lib-011",
+        "title": "初始文献11",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "journal_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-011",
+          "title": "初始文献11",
+          "rag_indexed": true,
+          "source_type": "journal_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-004",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "journal_article",
+      "sources_found": [
+        {
+          "source_id": "src-012",
+          "title": "初始文献12",
+          "source_type": "journal_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 500,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z012",
+      "ref_metadata": {
+        "ref_id": "ref-lib-012",
+        "title": "初始文献12",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "journal_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-012",
+          "title": "初始文献12",
+          "rag_indexed": true,
+          "source_type": "journal_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-001",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "journal_article",
+      "sources_found": [
+        {
+          "source_id": "src-013",
+          "title": "初始文献13",
+          "source_type": "journal_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 550,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z013",
+      "ref_metadata": {
+        "ref_id": "ref-lib-013",
+        "title": "初始文献13",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "journal_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-013",
+          "title": "初始文献13",
+          "rag_indexed": true,
+          "source_type": "journal_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-002",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "journal_article",
+      "sources_found": [
+        {
+          "source_id": "src-014",
+          "title": "初始文献14",
+          "source_type": "journal_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 250,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z014",
+      "ref_metadata": {
+        "ref_id": "ref-lib-014",
+        "title": "初始文献14",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "journal_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-014",
+          "title": "初始文献14",
+          "rag_indexed": true,
+          "source_type": "journal_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-003",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "monograph_chapter",
+      "sources_found": [
+        {
+          "source_id": "src-015",
+          "title": "初始文献15",
+          "source_type": "monograph_chapter",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 300,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z015",
+      "ref_metadata": {
+        "ref_id": "ref-lib-015",
+        "title": "初始文献15",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "monograph_chapter"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-015",
+          "title": "初始文献15",
+          "rag_indexed": true,
+          "source_type": "monograph_chapter"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-004",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "monograph_chapter",
+      "sources_found": [
+        {
+          "source_id": "src-016",
+          "title": "初始文献16",
+          "source_type": "monograph_chapter",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 350,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z016",
+      "ref_metadata": {
+        "ref_id": "ref-lib-016",
+        "title": "初始文献16",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "monograph_chapter"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-016",
+          "title": "初始文献16",
+          "rag_indexed": true,
+          "source_type": "monograph_chapter"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-001",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "monograph_chapter",
+      "sources_found": [
+        {
+          "source_id": "src-017",
+          "title": "初始文献17",
+          "source_type": "monograph_chapter",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 400,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z017",
+      "ref_metadata": {
+        "ref_id": "ref-lib-017",
+        "title": "初始文献17",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "monograph_chapter"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-017",
+          "title": "初始文献17",
+          "rag_indexed": true,
+          "source_type": "monograph_chapter"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-002",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "monograph_chapter",
+      "sources_found": [
+        {
+          "source_id": "src-018",
+          "title": "初始文献18",
+          "source_type": "monograph_chapter",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 450,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z018",
+      "ref_metadata": {
+        "ref_id": "ref-lib-018",
+        "title": "初始文献18",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "monograph_chapter"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-018",
+          "title": "初始文献18",
+          "rag_indexed": true,
+          "source_type": "monograph_chapter"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-003",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "monograph_chapter",
+      "sources_found": [
+        {
+          "source_id": "src-019",
+          "title": "初始文献19",
+          "source_type": "monograph_chapter",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 500,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z019",
+      "ref_metadata": {
+        "ref_id": "ref-lib-019",
+        "title": "初始文献19",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "monograph_chapter"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-019",
+          "title": "初始文献19",
+          "rag_indexed": true,
+          "source_type": "monograph_chapter"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-004",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "monograph_chapter",
+      "sources_found": [
+        {
+          "source_id": "src-020",
+          "title": "初始文献20",
+          "source_type": "monograph_chapter",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 550,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z020",
+      "ref_metadata": {
+        "ref_id": "ref-lib-020",
+        "title": "初始文献20",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "monograph_chapter"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-020",
+          "title": "初始文献20",
+          "rag_indexed": true,
+          "source_type": "monograph_chapter"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-001",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "policy_document",
+      "sources_found": [
+        {
+          "source_id": "src-021",
+          "title": "初始文献21",
+          "source_type": "policy_document",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 250,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z021",
+      "ref_metadata": {
+        "ref_id": "ref-lib-021",
+        "title": "初始文献21",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "policy_document"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-021",
+          "title": "初始文献21",
+          "rag_indexed": true,
+          "source_type": "policy_document"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-002",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "policy_document",
+      "sources_found": [
+        {
+          "source_id": "src-022",
+          "title": "初始文献22",
+          "source_type": "policy_document",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 300,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z022",
+      "ref_metadata": {
+        "ref_id": "ref-lib-022",
+        "title": "初始文献22",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "policy_document"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-022",
+          "title": "初始文献22",
+          "rag_indexed": true,
+          "source_type": "policy_document"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-003",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "policy_document",
+      "sources_found": [
+        {
+          "source_id": "src-023",
+          "title": "初始文献23",
+          "source_type": "policy_document",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 350,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z023",
+      "ref_metadata": {
+        "ref_id": "ref-lib-023",
+        "title": "初始文献23",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "policy_document"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-023",
+          "title": "初始文献23",
+          "rag_indexed": true,
+          "source_type": "policy_document"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-004",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "policy_document",
+      "sources_found": [
+        {
+          "source_id": "src-024",
+          "title": "初始文献24",
+          "source_type": "policy_document",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 400,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z024",
+      "ref_metadata": {
+        "ref_id": "ref-lib-024",
+        "title": "初始文献24",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "policy_document"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-024",
+          "title": "初始文献24",
+          "rag_indexed": true,
+          "source_type": "policy_document"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-001",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "policy_document",
+      "sources_found": [
+        {
+          "source_id": "src-025",
+          "title": "初始文献25",
+          "source_type": "policy_document",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 450,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z025",
+      "ref_metadata": {
+        "ref_id": "ref-lib-025",
+        "title": "初始文献25",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "policy_document"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-025",
+          "title": "初始文献25",
+          "rag_indexed": true,
+          "source_type": "policy_document"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-002",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "policy_document",
+      "sources_found": [
+        {
+          "source_id": "src-026",
+          "title": "初始文献26",
+          "source_type": "policy_document",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 500,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z026",
+      "ref_metadata": {
+        "ref_id": "ref-lib-026",
+        "title": "初始文献26",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "policy_document"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-026",
+          "title": "初始文献26",
+          "rag_indexed": true,
+          "source_type": "policy_document"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-003",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "primary_source",
+      "sources_found": [
+        {
+          "source_id": "src-027",
+          "title": "初始文献27",
+          "source_type": "primary_source",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 550,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z027",
+      "ref_metadata": {
+        "ref_id": "ref-lib-027",
+        "title": "初始文献27",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "primary_source"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-027",
+          "title": "初始文献27",
+          "rag_indexed": true,
+          "source_type": "primary_source"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-004",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "primary_source",
+      "sources_found": [
+        {
+          "source_id": "src-028",
+          "title": "初始文献28",
+          "source_type": "primary_source",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 250,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z028",
+      "ref_metadata": {
+        "ref_id": "ref-lib-028",
+        "title": "初始文献28",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "primary_source"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-028",
+          "title": "初始文献28",
+          "rag_indexed": true,
+          "source_type": "primary_source"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-001",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "primary_source",
+      "sources_found": [
+        {
+          "source_id": "src-029",
+          "title": "初始文献29",
+          "source_type": "primary_source",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 300,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z029",
+      "ref_metadata": {
+        "ref_id": "ref-lib-029",
+        "title": "初始文献29",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "primary_source"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-029",
+          "title": "初始文献29",
+          "rag_indexed": true,
+          "source_type": "primary_source"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-002",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "primary_source",
+      "sources_found": [
+        {
+          "source_id": "src-030",
+          "title": "初始文献30",
+          "source_type": "primary_source",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 350,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z030",
+      "ref_metadata": {
+        "ref_id": "ref-lib-030",
+        "title": "初始文献30",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "primary_source"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-030",
+          "title": "初始文献30",
+          "rag_indexed": true,
+          "source_type": "primary_source"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-003",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "english_article",
+      "sources_found": [
+        {
+          "source_id": "src-031",
+          "title": "初始文献31",
+          "source_type": "english_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 400,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z031",
+      "ref_metadata": {
+        "ref_id": "ref-lib-031",
+        "title": "初始文献31",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "english_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-031",
+          "title": "初始文献31",
+          "rag_indexed": true,
+          "source_type": "english_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-004",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "english_article",
+      "sources_found": [
+        {
+          "source_id": "src-032",
+          "title": "初始文献32",
+          "source_type": "english_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 450,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z032",
+      "ref_metadata": {
+        "ref_id": "ref-lib-032",
+        "title": "初始文献32",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "english_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-032",
+          "title": "初始文献32",
+          "rag_indexed": true,
+          "source_type": "english_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-001",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "english_article",
+      "sources_found": [
+        {
+          "source_id": "src-033",
+          "title": "初始文献33",
+          "source_type": "english_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 500,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z033",
+      "ref_metadata": {
+        "ref_id": "ref-lib-033",
+        "title": "初始文献33",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "english_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-033",
+          "title": "初始文献33",
+          "rag_indexed": true,
+          "source_type": "english_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-002",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "english_article",
+      "sources_found": [
+        {
+          "source_id": "src-034",
+          "title": "初始文献34",
+          "source_type": "english_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": true,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 550,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z034",
+      "ref_metadata": {
+        "ref_id": "ref-lib-034",
+        "title": "初始文献34",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "english_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-034",
+          "title": "初始文献34",
+          "rag_indexed": true,
+          "source_type": "english_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-003",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "english_article",
+      "sources_found": [
+        {
+          "source_id": "src-035",
+          "title": "初始文献35",
+          "source_type": "english_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": false,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 250,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z035",
+      "ref_metadata": {
+        "ref_id": "ref-lib-035",
+        "title": "初始文献35",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "english_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-035",
+          "title": "初始文献35",
+          "rag_indexed": false,
+          "source_type": "english_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-004",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "english_article",
+      "sources_found": [
+        {
+          "source_id": "src-036",
+          "title": "初始文献36",
+          "source_type": "english_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": false,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 300,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z036",
+      "ref_metadata": {
+        "ref_id": "ref-lib-036",
+        "title": "初始文献36",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "english_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-036",
+          "title": "初始文献36",
+          "rag_indexed": false,
+          "source_type": "english_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-001",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "english_article",
+      "sources_found": [
+        {
+          "source_id": "src-037",
+          "title": "初始文献37",
+          "source_type": "english_article",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": false,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 350,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z037",
+      "ref_metadata": {
+        "ref_id": "ref-lib-037",
+        "title": "初始文献37",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "english_article"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-037",
+          "title": "初始文献37",
+          "rag_indexed": false,
+          "source_type": "english_article"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-002",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "classic_foundational",
+      "sources_found": [
+        {
+          "source_id": "src-038",
+          "title": "初始文献38",
+          "source_type": "classic_foundational",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": false,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 400,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z038",
+      "ref_metadata": {
+        "ref_id": "ref-lib-038",
+        "title": "初始文献38",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "classic_foundational"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-038",
+          "title": "初始文献38",
+          "rag_indexed": false,
+          "source_type": "classic_foundational"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-003",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "classic_foundational",
+      "sources_found": [
+        {
+          "source_id": "src-039",
+          "title": "初始文献39",
+          "source_type": "classic_foundational",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": false,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 450,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z039",
+      "ref_metadata": {
+        "ref_id": "ref-lib-039",
+        "title": "初始文献39",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "classic_foundational"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-039",
+          "title": "初始文献39",
+          "rag_indexed": false,
+          "source_type": "classic_foundational"
+        }
+      ],
+      "failure_reasons": []
+    },
+    {
+      "request_id": "lib-dir-004",
+      "claim_id": null,
+      "status": "ingested",
+      "source_type": "classic_foundational",
+      "sources_found": [
+        {
+          "source_id": "src-040",
+          "title": "初始文献40",
+          "source_type": "classic_foundational",
+          "match_status": "completed"
+        }
+      ],
+      "kb_routing": {
+        "macro_round": "round1",
+        "target_kb": "B",
+        "rag_index": "fixture-rag-b"
+      },
+      "pdf_status": {
+        "required": true,
+        "available": true,
+        "verified": true
+      },
+      "import_status": {
+        "stage25_ready": true,
+        "rag_indexed": false,
+        "import_batch_id": "fixture-initial-library"
+      },
+      "usable_text_chars": 500,
+      "usable_text_source": "fixture_pdf_excerpt",
+      "zotero_id": "Z040",
+      "ref_metadata": {
+        "ref_id": "ref-lib-040",
+        "title": "初始文献40",
+        "authors": [
+          "模拟作者"
+        ],
+        "year": 2024,
+        "source": "模拟来源",
+        "pages": "1-20",
+        "source_type": "classic_foundational"
+      },
+      "items_found": 1,
+      "items_ingested": 1,
+      "ingested_refs": [
+        {
+          "ref_id": "ref-lib-040",
+          "title": "初始文献40",
+          "rag_indexed": false,
+          "source_type": "classic_foundational"
+        }
+      ],
+      "failure_reasons": []
+    }
+  ]
+}

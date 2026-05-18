@@ -1,0 +1,27 @@
+{
+  "article_id": "article-id",
+  "workflow_rule": "retrieval_first",
+  "must_build_library_before_reference_selection": true,
+  "target_reference_count": 30,
+  "initial_pool_min_sources": 40,
+  "min_usable_text_avg_per_source": 200,
+  "type_coverage_minimum": 3,
+  "type_coverage_targets": {
+    "journal_article": ">=12",
+    "monograph_chapter": ">=5",
+    "policy_document": ">=5",
+    "primary_source": ">=3",
+    "english_article": ">=5"
+  },
+  "directions": [
+    {
+      "direction_id": "dir-001",
+      "name": "概念理论与核心范畴",
+      "keywords_zh": ["关键词"],
+      "keywords_en": ["keyword"],
+      "source_types": ["journal_article", "monograph_chapter"],
+      "minimum_sources": 5,
+      "ideal_sources": 8
+    }
+  ]
+}

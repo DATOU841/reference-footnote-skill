@@ -64,7 +64,7 @@ ReferenceFootnote 本身不运行 CNKI、WoS、Zotero、PDF 获取或 RAG 导库
 
 ### 7. 补库后二轮反查
 
-当 `检索入库` 返回入库完成状态后，ReferenceFootnote 可以记录完成结果，并为补库后的再次 RAG 反查建立闭环。0.3.0-dev 版本会生成二轮 RAG 反查调用包，只把已确认 `rag_indexed=true` 的来源纳入再次反查，并用离线 fixture 验证返回结果如何更新证据映射和脚注计划。
+0.5.0-dev 将该链条前移为 retrieval-first：先根据文章整体生成检索蓝图和初始文献库建设请求，待 `检索入库` 返回入库完成状态并通过质量验收后，再进行 RAG 反查。RAG 后仍无支撑的 critical/important claim 才进入二轮 gap 补库。
 
 ### 8. 脚注与参考文献补充计划
 
@@ -113,11 +113,12 @@ ReferenceFootnote 使用 A0 到 A11 的阶段机：
 | A1 | article intake | 导入已写文章并解析结构 |
 | A2 | claim segmentation | 拆解 claim 和 evidence need |
 | A3 | citation-need diagnosis | 判断引用需求和引用类型 |
-| A4 | RAG reverse lookup request | 构建 RAG 文献反查请求 |
-| A5 | RAG evidence interpretation | 解释 RAG 返回结果和风险 |
-| A6 | evidence map build | 构建全文证据映射 |
-| A7 | search-intake gap handoff | 生成补库交接请求 |
-| A8 | post-ingestion reverse lookup | 接收入库完成状态并准备二轮反查 |
+| A3.5 | search blueprint | 从文章反推检索方向和关键词 |
+| A4 | initial library handoff | 生成初始文献库建设请求 |
+| A5 | intake completion and quality gate | 接收入库完成状态并验收文献池质量 |
+| A6 | RAG reverse lookup request | 在入库完成后构建 RAG 文献反查请求 |
+| A7 | evidence map and gap handoff | 构建证据映射，并为剩余缺口生成二轮补库请求 |
+| A8 | post-ingestion reverse lookup | 接收二轮入库完成状态并准备回流反查 |
 | A9 | footnote/reference insertion plan | 生成脚注和参考文献补充计划 |
 | A10 | final citation quality gate | 执行最终引文质量门禁 |
 | A11 | delivery package | 构建最终补注交付包 |
@@ -146,6 +147,6 @@ ReferenceFootnote 的边界很清楚：
 
 ## 当前版本状态
 
-`0.4.0-dev` 是脚注真实性与必要性增强版本，在离线优先的基础上增加了脚注候选池、必要性裁剪、参考文献裁剪、入库材料质量统计、PDF + RAG 双核验请求和脚注/尾注/参考文献边界门禁。它可以说明“下一步应由哪个 skill 或系统执行”，并生成 JSON 包和中文提示词，但仍不直接运行真实检索、入库、PDF 获取或 RAG 查询。staging 和 production 默认保持 blocked。
+`0.5.0-dev` 是 retrieval-first 流程修正版，在离线优先的基础上增加了文章反推检索蓝图、初始文献库建设交接、入库质量门禁和 RAG 前置硬门禁。它先建设足量文献库，再做 RAG 反查、证据映射、脚注候选和参考文献裁剪；仍不直接运行真实检索、入库、PDF 获取或 RAG 查询。staging 和 production 默认保持 blocked。
 
 这个版本适合用于展示 ReferenceFootnote 的工作流、协议边界和离线验证能力；正式文章补注和真实外部服务集成应在后续版本中逐步开放。

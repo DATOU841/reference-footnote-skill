@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "metrics": {
+    "total_sources_ingested": 40,
+    "minimum_pool_required": 24,
+    "pool_avg_usable_text_chars": 260,
+    "type_coverage": 4,
+    "type_coverage_minimum": 3,
+    "rag_indexed_count": 30,
+    "rag_indexed_ratio": 0.75
+  },
+  "blocking": [],
+  "warnings": [],
+  "suggested_补充_directions": []
+}

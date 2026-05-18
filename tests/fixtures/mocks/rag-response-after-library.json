@@ -1,0 +1,101 @@
+{
+  "protocol_version": "1.0",
+  "response_type": "reverse_lookup_result",
+  "batch_id": "batch-01",
+  "results": [
+    {
+      "claim_id": "c-002",
+      "status": "completed",
+      "candidates": [
+        {
+          "candidate_id": "cand-lib-001",
+          "reference": {
+            "ref_id": "ref-lib-001",
+            "title": "初始文献1",
+            "authors": [
+              "模拟作者甲"
+            ],
+            "year": 2024,
+            "source": "模拟来源",
+            "pages": "1-20"
+          },
+          "support_assessment": {
+            "strength": "strong_support",
+            "confidence": 0.9,
+            "reasoning": "入库文献直接支撑平台规则影响判断。"
+          },
+          "match_details": {
+            "matched_snippet": "平台规则会影响用户表达空间与市场进入条件。",
+            "snippet_page": 5
+          },
+          "risks": []
+        }
+      ]
+    },
+    {
+      "claim_id": "c-005",
+      "status": "completed",
+      "candidates": [
+        {
+          "candidate_id": "cand-lib-002",
+          "reference": {
+            "ref_id": "ref-lib-002",
+            "title": "初始文献2",
+            "authors": [
+              "模拟作者乙"
+            ],
+            "year": 2024,
+            "source": "模拟来源",
+            "pages": "21-40"
+          },
+          "support_assessment": {
+            "strength": "partial_support",
+            "confidence": 0.7,
+            "reasoning": "文献支持比例原则结构，但未完全覆盖平台治理语境。"
+          },
+          "match_details": {
+            "matched_snippet": "比例原则包含目的、适当性、必要性与均衡性。",
+            "snippet_page": 23
+          },
+          "risks": [
+            "concept_approximate"
+          ]
+        }
+      ]
+    },
+    {
+      "claim_id": "c-009",
+      "status": "completed",
+      "candidates": []
+    },
+    {
+      "claim_id": "c-011",
+      "status": "completed",
+      "candidates": [
+        {
+          "candidate_id": "cand-lib-003",
+          "reference": {
+            "ref_id": "ref-lib-003",
+            "title": "初始文献3",
+            "authors": [
+              "模拟作者丙"
+            ],
+            "year": 2024,
+            "source": "模拟来源",
+            "pages": "41-60"
+          },
+          "support_assessment": {
+            "strength": "conflict",
+            "confidence": 0.74,
+            "reasoning": "文献认为过度透明可能损害风控。"
+          },
+          "match_details": {
+            "matched_snippet": "过度透明可能削弱平台风控系统。",
+            "snippet_page": 44
+          },
+          "risks": []
+        }
+      ]
+    }
+  ]
+}
