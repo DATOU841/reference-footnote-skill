@@ -1,5 +1,20 @@
 # Release Notes
 
+## 0.5.1-dev
+
+Status: pre-Claude-review development build.
+
+### Scope
+
+- Markdown-first grounding between RAG chunks, MinerU/MU Markdown or parsed text, page maps, and PDF fallback.
+- `analogy_only` evidence classification for neighboring grid or adjacent-method literature.
+- Grounding-aware evidence maps, insertion plans, quality reports, authenticity requests, and delivery handoffs.
+- 51 offline fixtures covering retrieval-first and grounding behavior.
+
+### Required Before Publication
+
+Run local gates, request Claude review, fix P0/P1, commit, tag `0.5.1-dev`, and push.
+
 ## 0.5.0-dev
 
 Status: pre-Claude-review development build.

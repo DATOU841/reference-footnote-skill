@@ -48,6 +48,11 @@ def build_from_pruning(task: Path, style: str) -> dict | None:
         ref_id = ref.get("ref_id", item.get("candidate_id"))
         refs[ref_id] = ref
         gbt = footnote_text(ref, "gb_t_7714")
+        grounding_status = item.get("grounding_status", "not_resolved")
+        risks = list(dict.fromkeys(item.get("risks", [])))
+        if grounding_status == "chunk_only_grounding" and "chunk_only_grounding" not in risks:
+            risks.append("chunk_only_grounding")
+        requires_rewrite = item.get("support_strength") == "partial_support" or bool(risks) or grounding_status in {"chunk_only_grounding", "pdf_fallback_required", "unresolved_grounding"}
         insertions.append({
             "insertion_id": f"ins-{len(insertions)+1:03d}",
             "candidate_id": item.get("candidate_id"),
@@ -64,6 +69,7 @@ def build_from_pruning(task: Path, style: str) -> dict | None:
             "evidence_type": infer_evidence_type(item["claim_type"], ref),
             "source_role": infer_source_role(item["claim_type"]),
             "consumption_depth_suggestion": consumption_depth_for_strength(item.get("support_strength"), item.get("risks", [])),
+            "grounding_status": grounding_status,
             "target_location": item["target_location"],
             "footnote_content": {
                 "style": style,
@@ -74,12 +80,14 @@ def build_from_pruning(task: Path, style: str) -> dict | None:
             "evidence_basis": {
                 "support_strength": item.get("support_strength"),
                 "confidence": item.get("confidence", 0),
-                "risks": item.get("risks", []),
+                "risks": risks,
                 "source_ref_id": ref_id,
                 "evidence_source": item.get("evidence_source", "rag_verified"),
+                "grounding_status": grounding_status,
+                "resolved_source": item.get("resolved_source") or item.get("grounding", {}).get("resolved_source"),
             },
-            "requires_rewrite": item.get("support_strength") == "partial_support" or bool(item.get("risks")),
-            "rewrite_suggestion": "建议限定表述或人工确认页码。" if item.get("support_strength") == "partial_support" or item.get("risks") else None,
+            "requires_rewrite": requires_rewrite,
+            "rewrite_suggestion": "建议限定表述、补充 Markdown/page map 核查或人工确认。" if requires_rewrite else None,
         })
     no_insert = [
         {
@@ -147,9 +155,13 @@ def main() -> int:
             ref = cand.get("reference", {})
             ref_id = ref.get("ref_id", cand.get("candidate_id"))
             refs[ref_id] = ref
-            risks = cand.get("risks", [])
+            grounding_status = cand.get("grounding_status", entry.get("grounding_status", "not_resolved"))
+            risks = list(dict.fromkeys(cand.get("risks", [])))
+            if grounding_status == "chunk_only_grounding" and "chunk_only_grounding" not in risks:
+                risks.append("chunk_only_grounding")
             gbt = footnote_text(ref, "gb_t_7714")
             material = {"material_flag": material_flag(0), "usable_text_chars": 0}
+            requires_rewrite = entry["evidence_status"] == "partial_support" or bool(risks) or grounding_status in {"chunk_only_grounding", "pdf_fallback_required", "unresolved_grounding"}
             insertions.append({
                 "insertion_id": f"ins-{len(insertions)+1:03d}",
                 "claim_id": entry["claim_id"],
@@ -165,6 +177,7 @@ def main() -> int:
                 "evidence_type": infer_evidence_type(entry["claim_type"], ref),
                 "source_role": infer_source_role(entry["claim_type"], entry.get("citation_type")),
                 "consumption_depth_suggestion": consumption_depth_for_strength(entry["evidence_status"], risks),
+                "grounding_status": grounding_status,
                 "target_location": {"paragraph_id": entry["paragraph_id"], "sentence_id": entry["source_sentence_id"]},
                 "footnote_content": {"style": args.style, "text": footnote_text(ref, args.style), "gbt7714_footnote": gbt},
                 "gbt7714_footnote": gbt,
@@ -173,9 +186,11 @@ def main() -> int:
                     "confidence": cand.get("support_assessment", {}).get("confidence", 0),
                     "risks": risks,
                     "source_ref_id": ref_id,
+                    "grounding_status": grounding_status,
+                    "resolved_source": cand.get("grounding", {}).get("resolved_source"),
                 },
-                "requires_rewrite": entry["evidence_status"] == "partial_support" or bool(risks),
-                "rewrite_suggestion": "建议限定表述或人工确认页码。" if entry["evidence_status"] == "partial_support" or risks else None,
+                "requires_rewrite": requires_rewrite,
+                "rewrite_suggestion": "建议限定表述、补充 Markdown/page map 核查或人工确认。" if requires_rewrite else None,
             })
     plan = {
         "article_id": evidence["article_id"],

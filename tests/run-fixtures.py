@@ -609,6 +609,154 @@ def fixture_41(base: Path) -> None:
     assert (task / "delivery" / "intake-quality-gate.json").exists()
 
 
+def grounding_candidate(**overrides: object) -> dict:
+    data = {
+        "candidate_id": "cand-001",
+        "reference": {"ref_id": "ref-001", "title": "习字格研究", "authors": ["作者"], "year": 2024, "source": "书法教育", "pages": "1-10"},
+        "support_assessment": {"strength": "strong_support", "confidence": 0.9, "reasoning": "片段直接支撑。"},
+        "match_details": {"snippet": "这是可定位的 RAG chunk 文本。", "snippet_page": 3},
+        "risks": [],
+    }
+    data.update(overrides)
+    return data
+
+
+def write_grounding_interpretation(task: Path, candidate: dict, *, claim_id: str = "c-001") -> None:
+    write(task / "state" / "evidence-interpretations" / "batch-01.json", {
+        "batch_id": "batch-01",
+        "interpretations": [{
+            "claim_id": claim_id,
+            "status": "interpreted",
+            "best_strength": candidate.get("support_assessment", {}).get("strength", "strong_support"),
+            "candidates": [candidate],
+            "risks": candidate.get("risks", []),
+        }],
+        "errors": [],
+    })
+
+
+def write_minimal_need(task: Path, *, claim_id: str = "c-001", claim_type: str = "theoretical_claim", need_level: str = "critical") -> None:
+    write(task / "state" / "citation-needs.json", {
+        "article_id": "grounding-fixture",
+        "needs": [{
+            "claim_id": claim_id,
+            "paragraph_id": "p-001",
+            "source_sentence_id": "s-001",
+            "text": "核心论断需要补注。",
+            "claim_type": claim_type,
+            "need_level": need_level,
+            "citation_type": "secondary_source",
+        }],
+    })
+
+
+def fixture_42(base: Path) -> None:
+    task = base / "full-markdown-grounding"
+    write_grounding_interpretation(task, grounding_candidate(markdown_path="mineru/ref-001.md"))
+    code, data = run(["python3", "scripts/resolve-grounding.py", "--task-dir", str(task)])
+    assert code == 0, data
+    item = read(task / "state" / "grounding-resolution.json")["resolved_items"][0]
+    assert item["grounding_status"] == "full_markdown_grounding"
+
+
+def fixture_43(base: Path) -> None:
+    task = base / "chunk-only-grounding"
+    write_grounding_interpretation(task, grounding_candidate())
+    code, data = run(["python3", "scripts/resolve-grounding.py", "--task-dir", str(task)])
+    assert code == 0, data
+    item = read(task / "state" / "grounding-resolution.json")["resolved_items"][0]
+    assert item["grounding_status"] == "chunk_only_grounding"
+    assert "chunk_only_grounding" in item["risk_flags"]
+
+
+def fixture_44(base: Path) -> None:
+    task = base / "parsed-text-grounding"
+    write_grounding_interpretation(task, grounding_candidate(parsed_text_path="parsed/ref-001.txt"))
+    code, data = run(["python3", "scripts/resolve-grounding.py", "--task-dir", str(task)])
+    assert code == 0, data
+    assert read(task / "state" / "grounding-resolution.json")["summary"]["full_markdown_grounding"] == 1
+
+
+def fixture_45(base: Path) -> None:
+    task = base / "page-map-grounding"
+    write_grounding_interpretation(task, grounding_candidate(page_map={"page": 5, "chunk_id": "ch-1"}))
+    code, data = run(["python3", "scripts/resolve-grounding.py", "--task-dir", str(task)])
+    assert code == 0, data
+    assert read(task / "state" / "grounding-resolution.json")["resolved_items"][0]["grounding_status"] == "page_mapped_grounding"
+
+
+def fixture_46(base: Path) -> None:
+    task = base / "page-map-conflict-fallback"
+    write_grounding_interpretation(task, grounding_candidate(page_map={"page": 5, "conflict": True}))
+    code, data = run(["python3", "scripts/resolve-grounding.py", "--task-dir", str(task)])
+    assert code == 0, data
+    item = read(task / "state" / "grounding-resolution.json")["resolved_items"][0]
+    assert item["grounding_status"] == "pdf_fallback_required"
+    assert "page_map_conflict" in item["risk_flags"]
+
+
+def fixture_47(base: Path) -> None:
+    task = base / "source-file-garbled-item-key-ok"
+    write(task / "state" / "artifact-resolver-map.json", {"items": [{"item_key": "zot-001", "markdown_path": "mineru/zot-001.md"}]})
+    write_grounding_interpretation(task, grounding_candidate(item_key="zot-001", source_file="乱码文件名.pdf"))
+    code, data = run(["python3", "scripts/resolve-grounding.py", "--task-dir", str(task)])
+    assert code == 0, data
+    assert read(task / "state" / "grounding-resolution.json")["resolved_items"][0]["grounding_status"] == "full_markdown_grounding"
+
+
+def fixture_48(base: Path) -> None:
+    task = base / "vertical-text-pdf-fallback"
+    write_grounding_interpretation(task, grounding_candidate(markdown_path="mineru/ref-001.md", risks=["vertical_text"]))
+    code, data = run(["python3", "scripts/resolve-grounding.py", "--task-dir", str(task)])
+    assert code == 0, data
+    assert read(task / "state" / "grounding-resolution.json")["resolved_items"][0]["grounding_status"] == "pdf_fallback_required"
+
+
+def fixture_49(base: Path) -> None:
+    task = base / "table-evidence-pdf-fallback"
+    write_grounding_interpretation(task, grounding_candidate(markdown_path="mineru/ref-001.md", risks=["table_complex"]))
+    code, data = run(["python3", "scripts/resolve-grounding.py", "--task-dir", str(task)])
+    assert code == 0, data
+    assert read(task / "state" / "grounding-resolution.json")["resolved_items"][0]["fallback_reason"] == "layout_or_page_mapping_risk"
+
+
+def fixture_50(base: Path) -> None:
+    task = base / "ownership-no-primary-no-force"
+    write_minimal_need(task, claim_type="factual_claim", need_level="critical")
+    cand = grounding_candidate(
+        support_assessment={"strength": "no_support_found", "confidence": 0.1, "reasoning": "未发现一手材料。"},
+        risks=["ownership_unverified"],
+    )
+    write_grounding_interpretation(task, cand)
+    code, data = run(["python3", "scripts/build-evidence-map.py", "--task-dir", str(task)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/plan-footnotes.py", "--task-dir", str(task)])
+    assert code == 0, data
+    plan = read(task / "state" / "insertion-plan.json")
+    assert not plan["insertions"]
+    assert plan["no_insert_zones"]
+
+
+def fixture_51(base: Path) -> None:
+    task = base / "adjacent-grid-analogy-only"
+    write_minimal_need(task, claim_type="theoretical_claim", need_level="important")
+    cand = grounding_candidate(
+        markdown_path="mineru/ref-001.md",
+        support_assessment={"strength": "analogy_only", "confidence": 0.6, "reasoning": "相邻格具类比，不能直接证明本文对象。"},
+        risks=["concept_approximate", "direct_experiment_missing"],
+    )
+    write_grounding_interpretation(task, cand)
+    code, data = run(["python3", "scripts/resolve-grounding.py", "--task-dir", str(task)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/build-evidence-map.py", "--task-dir", str(task)])
+    assert code == 0, data
+    evidence = read(task / "state" / "evidence-map.json")
+    assert evidence["coverage_summary"]["analogy_only"] == 1
+    code, data = run(["python3", "scripts/plan-footnotes.py", "--task-dir", str(task)])
+    assert code == 0, data
+    assert not read(task / "state" / "insertion-plan.json")["insertions"]
+
+
 FIXTURES = [
     fixture_01, fixture_02, fixture_03, fixture_04, fixture_05,
     fixture_06, fixture_07, fixture_08, fixture_09, fixture_10,
@@ -621,6 +769,8 @@ FIXTURES = [
     fixture_30, fixture_31, fixture_32, fixture_33, fixture_34,
     fixture_35, fixture_36, fixture_37, fixture_38, fixture_39,
     fixture_40, fixture_41,
+    fixture_42, fixture_43, fixture_44, fixture_45, fixture_46,
+    fixture_47, fixture_48, fixture_49, fixture_50, fixture_51,
 ]
 
 

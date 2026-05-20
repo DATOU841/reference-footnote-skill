@@ -1,6 +1,6 @@
 # RAG Reverse Lookup Protocol
 
-The skill only builds and validates reverse-lookup payloads. It does not query a live RAG service in 0.5.0-dev. RAG reverse lookup is blocked until initial library intake is complete, unless the user explicitly declared an existing RAG library.
+The skill only builds and validates reverse-lookup payloads. It does not query a live RAG service in 0.5.1-dev. RAG reverse lookup is blocked until initial library intake is complete, unless the user explicitly declared an existing RAG library.
 
 ## Request
 
@@ -35,3 +35,7 @@ Candidate support strength must be one of:
 ## Evidence Rules
 
 RAG hits are candidate evidence only. A candidate cannot become a clean citation when it has unresolved risks such as `page_missing`, `ocr_uncertain`, `secondhand_citation`, `concept_approximate`, `temporal_mismatch`, `discipline_cross`, or `translation_gap`.
+
+RAG responses should include any available `chunk_text`, `source_file`, `item_key`, `file_id`, `kb_id`, `markdown_path`, `parsed_text_path`, `page_map`, and `pdf_path`. `chunk_text` is the locator; Markdown/parsed text is the default verification layer; PDF is fallback only when page-map, OCR, or layout risks require it. See `docs/grounding-protocol.md`.
+
+Allowed support strengths are `strong_support`, `partial_support`, `analogy_only`, `background_only`, `conflict`, and `no_support_found`. `analogy_only` cannot be promoted to direct support.

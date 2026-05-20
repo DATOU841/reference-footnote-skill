@@ -14,11 +14,41 @@ ROOT = Path(__file__).resolve().parents[1]
 VERSION = (ROOT / "VERSION").read_text(encoding="utf-8").strip() if (ROOT / "VERSION").exists() else ""
 
 PROTECTED_TYPES = {"author_opinion", "common_knowledge", "transitional"}
-SUPPORT_STRENGTHS = {"strong_support", "partial_support", "background_only", "conflict", "no_support"}
+SUPPORT_STRENGTHS = {
+    "strong_support",
+    "partial_support",
+    "analogy_only",
+    "background_only",
+    "conflict",
+    "no_support",
+    "no_support_found",
+}
+GROUNDING_STATUSES = {
+    "full_markdown_grounding",
+    "page_mapped_grounding",
+    "chunk_only_grounding",
+    "pdf_fallback_required",
+    "unresolved_grounding",
+    "not_resolved",
+}
+LAYOUT_RISK_TRIGGERS = {
+    "ocr_uncertain",
+    "vertical_text",
+    "table_complex",
+    "figure_embedded",
+    "formula_inline",
+    "footnote_in_source",
+    "page_map_conflict",
+    "markdown_page_map_missing",
+}
 RISK_FLAGS = {
     "page_missing", "ocr_uncertain", "secondhand_citation", "concept_approximate",
     "temporal_mismatch", "discipline_cross", "translation_gap", "pdf_rag_conflict",
-    "wrong_insertion_position", "reference_only_in_footnote", "low_material"
+    "wrong_insertion_position", "reference_only_in_footnote", "low_material",
+    "vertical_text", "table_complex", "figure_embedded", "formula_inline",
+    "footnote_in_source", "page_map_conflict", "markdown_not_available",
+    "markdown_page_map_missing", "chunk_only_grounding", "ownership_unverified",
+    "direct_experiment_missing"
 }
 NOTE_TYPES = {"footnote", "endnote", "reference_only"}
 ANNOTATION_PURPOSES = {
@@ -79,7 +109,45 @@ def consumption_depth_for_strength(strength: str, risks: list[str] | None = None
     risks = risks or []
     if strength == "strong_support" and not risks:
         return "深度消费"
+    if strength == "analogy_only":
+        return "类比旁证"
     return "浅要参考"
+
+
+def normalize_support_strength(strength: str | None) -> str:
+    if strength == "no_support_found":
+        return "no_support"
+    if strength in SUPPORT_STRENGTHS:
+        return strength or "no_support"
+    return "no_support"
+
+
+def resolve_grounding_status(
+    *,
+    chunk_text: str | None = None,
+    markdown_path: str | None = None,
+    parsed_text_path: str | None = None,
+    page_map: object | None = None,
+    risk_flags: list[str] | None = None,
+) -> str:
+    """Resolve grounding status from available parsed artifacts.
+
+    RAG chunk text proves that ingestion parsed the source enough for retrieval.
+    Markdown/parsed text is the default context-verification layer; PDF is only
+    a fallback when page maps or layout-sensitive evidence require it.
+    """
+    risks = set(risk_flags or [])
+    if not chunk_text:
+        return "unresolved_grounding"
+    if risks & LAYOUT_RISK_TRIGGERS:
+        return "pdf_fallback_required"
+    if markdown_path or parsed_text_path:
+        return "full_markdown_grounding"
+    if page_map:
+        if isinstance(page_map, dict) and page_map.get("conflict"):
+            return "pdf_fallback_required"
+        return "page_mapped_grounding"
+    return "chunk_only_grounding"
 
 
 def material_flag(chars: int | None) -> str:

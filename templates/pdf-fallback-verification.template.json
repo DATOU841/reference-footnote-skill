@@ -1,0 +1,14 @@
+{
+  "status": "completed",
+  "results": [
+    {
+      "insertion_id": "ins-001",
+      "pdf_fallback_status": "not_required",
+      "pdf_path": null,
+      "page_confirmed": null,
+      "layout_issue": null,
+      "risks": [],
+      "notes": "PDF fallback was not required because Markdown/page-map grounding was sufficient."
+    }
+  ]
+}

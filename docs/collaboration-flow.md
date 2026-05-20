@@ -1,6 +1,6 @@
 # Collaboration Flow
 
-`0.5.0-dev` uses a retrieval-first collaboration layer. ReferenceFootnote first derives article-level retrieval directions, then prepares an initial library-building package for `检索入库`. RAG reverse lookup happens only after structured ingestion completion and intake quality validation.
+`0.5.1-dev` uses a retrieval-first collaboration layer. ReferenceFootnote first derives article-level retrieval directions, then prepares an initial library-building package for `检索入库`. RAG reverse lookup happens only after structured ingestion completion and intake quality validation.
 
 ## Flow
 
@@ -13,8 +13,9 @@
 7. Validate library quality with `validate-intake-quality.py`.
 8. Build RAG reverse lookup request with `build-rag-request.py`.
 9. Validate returned RAG response with `validate-rag-response.py`.
-10. Build evidence map and, if needed, create round2 gap requests with `build-search-handoff.py`.
-11. Generate footnote/reference plans, quality report, authenticity request, and delivery package.
+10. Resolve Markdown/page-map grounding with `resolve-grounding.py`.
+11. Build evidence map and, if needed, create round2 gap requests with `build-search-handoff.py`.
+12. Generate footnote/reference plans, quality report, authenticity request, and delivery package.
 
 `tests/run-fixtures.py` includes offline retrieval-first fixtures. They verify that RAG is blocked before ingestion, initial library handoff packages are produced, intake quality gates pass/fail deterministically, and delivery includes blueprint and intake gate artifacts.
 
@@ -64,7 +65,7 @@ Only completion rows whose `import_status.rag_indexed=true` become RAG lookup ta
 
 ## Boundary
 
-ReferenceFootnote may say "call package prepared" but must not say search or RAG has completed until the responsible system returns a structured completion or response.
+ReferenceFootnote may say "call package prepared" but must not say search or RAG has completed until the responsible system returns a structured completion or response. If ingestion already produced MinerU/MU Markdown or equivalent parsed text, use it as the default verification artifact; request PDF fallback only for page-map, OCR, or layout risks.
 
 ReferenceFootnote must not:
 

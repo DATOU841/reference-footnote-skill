@@ -40,6 +40,16 @@
     "full-retrieval-first-flow",
     "gap-round2-after-initial-library",
     "validate-citation-plan-blocks-without-blueprint",
-    "delivery-includes-blueprint-and-intake-gate"
+    "delivery-includes-blueprint-and-intake-gate",
+    "full-markdown-grounding",
+    "chunk-only-grounding",
+    "parsed-text-grounding",
+    "page-map-grounding",
+    "page-map-conflict-fallback",
+    "source-file-garbled-item-key-ok",
+    "vertical-text-pdf-fallback",
+    "table-evidence-pdf-fallback",
+    "ownership-no-primary-no-force",
+    "adjacent-grid-analogy-only"
   ]
 }

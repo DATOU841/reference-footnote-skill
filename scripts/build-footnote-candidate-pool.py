@@ -75,7 +75,10 @@ def main() -> int:
         for cand in entry.get("candidates", [])[:2]:
             ref = cand.get("reference", {})
             support = cand.get("support_assessment", {})
-            risks = cand.get("risks", entry.get("risks", []))
+            grounding_status = cand.get("grounding_status", entry.get("grounding_status", "not_resolved"))
+            risks = list(dict.fromkeys(cand.get("risks", entry.get("risks", []))))
+            if grounding_status == "chunk_only_grounding" and "chunk_only_grounding" not in risks:
+                risks.append("chunk_only_grounding")
             purpose = annotation_purpose_for(entry, cand)
             note_type = "footnote" if purpose != "reference_only" else "reference_only"
             mat = materials.get(entry.get("claim_id")) or materials.get("__pool_average__") or {"usable_text_chars": 0, "usable_text_source": "not_reported", "material_flag": "very_low"}
@@ -90,6 +93,9 @@ def main() -> int:
                 "note_type": note_type,
                 "annotation_purpose": purpose,
                 "support_strength": support.get("strength", entry.get("evidence_status")),
+                "grounding_status": grounding_status,
+                "grounding": cand.get("grounding", {}),
+                "resolved_source": cand.get("grounding", {}).get("resolved_source"),
                 "evidence_source": evidence_source,
                 "confidence": support.get("confidence", 0),
                 "risks": risks,

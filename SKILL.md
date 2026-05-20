@@ -5,7 +5,7 @@ description: Use for ReferenceFootnote workflows on already-written academic art
 
 # 参考文献补注 Skill
 
-版本：0.5.0-dev
+版本：0.5.1-dev
 
 ## 硬边界
 
@@ -38,7 +38,8 @@ description: Use for ReferenceFootnote workflows on already-written academic art
 14. A7.6 缺口补库调用包：用 `scripts/build-search-intake-call.py` 生成二轮交接包。
 15. A8/A8.5 可用于二轮入库完成和二轮 RAG 回流。
 16. A9a-A9c 脚注候选池、必要性裁剪和参考文献裁剪。
-17. A9-A11 脚注方案、质量门禁、真实性复核、边界一致性和交付包。
+17. A6.6 grounding 解析：用 `scripts/resolve-grounding.py` 将 RAG chunk 映射到 MinerU/MU Markdown、parsed text、page map 或 PDF fallback 状态。
+18. A9-A11 脚注方案、质量门禁、真实性复核、边界一致性和交付包。
 
 ## 何时读取参考文件
 
@@ -47,6 +48,7 @@ description: Use for ReferenceFootnote workflows on already-written academic art
 - 需要与 `检索入库` 或 `正文写作` 交接时读 `docs/handoff-protocol.md`。
 - 需要理解检索入库调用包和补库后二轮 RAG 调用时读 `docs/collaboration-flow.md`。
 - 需要判断证据强度和风险时读 `docs/evidence-classification.md`。
+- 需要处理 RAG chunk、Markdown/parsed text、page map 和 PDF fallback 时读 `docs/grounding-protocol.md`。
 - 需要发布或部署边界时读 `docs/quality-gates.md` 和 `docs/boundary-rules.md`。
 
 ## 质量原则
@@ -59,4 +61,6 @@ description: Use for ReferenceFootnote workflows on already-written academic art
 - RAG 反查必须发生在初始文献库建设和入库质量验收之后；旧版 pre-ingestion RAG 仅允许 fixture bypass 或用户明确声明已有 RAG 库。
 - 脚注和尾注是正文内容的必要补充，不是参考文献罗列；`reference_only` 禁止进入脚注正文。
 - 入库完成回执应报告 `usable_text_chars`，文献池平均可消费正文级材料低于 200 字/篇时必须标注材料风险。
-- 最终插入和参考文献整理后，必须通过外部 PDF + RAG 回执逐条复核真实性、页码/OCR、位置和契合性。
+- RAG 入库通常已经由 PDF 生成 MinerU/MU Markdown 或等价 parsed text。默认核查层是 RAG chunk 对 Markdown/parsed text 的定位和上下文复核；PDF 只在页码映射冲突、OCR/版式风险、表格/图片/竖排等场景作为 fallback。
+- `analogy_only` 只能作为类比旁证，不能升级为 `strong_support`；一手权属缺失时不得强行补注。
+- 最终插入和参考文献整理后，必须通过外部 Markdown/RAG 回执逐条复核真实性、位置和契合性；触发 fallback 的条目再请求 PDF 页码或版式核验。

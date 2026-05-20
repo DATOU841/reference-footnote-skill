@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
-from reflib import ensure_task, print_json, read_json, result, write_json
+from reflib import GROUNDING_STATUSES, ensure_task, print_json, read_json, result, write_json
 
 ALLOWED_EVIDENCE_SOURCES = {"rag_verified", "intake_completed", "user_declared_existing", None}
 
@@ -29,6 +29,11 @@ def main() -> int:
     page_missing = [ins for ins in high_risk if "page_missing" in ins["evidence_basis"].get("risks", [])]
     footnote_like = [ins for ins in plan["insertions"] if ins.get("note_type", "footnote") in {"footnote", "endnote"}]
     references = plan.get("reference_list", {}).get("new_references", [])
+    grounding_summary = {status: 0 for status in GROUNDING_STATUSES}
+    for ins in plan["insertions"]:
+        status = ins.get("grounding_status") or ins.get("evidence_basis", {}).get("grounding_status") or "not_resolved"
+        grounding_summary[status] = grounding_summary.get(status, 0) + 1
+    resolved_grounding = sum(grounding_summary.get(status, 0) for status in {"full_markdown_grounding", "page_mapped_grounding"})
     intake_path = task / "state" / "intake-status.json"
     intake = read_json(intake_path) if intake_path.exists() else {}
     blueprint_path = task / "state" / "search-blueprint.json"
@@ -42,6 +47,8 @@ def main() -> int:
         "page_missing_ratio": len(page_missing) / len(plan["insertions"]) if plan["insertions"] else 0,
         "footnote_count": len(footnote_like),
         "reference_count": len(references),
+        "grounding_summary": grounding_summary,
+        "grounding_coverage": resolved_grounding / len(plan["insertions"]) if plan["insertions"] else 1,
         "pool_avg_usable_text_chars": intake.get("pool_avg_usable_text_chars"),
         "pool_material_status": intake.get("pool_material_status", "not_reported"),
         "retrieval_first_ready": user_declared_existing or (blueprint_path.exists() and initial_handoff.exists() and intake_path.exists()),
@@ -89,6 +96,18 @@ def main() -> int:
         source = ins.get("evidence_basis", {}).get("evidence_source")
         if source not in ALLOWED_EVIDENCE_SOURCES:
             blocking.append(f"{ins.get('insertion_id')} invalid evidence_source: {source}")
+        basis = ins.get("evidence_basis", {})
+        strength = basis.get("support_strength")
+        grounding_status = ins.get("grounding_status") or basis.get("grounding_status") or "not_resolved"
+        if grounding_status == "unresolved_grounding" and strength == "strong_support":
+            blocking.append(f"{ins.get('insertion_id')} strong_support has unresolved grounding")
+        if grounding_status == "chunk_only_grounding" and strength == "strong_support":
+            warnings.append(f"{ins.get('insertion_id')} strong_support is chunk-only; verify against Markdown/parsed text before final insertion")
+        if grounding_status == "pdf_fallback_required":
+            if ins.get("authenticity_status") in {"verified", "human_review"}:
+                warnings.append(f"{ins.get('insertion_id')} requires PDF fallback review because Markdown/page-map grounding is insufficient")
+            else:
+                blocking.append(f"{ins.get('insertion_id')} requires PDF fallback before final citation")
     status = "failed" if blocking else "passed"
     report = {"status": status, "blocking_issues": blocking, "warnings": warnings, "metrics": metrics}
     out = task / "state" / "quality-report.json"

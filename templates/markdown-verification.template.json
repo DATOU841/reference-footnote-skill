@@ -1,0 +1,15 @@
+{
+  "status": "completed",
+  "results": [
+    {
+      "insertion_id": "ins-001",
+      "markdown_grounding_status": "verified",
+      "markdown_path": "mineru/source.md",
+      "chunk_matches_markdown": true,
+      "claim_fit": "fits",
+      "insertion_position_fit": "fits",
+      "risks": [],
+      "notes": "Markdown context supports the citation."
+    }
+  ]
+}

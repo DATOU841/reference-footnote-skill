@@ -1,0 +1,15 @@
+{
+  "items": [
+    {
+      "item_key": "zotero-or-intake-key",
+      "file_id": "rag-file-id",
+      "source_file": "source.pdf",
+      "title": "source title",
+      "kb_id": "KB-01B",
+      "markdown_path": "mineru/source.md",
+      "parsed_text_path": null,
+      "page_map": {"page": 3, "chunk_id": "ch-001"},
+      "pdf_path": "source.pdf"
+    }
+  ]
+}

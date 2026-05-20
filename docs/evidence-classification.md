@@ -6,6 +6,7 @@ Support strengths:
 | --- | --- | --- |
 | `strong_support` | directly supports the claim | usable if no blocking risk |
 | `partial_support` | supports part of the claim | requires limitation or rewrite |
+| `analogy_only` | adjacent case, similar grid, or indirect method analogy | background/argument reference only; not direct support |
 | `background_only` | provides context only | background citation only |
 | `conflict` | contradicts the claim | not support; may become opposing view |
 | `no_support` | no candidate support found | create gap handoff or human review |
@@ -19,6 +20,9 @@ Risk flags:
 - `temporal_mismatch`: source timing does not match claim scope.
 - `discipline_cross`: source is from another discipline.
 - `translation_gap`: translated concept may not align.
+- `chunk_only_grounding`: only RAG chunk is available; verify against Markdown/parsed text before final insertion.
+- `ownership_unverified`: product/person/company ownership lacks a primary source.
+- `direct_experiment_missing`: evidence is analogous and lacks direct experiment on the article object.
 
 Unsupported critical claims must not receive fabricated notes.
 
@@ -36,7 +40,7 @@ ReferenceFootnote also carries evidence types for `正文写作` consumption:
 Evidence type affects insertion planning:
 
 - `strong_support` + precise page + suitable evidence type can become a direct insertion.
-- `partial_support` or approximate evidence type must set `requires_rewrite=true`.
+- `partial_support`, `analogy_only`, or approximate evidence type must set `requires_rewrite=true` or remain reference-only.
 - `background_only` may become background citation but cannot support a concrete claim.
 - `conflict` must never become support; it may become opposing-view material.
 

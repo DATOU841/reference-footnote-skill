@@ -15,7 +15,8 @@ ReferenceFootnote uses an offline-first stage machine:
 | A5.5 | intake quality gate | intake status + blueprint | `intake-quality-gate.json` | pool size, text, type coverage, RAG index ratio checked |
 | A6 | RAG request build | citation needs + intake status | `rag-requests/*.json` | blocked unless initial library exists or user declared existing RAG |
 | A6.5 | RAG response interpretation | request + response | `evidence-interpretations/*.json` | support/risk labels present |
-| A7 | evidence map | citation needs + interpretations | `evidence-map.json` | coverage summary complete |
+| A6.6 | grounding resolution | interpretations + intake/artifact map | `grounding-resolution.json` | chunk mapped to Markdown/parsed text, page map, fallback, or unresolved |
+| A7 | evidence map | citation needs + interpretations + grounding | `evidence-map.json` | coverage and grounding summary complete |
 | A7.5 | gap search-intake handoff | evidence map | `search-intake-requests/gap-round2.json` | unsupported critical/important claims converted for round2 |
 | A7.6 | gap search-intake skill call | gap request | `search-intake-calls/gap-round2.json` and `.prompt.md` | call package prepared, not executed |
 | A8 | round2 intake completion | completion response | `intake-status-round2.json` | optional second-round completion |
@@ -25,9 +26,9 @@ ReferenceFootnote uses an offline-first stage machine:
 | A9c | reference candidate pruning | candidate pool + kept footnotes | `reference-pruning-plan.json` | 25-30 important references targeted |
 | A9 | footnote plan | pruning results + evidence map | `insertion-plan.json` | no forced citation on unsupported claims |
 | A10 | citation quality gate | insertion plan | `quality-report.json` | blocking issues identified |
-| A10a | authenticity request | insertion plan | `authenticity-verification-request.json` | PDF + RAG check package prepared, not executed |
+| A10a | authenticity request | insertion plan | `authenticity-verification-request.json` | Markdown/RAG check package prepared; PDF only as fallback |
 | A10b | authenticity result | external/synthetic verification result | `authenticity-verification-result.json` | result schema and issue list validated |
 | A10c | consistency gate | insertion plan + verification result | `consistency-gate-result.json` | note/reference boundaries checked |
 | A11 | delivery package | all prior outputs | `delivery/` | required artifacts copied |
 
-Stages are deterministic in 0.5.0-dev. Collaboration and verification stages produce call packages or consume offline回执 only; they do not execute real search, ingestion, PDF checks, or RAG queries. RAG reverse lookup is retrieval-first: it is blocked until an initial library completion exists, unless the user explicitly declared an existing RAG library.
+Stages are deterministic in 0.5.1-dev. Collaboration and verification stages produce call packages or consume offline回执 only; they do not execute real search, ingestion, PDF checks, or RAG queries. RAG reverse lookup is retrieval-first: it is blocked until an initial library completion exists, unless the user explicitly declared an existing RAG library. Grounding resolution treats MinerU/MU Markdown or parsed text as the default verification artifact and reserves PDF fallback for layout/page-map risks.

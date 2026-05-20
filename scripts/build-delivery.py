@@ -26,6 +26,7 @@ def main() -> int:
         "footnote-candidate-pool.json", "footnote-pruning-result.json", "reference-pruning-plan.json",
         "authenticity-verification-request.json", "authenticity-verification-result.json",
         "authenticity-issues.json", "consistency-gate-result.json",
+        "grounding-resolution.json", "markdown-verification.json", "pdf-fallback-verification.json",
     ]:
         copy_if_exists(task / "state" / name, delivery / name)
     evidence = read_json(task / "state" / "evidence-map.json")
@@ -40,6 +41,8 @@ def main() -> int:
         "no_support_critical": evidence.get("critical_gaps", []),
         "high_risk_unsupported": evidence.get("high_risk_unsupported", []),
         "library_gap_directions": intake_gate.get("suggested_补充_directions", []),
+        "grounding_unresolved": [i for i in plan["insertions"] if i.get("grounding_status") in {"unresolved_grounding", "chunk_only_grounding"}],
+        "pdf_fallback_pending": [i for i in plan["insertions"] if i.get("grounding_status") == "pdf_fallback_required"],
     }
     unresolved = [gap for gap in evidence.get("critical_gaps", []) if gap.get("need_level") == "critical"]
     handoff = {
@@ -57,6 +60,7 @@ def main() -> int:
         },
         "library_status": "built" if (task / "state" / "intake-status.json").exists() else "not_built",
         "library_gap_directions": intake_gate.get("suggested_补充_directions", []),
+        "grounding_summary": evidence.get("grounding_summary", {}),
         "manual_citation_tasks": human_review["page_numbers_to_verify"] + human_review["risk_citations"],
         "writer_consumption_notes": {
             "r2_a1_gap_routing": "unsupported critical/important claims may become gap-routing-table entries",

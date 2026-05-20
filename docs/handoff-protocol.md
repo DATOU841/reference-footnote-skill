@@ -123,6 +123,7 @@ Top-level fields:
 | `writer_consumption_notes` | 给 writer 的消费说明 |
 | `library_status` | `built` / `partial` / `not_built` |
 | `library_gap_directions[]` | 初始库仍缺方向 |
+| `grounding_summary` | RAG chunk 到 Markdown/parsed text、page map、PDF fallback 或 unresolved 的汇总 |
 | `manual_citation_tasks[]` | 需人工确认页码/版本/翻译的脚注 |
 
 `insertions[]` should include:
@@ -134,11 +135,14 @@ Top-level fields:
 - `evidence_type`
 - `source_role`
 - `consumption_depth_suggestion`
+- `grounding_status`
 - `footnote_content.text`
 - `gbt7714_footnote`
 - `evidence_basis.support_strength`
 - `evidence_basis.confidence`
 - `evidence_basis.risks`
+- `evidence_basis.grounding_status`
+- `evidence_basis.resolved_source`
 - `requires_rewrite`
 - `rewrite_suggestion`
 - `note_type`
@@ -152,14 +156,14 @@ Top-level fields:
 
 ## Authenticity Verification Package
 
-`build-authenticity-verification-request.py` prepares `authenticity-verification-request.json` for external PDF + RAG dual checking. It is a request only.
+`build-authenticity-verification-request.py` prepares `authenticity-verification-request.json` for external Markdown/parsed-text + RAG checking. It is a request only. PDF checks are requested only when `grounding_status=pdf_fallback_required` or page/OCR/layout risks are present.
 
 | Field | Meaning |
 | --- | --- |
 | `request_type` | `footnote_authenticity_verification` |
 | `execution_status` | fixed `prepared_not_executed` |
 | `items[]` | final footnote/endnote insertions requiring verification |
-| `checks_required[]` | reference existence, metadata, PDF content, RAG-PDF consistency, page/OCR, claim fit, insertion position |
+| `checks_required[]` | reference existence, metadata, Markdown/parsed-text content, RAG chunk consistency, claim fit, insertion position; optional PDF fallback/page/OCR checks |
 
 `apply-authenticity-verification-result.py` consumes `authenticity-verification-result.json` and writes `authenticity-issues.json`. A `failed` authenticity status blocks consistency; `human_review` is allowed only as an explicit review item.
 

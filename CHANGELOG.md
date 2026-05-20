@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.5.1-dev - 2026-05-20
+
+- Added Markdown-first grounding resolution after RAG interpretation: `full_markdown_grounding`, `page_mapped_grounding`, `chunk_only_grounding`, `pdf_fallback_required`, and `unresolved_grounding`.
+- Added `resolve-grounding.py`, `validate-markdown-grounding.py`, and `validate-pdf-page-grounding.py`.
+- Propagated grounding status into evidence maps, candidate pools, insertion plans, quality gates, authenticity requests, and delivery packages.
+- Added `analogy_only` support strength and new risk flags for chunk-only grounding, ownership gaps, direct experiment gaps, page-map conflict, and layout fallback.
+- Expanded offline fixtures from 41 to 51 to cover Markdown grounding, page maps, PDF fallback triggers, no-force ownership, and analogy-only evidence.
+
 ## 0.5.0-dev - 2026-05-18
 
 - Reworked the workflow into a retrieval-first pipeline: article-derived search blueprint, initial library-building handoff to `检索入库`, intake completion, intake quality gate, then RAG reverse lookup.

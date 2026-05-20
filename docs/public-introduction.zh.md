@@ -83,7 +83,7 @@ ReferenceFootnote 本身不运行 CNKI、WoS、Zotero、PDF 获取或 RAG 导库
 
 ### 8.5 真实性与契合性复核
 
-脚注位置和文献确定后，ReferenceFootnote 会生成 PDF + RAG 双重核验请求，要求逐条检查文献是否真实存在、题录和页码是否准确、PDF 原文是否包含引用内容、RAG 片段是否与 PDF 一致、脚注是否真正契合正文位置。它本身不获取 PDF、不运行真实 RAG，只接收外部或人工给回的结构化核验结果，并把问题列入交付包。
+脚注位置和文献确定后，ReferenceFootnote 会生成 Markdown/parsed text + RAG 复核请求，要求逐条检查文献是否真实存在、题录是否准确、RAG 片段是否能在 MinerU/MU Markdown 或等价解析文本中定位、脚注是否真正契合正文位置。PDF 不再作为默认核查层，只在页码映射冲突、OCR 不确定、表格图片竖排等复杂版式风险出现时作为 fallback。它本身不获取 PDF、不运行真实 RAG，只接收外部或人工给回的结构化核验结果，并把问题列入交付包。
 
 ### 9. 高风险清单与质量门禁
 
@@ -117,6 +117,7 @@ ReferenceFootnote 使用 A0 到 A11 的阶段机：
 | A4 | initial library handoff | 生成初始文献库建设请求 |
 | A5 | intake completion and quality gate | 接收入库完成状态并验收文献池质量 |
 | A6 | RAG reverse lookup request | 在入库完成后构建 RAG 文献反查请求 |
+| A6.6 | grounding resolution | 将 RAG chunk 对齐到 Markdown、parsed text、page map 或 PDF fallback |
 | A7 | evidence map and gap handoff | 构建证据映射，并为剩余缺口生成二轮补库请求 |
 | A8 | post-ingestion reverse lookup | 接收二轮入库完成状态并准备回流反查 |
 | A9 | footnote/reference insertion plan | 生成脚注和参考文献补充计划 |
@@ -147,6 +148,6 @@ ReferenceFootnote 的边界很清楚：
 
 ## 当前版本状态
 
-`0.5.0-dev` 是 retrieval-first 流程修正版，在离线优先的基础上增加了文章反推检索蓝图、初始文献库建设交接、入库质量门禁和 RAG 前置硬门禁。它先建设足量文献库，再做 RAG 反查、证据映射、脚注候选和参考文献裁剪；仍不直接运行真实检索、入库、PDF 获取或 RAG 查询。staging 和 production 默认保持 blocked。
+`0.5.1-dev` 是 retrieval-first + Markdown grounding 修正版。它先建设足量文献库，再做 RAG 反查，并把 RAG chunk 对齐到 MinerU/MU Markdown、parsed text、page map 或 PDF fallback；同时区分类比证据 `analogy_only`，避免把相邻格具或近似教学研究误当成直接支撑。它仍不直接运行真实检索、入库、PDF 获取或 RAG 查询。staging 和 production 默认保持 blocked。
 
 这个版本适合用于展示 ReferenceFootnote 的工作流、协议边界和离线验证能力；正式文章补注和真实外部服务集成应在后续版本中逐步开放。
