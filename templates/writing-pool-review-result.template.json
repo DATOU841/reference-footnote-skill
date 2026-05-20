@@ -1,0 +1,16 @@
+{
+  "status": "completed",
+  "request_id": "writing-pool-review-01",
+  "results": [
+    {
+      "insertion_id": "ins-001",
+      "decision": "keep",
+      "fit": "fits",
+      "reason": "注释位置和正文契合。",
+      "revised_note_text": null,
+      "new_target_location": null,
+      "rewritten_paragraph": null,
+      "risks": []
+    }
+  ]
+}

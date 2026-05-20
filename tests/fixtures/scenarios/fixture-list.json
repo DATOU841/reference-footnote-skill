@@ -50,6 +50,13 @@
     "vertical-text-pdf-fallback",
     "table-evidence-pdf-fallback",
     "ownership-no-primary-no-force",
-    "adjacent-grid-analogy-only"
+    "adjacent-grid-analogy-only",
+    "evidence-trace-full-order",
+    "risk-cleanup-removes-unconsumed-reference",
+    "writing-pool-full-paragraph-blocks",
+    "delivery-top-level-is-constrained",
+    "final-gate-requires-cleanup",
+    "rag-request-explicit-full-order-fields",
+    "final-gate-explicit-unconsumed-cleaned-reference"
   ]
 }

@@ -13,22 +13,45 @@ def main() -> int:
     parser.add_argument("--task-dir", required=True, type=Path)
     args = parser.parse_args()
     task = ensure_task(args.task_dir)
+    final_gate_path = task / "state" / "final-gate-result.json"
     quality_path = task / "state" / "quality-report.json"
-    if not quality_path.exists():
-        print_json(result("failed", errors=["quality-report.json missing"]))
+    if final_gate_path.exists():
+        final_gate = read_json(final_gate_path)
+        quality = {"status": final_gate.get("status", "unknown"), "source": "final-gate-result.json"}
+    elif quality_path.exists():
+        quality = read_json(quality_path)
+        final_gate = {}
+    else:
+        print_json(result("failed", errors=["final-gate-result.json or quality-report.json missing"]))
         return 1
-    quality = read_json(quality_path)
     delivery = task / "delivery"
     delivery.mkdir(parents=True, exist_ok=True)
+    process = delivery / "process"
+    process.mkdir(parents=True, exist_ok=True)
+    top_level = [
+        "full-text-with-notes.md",
+        "full-order-audit.md",
+        "full-order-audit.json",
+        "risk-inventory.json",
+        "risk-cleanup-result.json",
+        "evidence-trace-ledger.json",
+        "final-gate-result.json",
+    ]
+    for name in top_level:
+        copy_if_exists(task / "state" / name, delivery / name)
     for name in [
-        "evidence-map.json", "insertion-plan.json", "quality-report.json", "intake-status.json",
+        "evidence-map.json", "insertion-plan.json", "cleaned-insertion-plan.json",
+        "cleaned-citation-needs.json", "cleaned-reference-list.json",
+        "quality-report.json", "intake-status.json",
         "search-blueprint.json", "intake-quality-gate.json",
         "footnote-candidate-pool.json", "footnote-pruning-result.json", "reference-pruning-plan.json",
         "authenticity-verification-request.json", "authenticity-verification-result.json",
         "authenticity-issues.json", "consistency-gate-result.json",
         "grounding-resolution.json", "markdown-verification.json", "pdf-fallback-verification.json",
+        "writing-pool-review-request.json", "writing-pool-review-result.json", "writing-pool-gate-result.json",
+        "risk-cleanup-plan.json", "still-needs-human-review.json", "cleaned-补库-needs.json",
     ]:
-        copy_if_exists(task / "state" / name, delivery / name)
+        copy_if_exists(task / "state" / name, process / name)
     evidence = read_json(task / "state" / "evidence-map.json")
     plan = read_json(task / "state" / "insertion-plan.json")
     intake_gate_path = task / "state" / "intake-quality-gate.json"
@@ -69,16 +92,21 @@ def main() -> int:
             "footnote_boundary": "footnote/endnote text is only for necessary content supplements; reference_only entries must not become footnote prose",
         },
     }
-    write_json(delivery / "human_review_needed.json", human_review)
-    write_json(delivery / "handoff_to_writing.json", handoff)
-    write_json(delivery / "statistics.json", {
+    write_json(process / "human_review_needed.json", human_review)
+    write_json(process / "handoff_to_writing.json", handoff)
+    write_json(process / "statistics.json", {
         "insertions": len(plan["insertions"]),
         "no_insert_zones": len(plan["no_insert_zones"]),
         "references": len(plan.get("reference_list", {}).get("new_references", [])),
         "footnote_pruning_applied": plan.get("footnote_pruning_applied", False),
+        "process_files_are_under": "process/",
     })
-    (delivery / "summary.md").write_text(f"# ReferenceFootnote Delivery\n\nQuality status: {quality['status']}\n", encoding="utf-8")
-    (delivery / "changelog.md").write_text(f"# Citation Change Log\n\nGenerated offline by ReferenceFootnote {VERSION}.\n", encoding="utf-8")
+    (delivery / "summary.md").write_text(
+        f"# ReferenceFootnote Delivery\n\nQuality status: {quality['status']}\n\n"
+        "Top-level files are the main entry points. Process files are under `process/`.\n",
+        encoding="utf-8",
+    )
+    (process / "changelog.md").write_text(f"# Citation Change Log\n\nGenerated offline by ReferenceFootnote {VERSION}.\n", encoding="utf-8")
     print_json(result("passed", output=str(delivery)))
     return 0
 

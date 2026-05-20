@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.5.2-dev - 2026-05-20
+
+- Reworked the workflow into the S00-S120 single-line stage machine with `referencefootnote-flow-status.json` as the status source.
+- Added a full-order `evidence-trace-ledger.json` as the main evidence, note, reference, risk, cleanup, and final-decision ledger.
+- Added independent writing-pool-style review scripts for note position, note wording, claim-strength fit, and full-paragraph rewrite blocking.
+- Added risk inventory, cleanup plan, cleanup application, and cleaned artifact rebuild stages before final delivery.
+- Added complete Markdown full-text insertion, full-order audit export, and a final delivery gate.
+- Changed delivery packaging so main entry files stay at top level and process files go under `delivery/process/`.
+- Expanded offline fixtures from 51 to 58 to cover evidence trace, risk cleanup, writing-pool rewrite blocking, explicit RAG ordering fields, delivery收束, and final gate requirements.
+
 ## 0.5.1-dev - 2026-05-20
 
 - Added Markdown-first grounding resolution after RAG interpretation: `full_markdown_grounding`, `page_mapped_grounding`, `chunk_only_grounding`, `pdf_fallback_required`, and `unresolved_grounding`.

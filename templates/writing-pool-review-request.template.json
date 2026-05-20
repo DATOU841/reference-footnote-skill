@@ -1,0 +1,14 @@
+{
+  "request_type": "writing_pool_review",
+  "request_id": "writing-pool-review-01",
+  "article_id": "article-id",
+  "execution_status": "prepared_not_executed",
+  "target_executor": "ReferenceFootnote 独立写作池能力",
+  "review_scope": [
+    "note_position_fit",
+    "note_wording_fit",
+    "body_claim_strength_fit",
+    "rewrite_needed_as_full_paragraph_only"
+  ],
+  "items": []
+}

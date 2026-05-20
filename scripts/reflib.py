@@ -56,6 +56,17 @@ ANNOTATION_PURPOSES = {
     "background", "reference_only"
 }
 AUTHENTICITY_STATUSES = {"verified", "human_review", "failed", "not_checked"}
+WRITING_POOL_DECISIONS = {"keep", "revise_note", "move_note", "drop_note", "return_paragraph_for_rewrite"}
+FINAL_DECISIONS = {
+    "pending",
+    "inserted",
+    "no_note_needed",
+    "deleted_by_cleanup",
+    "downgraded_by_cleanup",
+    "needs_gap_handoff",
+    "needs_human_review",
+    "blocked_rewrite_required",
+}
 
 
 def search_dimensions_for_text(text: str) -> dict:
@@ -206,6 +217,33 @@ def read_json(path: Path) -> dict:
 def write_json(path: Path, data: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def update_flow_status(task_dir: Path, stage: str, *, status: str = "completed", blocked: bool = False, note: str | None = None) -> None:
+    state_path = task_dir / "state" / "referencefootnote-flow-status.json"
+    existing = read_json(state_path) if state_path.exists() else {
+        "version": VERSION,
+        "current_stage": None,
+        "completed_stages": [],
+        "blocked_at": None,
+        "block_reason": None,
+        "pending_actions": [],
+    }
+    completed = list(existing.get("completed_stages", []))
+    if not blocked and stage not in completed:
+        completed.append(stage)
+    existing.update({
+        "version": VERSION,
+        "current_stage": stage,
+        "completed_stages": completed,
+        "blocked_at": stage if blocked else None,
+        "block_reason": note if blocked else None,
+        "last_updated": now(),
+        "last_status": status,
+    })
+    if note and not blocked:
+        existing["last_note"] = note
+    write_json(state_path, existing)
 
 
 def print_json(data: dict) -> None:

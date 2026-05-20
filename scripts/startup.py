@@ -5,7 +5,7 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
-from reflib import ROOT, ensure_task, print_json, result, write_json
+from reflib import ROOT, ensure_task, print_json, result, update_flow_status, write_json
 
 REQUIRED = ["SKILL.md", "docs", "references", "scripts", "templates", "config", "agents", "server-assets", "tests/fixtures", "VERSION"]
 
@@ -31,6 +31,7 @@ def main() -> int:
     )
     task = ensure_task(args.task_dir)
     write_json(task / "state" / "status.json", data)
+    update_flow_status(task, "S00", status=data["status"], blocked=bool(errors), note="startup boundary check")
     print_json(data)
     return 1 if errors else 0
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Check stage gate artifacts."""
+"""Check ReferenceFootnote stage gate artifacts."""
 
 from __future__ import annotations
 
@@ -8,35 +8,28 @@ from pathlib import Path
 from reflib import ensure_task, print_json, result
 
 STAGE_FILES = {
-    "A0": "state/status.json",
-    "A1": "state/article-structure.json",
-    "A2": "state/claim-segments.json",
-    "A3": "state/citation-needs.json",
-    "A3.5": "state/search-blueprint.json",
-    "A4": "state/search-intake-requests/initial-library.json",
-    "A4.5": "state/search-intake-calls/initial-library.json",
-    "A5": "state/intake-status.json",
-    "A5.5": "state/intake-quality-gate.json",
-    "A6": "state/rag-requests/batch-01.json",
-    "A6.5": "state/evidence-interpretations/batch-01.json",
-    "A7": "state/evidence-map.json",
-    "A7.5": "state/search-intake-requests/gap-round2.json",
-    "A7.6": "state/search-intake-calls/gap-round2.json",
-    "A8": "state/intake-status-round2.json",
-    "A8.5": "state/rag-calls/post-ingestion-01.json",
-    "A9a": "state/footnote-candidate-pool.json",
-    "A9b": "state/footnote-pruning-result.json",
-    "A9c": "state/reference-pruning-plan.json",
-    "A9": "state/insertion-plan.json",
-    "A10": "state/quality-report.json",
-    "A10a": "state/authenticity-verification-request.json",
-    "A10b": "state/authenticity-verification-result.json",
-    "A10c": "state/consistency-gate-result.json",
-    "A11": "delivery/summary.md",
+    "S00": "state/referencefootnote-flow-status.json",
+    "S10": "state/article-structure.json",
+    "S20": "state/citation-needs.json",
+    "S30": "state/search-blueprint.json",
+    "S40": "state/search-intake-calls/initial-library.json",
+    "S45": "state/intake-quality-gate.json",
+    "S50": "state/evidence-interpretations/batch-01.json",
+    "S55": "state/grounding-resolution.json",
+    "S60": "state/evidence-trace-ledger.json",
+    "S65": "state/evidence-map.json",
+    "S70": "state/insertion-plan.json",
+    "S80": "state/writing-pool-review-request.json",
+    "S85": "state/risk-inventory.json",
+    "S90": "state/risk-cleanup-result.json",
+    "S95": "state/cleaned-insertion-plan.json",
+    "S100": "state/full-text-with-notes.md",
+    "S105": "state/full-order-audit.json",
+    "S110": "state/final-gate-result.json",
+    "S120": "delivery/summary.md",
 }
 
-
-STAGE_ORDER = ["A0", "A1", "A2", "A3", "A3.5", "A4", "A4.5", "A5", "A5.5", "A6", "A6.5", "A7", "A7.5", "A7.6", "A8", "A8.5", "A9a", "A9b", "A9c", "A9", "A10", "A10a", "A10b", "A10c", "A11"]
+STAGE_ORDER = list(STAGE_FILES)
 
 
 def main() -> int:

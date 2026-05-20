@@ -1,0 +1,5 @@
+{
+  "cleanup_id": "cleanup-001",
+  "source_risk_inventory": "risk-inventory.json",
+  "actions": []
+}

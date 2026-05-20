@@ -9,18 +9,18 @@ python3 tests/run-fixtures.py --all
 python3 scripts/run-local-gate.py --pre-review
 ```
 
-0.5.1-dev expects 51 offline fixtures to pass.
+0.5.2-dev expects 58 offline fixtures to pass.
 
-Release gate requires an approved Claude review and a clean git worktree with tag `0.5.1-dev`.
+Release gate requires an approved Claude review and a clean git worktree with tag matching `VERSION`.
 
-0.5.1-dev keeps the 0.5 retrieval-first gates and adds Markdown-first grounding gates:
+Blocking rules:
 
 - Footnotes/endnotes must contain necessary supplemental content; `reference_only` entries cannot become footnote prose.
-- Final footnote count should stay in the 10-20 range, with about 15 as the target.
-- Final reference count should target 25-30; over 40 is blocking.
-- Search-intake completion material pool should average at least 200 usable text chars per source pool; below that is a warning and must be surfaced.
-- Authenticity verification results must cover every requested insertion before final consistency review.
-- Retrieval-first gates are blocking: `search-blueprint.json`, `search-intake-requests/initial-library.json`, and `intake-status.json` must exist before citation planning unless the user declared an existing RAG library.
-- A5.5 intake quality gate checks initial pool size, pool average usable text, source type coverage, and RAG indexed ratio.
-- Grounding gates are explicit: `strong_support` with `unresolved_grounding` blocks; `strong_support` with `chunk_only_grounding` warns; `pdf_fallback_required` blocks until fallback verification or human review is recorded.
-- `analogy_only` is never counted as direct support and should not produce automatic footnote insertion.
+- `analogy_only` cannot be counted as direct support and cannot be final-inserted as if it were `strong_support`.
+- `ownership_unverified` cannot be final-inserted as verified fact.
+- Risk inventory must be followed by risk cleanup and cleaned artifact rebuild before final delivery.
+- The final package must include `evidence-trace-ledger.json`, `full-order-audit.json`, `risk-inventory.json`, `risk-cleanup-result.json`, and `full-text-with-notes.md`.
+- Writing-pool decisions of `return_paragraph_for_rewrite` block final delivery until a complete paragraph is returned and accepted.
+- Unconsumed references are blocking in risk cleanup unless explicitly moved out of the final reference list.
+- Grounding gates remain explicit: `strong_support` with unresolved grounding blocks; chunk-only support warns; PDF fallback blocks until reviewed or downgraded.
+- Final delivery must put process materials under `delivery/process/`; top-level files are reserved for the main text, audit, risk residue, ledger, final gate, summary, and statistics.

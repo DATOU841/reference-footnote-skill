@@ -43,6 +43,51 @@ def write(path: Path, data: dict) -> None:
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def run_new_closure(task: Path, *, allow_final_fail: bool = True) -> None:
+    for step in [
+        ["python3", "scripts/build-evidence-trace-ledger.py", "--task-dir", str(task)],
+        ["python3", "scripts/build-writing-pool-review-request.py", "--task-dir", str(task)],
+    ]:
+        code, data = run(step)
+        assert code == 0, data
+    req = read(task / "state" / "writing-pool-review-request.json")
+    review_path = task / "state" / "fixture-writing-pool-review-result.json"
+    write(review_path, {
+        "status": "completed",
+        "request_id": req.get("request_id"),
+        "results": [
+            {
+                "insertion_id": item["insertion_id"],
+                "decision": "keep",
+                "fit": "fits",
+                "reason": "fixture keeps this note.",
+                "revised_note_text": None,
+                "new_target_location": None,
+                "rewritten_paragraph": None,
+                "risks": [],
+            }
+            for item in req.get("items", [])
+        ],
+    })
+    for step in [
+        ["python3", "scripts/apply-writing-pool-review-result.py", "--task-dir", str(task), "--review-result", str(review_path)],
+        ["python3", "scripts/validate-writing-pool-review.py", "--task-dir", str(task), "--allow-fail"],
+        ["python3", "scripts/build-risk-inventory.py", "--task-dir", str(task)],
+        ["python3", "scripts/build-risk-cleanup-plan.py", "--task-dir", str(task)],
+        ["python3", "scripts/apply-risk-cleanup-result.py", "--task-dir", str(task)],
+        ["python3", "scripts/rebuild-cleaned-artifacts.py", "--task-dir", str(task)],
+        ["python3", "scripts/insert-full-text.py", "--task-dir", str(task)],
+        ["python3", "scripts/export-full-order-audit.py", "--task-dir", str(task)],
+    ]:
+        code, data = run(step)
+        assert code == 0, data
+    cmd = ["python3", "scripts/validate-final-delivery-gate.py", "--task-dir", str(task)]
+    if allow_final_fail:
+        cmd.append("--allow-fail")
+    code, data = run(cmd)
+    assert code == 0, data
+
+
 def base_flow(task: Path, *, include_rag: bool = True, allow_fail: bool = True) -> None:
     steps = [
         ["python3", "scripts/startup.py", "--task-dir", str(task)],
@@ -72,6 +117,7 @@ def base_flow(task: Path, *, include_rag: bool = True, allow_fail: bool = True) 
     assert code == 0, data
     code, data = run(["python3", "scripts/plan-footnotes.py", "--task-dir", str(task)])
     assert code == 0, data
+    run_new_closure(task, allow_final_fail=True)
     code, data = run(["python3", "scripts/build-authenticity-verification-request.py", "--task-dir", str(task)])
     assert code == 0, data
     request = read(task / "state" / "authenticity-verification-request.json")
@@ -129,10 +175,12 @@ def base_flow_retrieval_first(task: Path, *, allow_fail: bool = True) -> None:
         ["python3", "scripts/prune-footnotes.py", "--task-dir", str(task)],
         ["python3", "scripts/prune-references.py", "--task-dir", str(task)],
         ["python3", "scripts/plan-footnotes.py", "--task-dir", str(task)],
-        ["python3", "scripts/build-authenticity-verification-request.py", "--task-dir", str(task)],
     ]:
         code, data = run(step)
         assert code == 0, data
+    run_new_closure(task, allow_final_fail=True)
+    code, data = run(["python3", "scripts/build-authenticity-verification-request.py", "--task-dir", str(task)])
+    assert code == 0, data
     request = read(task / "state" / "authenticity-verification-request.json")
     auth_results = [{
         "insertion_id": item["insertion_id"],
@@ -292,9 +340,9 @@ def fixture_15(base: Path) -> None:
     task = base / "multi-round-closure"
     base_flow(task)
     delivery = task / "delivery"
-    assert (delivery / "handoff_to_writing.json").exists()
-    assert (delivery / "human_review_needed.json").exists()
-    handoff = read(delivery / "handoff_to_writing.json")
+    assert (delivery / "process" / "handoff_to_writing.json").exists()
+    assert (delivery / "process" / "human_review_needed.json").exists()
+    handoff = read(delivery / "process" / "handoff_to_writing.json")
     assert "unresolved_critical_claims" in handoff
     assert "existing_references_merge_status" in handoff
 
@@ -490,8 +538,8 @@ def fixture_28(base: Path) -> None:
 def fixture_29(base: Path) -> None:
     task = base / "delivery-includes-authenticity"
     base_flow(task)
-    assert (task / "delivery" / "authenticity-verification-request.json").exists()
-    assert (task / "delivery" / "consistency-gate-result.json").exists()
+    assert (task / "delivery" / "process" / "authenticity-verification-request.json").exists()
+    assert (task / "delivery" / "process" / "consistency-gate-result.json").exists()
 
 
 def fixture_30(base: Path) -> None:
@@ -581,8 +629,8 @@ def fixture_37(base: Path) -> None:
 def fixture_38(base: Path) -> None:
     task = base / "full-retrieval-first-flow"
     base_flow_retrieval_first(task)
-    assert (task / "delivery" / "search-blueprint.json").exists()
-    assert (task / "delivery" / "intake-quality-gate.json").exists()
+    assert (task / "delivery" / "process" / "search-blueprint.json").exists()
+    assert (task / "delivery" / "process" / "intake-quality-gate.json").exists()
 
 
 def fixture_39(base: Path) -> None:
@@ -605,8 +653,8 @@ def fixture_40(base: Path) -> None:
 def fixture_41(base: Path) -> None:
     task = base / "delivery-includes-blueprint-and-intake-gate"
     base_flow_retrieval_first(task)
-    assert (task / "delivery" / "search-blueprint.json").exists()
-    assert (task / "delivery" / "intake-quality-gate.json").exists()
+    assert (task / "delivery" / "process" / "search-blueprint.json").exists()
+    assert (task / "delivery" / "process" / "intake-quality-gate.json").exists()
 
 
 def grounding_candidate(**overrides: object) -> dict:
@@ -757,6 +805,104 @@ def fixture_51(base: Path) -> None:
     assert not read(task / "state" / "insertion-plan.json")["insertions"]
 
 
+def fixture_52(base: Path) -> None:
+    task = base / "evidence-trace-full-order"
+    base_flow(task)
+    ledger = read(task / "state" / "evidence-trace-ledger.json")
+    orders = [item["order"] for item in ledger["entries"]]
+    assert orders == sorted(orders)
+    assert any(item.get("note_id") for item in ledger["entries"])
+
+
+def fixture_53(base: Path) -> None:
+    task = base / "risk-cleanup-removes-unconsumed-reference"
+    base_flow(task)
+    plan = read(task / "state" / "insertion-plan.json")
+    plan["reference_list"]["new_references"].append({"ref_id": "ref-unused-risk", "title": "未消费风险文献"})
+    write(task / "state" / "insertion-plan.json", plan)
+    for step in [
+        ["python3", "scripts/build-evidence-trace-ledger.py", "--task-dir", str(task)],
+        ["python3", "scripts/build-risk-inventory.py", "--task-dir", str(task)],
+    ]:
+        code, data = run(step)
+        assert code == 0, data
+    inv = read(task / "state" / "risk-inventory.json")
+    assert any(r["risk_type"] == "unconsumed_reference" for r in inv["risks"])
+
+
+def fixture_54(base: Path) -> None:
+    task = base / "writing-pool-full-paragraph-blocks"
+    base_flow(task)
+    req = read(task / "state" / "writing-pool-review-request.json")
+    if not req["items"]:
+        return
+    review = {
+        "status": "completed",
+        "request_id": req["request_id"],
+        "results": [{
+            "insertion_id": req["items"][0]["insertion_id"],
+            "decision": "return_paragraph_for_rewrite",
+            "fit": "overstated",
+            "reason": "需要完整段落重写。",
+            "revised_note_text": None,
+            "new_target_location": None,
+            "rewritten_paragraph": None,
+            "risks": ["writing_pool_rewrite_pending"],
+        }],
+    }
+    path = task / "state" / "rewrite-review.json"
+    write(path, review)
+    code, data = run(["python3", "scripts/apply-writing-pool-review-result.py", "--task-dir", str(task), "--review-result", str(path)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/validate-writing-pool-review.py", "--task-dir", str(task), "--allow-fail"])
+    assert code == 0, data
+    gate = read(task / "state" / "writing-pool-gate-result.json")
+    assert gate["status"] == "failed"
+
+
+def fixture_55(base: Path) -> None:
+    task = base / "delivery-top-level-is-constrained"
+    base_flow(task)
+    names = {p.name for p in (task / "delivery").iterdir() if p.is_file()}
+    assert "full-text-with-notes.md" in names
+    assert "evidence-trace-ledger.json" in names
+    assert "insertion-plan.json" not in names
+    assert (task / "delivery" / "process" / "insertion-plan.json").exists()
+    assert "statistics.json" not in names
+
+
+def fixture_56(base: Path) -> None:
+    task = base / "final-gate-requires-cleanup"
+    base_flow(task)
+    (task / "state" / "risk-cleanup-result.json").unlink()
+    code, data = run(["python3", "scripts/validate-final-delivery-gate.py", "--task-dir", str(task), "--allow-fail"])
+    assert code == 0, data
+    report = read(task / "state" / "final-gate-result.json")
+    assert report["status"] == "failed"
+
+
+def fixture_57(base: Path) -> None:
+    task = base / "rag-request-explicit-full-order-fields"
+    prepare_initial_call(task)
+    code, data = run(["python3", "scripts/apply-intake-completion.py", "--task-dir", str(task), "--completion", str(INITIAL_COMPLETION)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/build-rag-request.py", "--task-dir", str(task), "--batch-id", "batch-01"])
+    assert code == 0, data
+    claim = read(task / "state" / "rag-requests" / "batch-01.json")["claims"][0]
+    assert {"order", "paragraph_id", "sentence_id", "original_text", "chapter_context"} <= (set(claim) | set(claim.get("context", {})))
+
+
+def fixture_58(base: Path) -> None:
+    task = base / "final-gate-explicit-unconsumed-cleaned-reference"
+    base_flow(task)
+    refs = read(task / "state" / "cleaned-reference-list.json")
+    refs["references"].append({"ref_id": "ref-clean-unused", "title": "clean unused"})
+    write(task / "state" / "cleaned-reference-list.json", refs)
+    code, data = run(["python3", "scripts/validate-final-delivery-gate.py", "--task-dir", str(task), "--allow-fail"])
+    assert code == 0, data
+    assert "unconsumed" in " ".join(read(task / "state" / "final-gate-result.json")["blocking_issues"])
+
+
 FIXTURES = [
     fixture_01, fixture_02, fixture_03, fixture_04, fixture_05,
     fixture_06, fixture_07, fixture_08, fixture_09, fixture_10,
@@ -771,6 +917,8 @@ FIXTURES = [
     fixture_40, fixture_41,
     fixture_42, fixture_43, fixture_44, fixture_45, fixture_46,
     fixture_47, fixture_48, fixture_49, fixture_50, fixture_51,
+    fixture_52, fixture_53, fixture_54, fixture_55, fixture_56,
+    fixture_57, fixture_58,
 ]
 
 

@@ -1,0 +1,30 @@
+{
+  "version": "0.5.2-dev",
+  "article_id": "article-id",
+  "total_entries": 0,
+  "entries": [
+    {
+      "order": 1,
+      "paragraph_id": "p-001",
+      "sentence_id": "p-001-s-1",
+      "claim_id": "c-001",
+      "original_text": "原句",
+      "citation_need": "critical",
+      "citation_type": "secondary_source",
+      "claim_type": "theoretical_claim",
+      "rag_query": null,
+      "rag_result_id": null,
+      "retrieved_chunk_id": null,
+      "source_ref_id": null,
+      "support_strength": null,
+      "grounding_status": null,
+      "note_id": null,
+      "note_text": null,
+      "reference_id": null,
+      "risk_flags": [],
+      "writing_pool_decision": null,
+      "cleanup_status": "not_started",
+      "final_decision": "pending"
+    }
+  ]
+}

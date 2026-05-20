@@ -1,5 +1,22 @@
 # Release Notes
 
+## 0.5.2-dev
+
+Status: pre-Claude-review development build.
+
+### Scope
+
+- Single-line S00-S120 workflow and `referencefootnote-flow-status.json`.
+- Full-order evidence trace ledger modeled after the writing chain's evidence trace concept, implemented independently inside ReferenceFootnote.
+- Independent writing-pool-style review request/result/gate for note placement and wording.
+- Risk inventory -> cleanup plan -> cleanup result -> cleaned artifact rebuild closure.
+- Full-text Markdown insertion, full-order audit, final delivery gate, and收束 delivery package.
+- 58 offline fixtures covering retrieval-first, grounding, evidence trace, risk cleanup, writing-pool review, explicit RAG ordering fields, and delivery gates.
+
+### Required Before Publication
+
+Run local gates, request Claude review, fix P0/P1, commit, tag `0.5.2-dev`, and push.
+
 ## 0.5.1-dev
 
 Status: pre-Claude-review development build.

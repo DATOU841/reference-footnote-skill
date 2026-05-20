@@ -34,24 +34,30 @@ def main() -> int:
         return 1
     needs = read_json(needs_path)
     targets = [n for n in needs["needs"] if n["need_level"] in {"critical", "important", "recommended"}]
+    request_claims = []
+    for order, n in enumerate(targets, start=1):
+        request_claims.append({
+            "order": order,
+            "paragraph_id": n.get("paragraph_id"),
+            "sentence_id": n.get("source_sentence_id"),
+            "claim_id": n["claim_id"],
+            "original_text": n["text"],
+            "text": n["text"],
+            "claim_type": n["claim_type"],
+            "need_level": n["need_level"],
+            "citation_need": n["need_level"],
+            "citation_type": n["citation_type"],
+            "expected_evidence_type": "一手材料" if n["citation_type"] == "primary_source" else "文本证据",
+            "search_dimensions": search_dimensions_for_text(n["text"]),
+            "context": {"section_title": n["section_title"], "chapter_context": n["section_title"], "article_discipline": "law"},
+        })
     request = {
         "protocol_version": "1.0",
         "request_type": "reverse_lookup",
         "batch_id": args.batch_id,
         "priority": args.priority,
         "retrieval_first_status": "pre_ingestion_bypass" if args.allow_pre_ingestion else ("user_declared_existing_library" if user_declared_existing else "after_intake_completion"),
-        "claims": [
-            {
-                "claim_id": n["claim_id"],
-                "text": n["text"],
-                "claim_type": n["claim_type"],
-                "need_level": n["need_level"],
-                "citation_type": n["citation_type"],
-                "search_dimensions": search_dimensions_for_text(n["text"]),
-                "context": {"section_title": n["section_title"], "article_discipline": "law"},
-            }
-            for n in targets
-        ],
+        "claims": request_claims,
     }
     out = task / "state" / "rag-requests" / f"{args.batch_id}.json"
     write_json(out, request)
