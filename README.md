@@ -2,13 +2,13 @@
 
 `参考文献补注 / ReferenceFootnote` 是一个面向已写文章的 Codex skill，用于系统诊断引用需求、构建 RAG 文献反查请求、解释候选证据、生成 `检索入库` 补库交接、规划脚注/参考文献插入方案，并打包 citation QA 交付物。
 
-版本：`0.5.2-dev`
+版本：`0.5.3-dev`
 
 公开展示版中文介绍见：[docs/public-introduction.zh.md](docs/public-introduction.zh.md)。
 
-当前版本是离线优先开发版，不运行正式文章任务、CNKI/WoS/Zotero/PDF 获取、RAG 导库、推进池、mimo、服务器部署或 production 工作流。
+当前版本不运行正式文章任务、CNKI/WoS/Zotero/PDF 获取、RAG 导库、推进池、mimo、服务器部署或 production 工作流。2.5 导库完成后的只读 RAG 反查由 ReferenceFootnote 的 executor 执行。
 
-`0.5.2-dev` 在 retrieval-first 和 Markdown-first grounding 基础上重构全流程：新增全文顺序 evidence trace ledger、独立写作池式审查、风险清单到清理到清理后重建的闭环、完整全文插入、全文顺序核查和最终交付 gate。写作池能力只用于注释位置/措辞/正文契合性审查，不依赖 `正文写作` skill。
+`0.5.3-dev` 修复 S50：不再要求用户提供 RAG 回执，而是由 `scripts/run-rag-reverse-lookup.py` 写入内部 `state/rag-calls/<batch>.response.json` 后继续 validate、grounding、ledger 和插注流程。写作池能力只用于注释位置/措辞/正文契合性审查，不依赖 `正文写作` skill。
 
 本地校验：
 

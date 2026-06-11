@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Wenheng native handoff schema - reference footnote",
+  "type": "object",
+  "required": ["schema_version", "wenheng_task", "routing", "style_memory", "e05_writeback", "b02_timeline", "h08_evidence", "archive", "no_bypass"],
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "source_skill": { "const": "参考文献补注" },
+    "wenheng_task": { "type": "object", "required": ["wenheng_task_id", "task_folder", "task_type", "target_skill"], "properties": { "wenheng_task_id": { "type": "string", "minLength": 1 }, "task_folder": { "type": "string", "minLength": 1 }, "task_type": { "const": "reference_footnote" }, "target_skill": { "type": "string" }, "source_run_id": { "type": ["string", "null"] } } },
+    "routing": { "type": "object", "required": ["f06_routing_decision", "target_channel", "forbidden_channel_checked"], "properties": { "f06_routing_decision": { "type": "string" }, "target_channel": { "type": "string" }, "forbidden_channel_checked": { "type": "boolean" } } },
+    "style_memory": { "type": "object", "required": ["style_memory_source", "style_memory_rules_applied", "style_memory_rules_ignored", "style_memory_conflicts", "style_memory_not_applicable_reason", "style_memory_feedback_candidate_id"], "properties": { "style_memory_source": { "type": "string" }, "style_memory_rules_applied": { "type": "array", "items": { "type": "string" } }, "style_memory_rules_ignored": { "type": "array", "items": { "type": "string" } }, "style_memory_conflicts": { "type": "array", "items": { "type": "string" } }, "style_memory_not_applicable_reason": { "type": ["string", "null"] }, "style_memory_feedback_candidate_id": { "type": ["string", "null"] } } },
+    "e05_writeback": { "type": "object", "required": ["enabled", "sanitized"], "properties": { "enabled": { "type": "boolean" }, "sanitized": { "const": true } } },
+    "b02_timeline": { "type": "array", "items": { "type": "object" } },
+    "h08_evidence": { "type": "object", "required": ["evidence_path", "sensitive_data"], "properties": { "evidence_path": { "type": ["string", "null"] }, "sensitive_data": { "const": "redacted" } } },
+    "archive": { "type": "object", "required": ["archive_required", "package_ref"], "properties": { "archive_required": { "type": "boolean" }, "package_ref": { "type": ["string", "null"] } } },
+    "no_bypass": { "type": "object", "required": ["wenheng_task_required", "intake_only_without_task"], "properties": { "wenheng_task_required": { "const": true }, "intake_only_without_task": { "const": true } } }
+  }
+}

@@ -11,7 +11,7 @@ REQUIRED = [
     "docs/architecture.md", "docs/state-machine.md", "docs/rag-protocol.md",
     "docs/handoff-protocol.md", "docs/evidence-classification.md", "docs/claim-taxonomy.md",
     "docs/quality-gates.md", "docs/boundary-rules.md", "docs/glossary.md",
-    "docs/collaboration-flow.md",
+    "docs/collaboration-flow.md", "docs/wenheng-native-protocol.md", "docs/footnote-thinking-protocol.md",
     "references/scholar-polish-protocol.md", "references/search-intake-interface.md",
     "references/writing-skill-interface.md", "references/rag-platform-interface.md",
     "config/skill.yaml", "config/boundaries.yaml",
@@ -29,10 +29,14 @@ REQUIRED = [
     "templates/authenticity-verification-request.template.json",
     "templates/authenticity-verification-result.template.json",
     "templates/consistency-gate-result.template.json", "templates/search-blueprint.template.json",
-    "templates/intake-quality-gate.template.json", "scripts/build-search-intake-call.py",
+    "templates/intake-quality-gate.template.json", "templates/wenheng-handoff-schema.json",
+    "templates/footnote-thinking-request.template.json", "templates/footnote-thinking-result.template.json",
+    "templates/footnote-thinking-validated.template.json", "scripts/build-search-intake-call.py",
     "scripts/build-search-blueprint.py", "scripts/build-initial-search-handoff.py",
     "scripts/validate-intake-quality.py",
-    "scripts/build-post-ingestion-rag-call.py", "tests/fixtures/README.md",
+    "scripts/build-post-ingestion-rag-call.py", "scripts/wenheng_native.py", "scripts/run-rag-reverse-lookup.py",
+    "scripts/build-footnote-thinking-request.py", "scripts/run-footnote-thinking-pool.py",
+    "scripts/validate-footnote-thinking-result.py", "config/rag-executor.yaml", "tests/fixtures/README.md",
 ]
 
 

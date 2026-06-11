@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.5.3-dev - 2026-05-20
+
+- Added `run-rag-reverse-lookup.py` so post-2.5 RAG reverse lookup is executed by ReferenceFootnote and written to `state/rag-calls/<batch>.response.json`.
+- Split S50 into request, executor response, and validation semantics; missing live executor configuration now blocks as `missing_rag_executor_config` instead of asking for a user-provided response.
+- Updated boundaries to keep RAG ingestion forbidden while allowing read-only `rag_reverse_lookup_query` after intake quality validation.
+- Added executor fixtures for mock execution, missing config blocking, response validation, and boundary separation.
+
 ## 0.5.2-dev - 2026-05-20
 
 - Reworked the workflow into the S00-S120 single-line stage machine with `referencefootnote-flow-status.json` as the status source.

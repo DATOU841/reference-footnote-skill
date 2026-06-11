@@ -1,0 +1,24 @@
+# ReferenceFootnote RAG reverse-lookup executor.
+# This config controls read-only RAG queries after 检索入库 has completed 2.5 RAG ingestion.
+
+executor:
+  # mock keeps local gates offline. live requires the live.* fields below.
+  mode: mock
+  mock_response_dir: tests/fixtures/mocks
+
+live:
+  base_url: null
+  api_key_env: RAG_API_KEY
+  model: null
+  route: /chat/completions
+  timeout_seconds: 60
+  max_retries: 2
+
+kb_routing:
+  override_kb_ids: []
+
+blocker_policy:
+  required_for_live:
+    - base_url
+    - api_key_env
+    - model

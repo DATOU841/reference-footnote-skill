@@ -55,6 +55,22 @@ ANNOTATION_PURPOSES = {
     "evidence", "clarification", "supplement", "source_anchor", "counter_view",
     "background", "reference_only"
 }
+FOOTNOTE_BARRED_PURPOSES = {"evidence", "source_anchor", "reference_only"}
+FOOTNOTE_TYPES = {"concept", "background", "mechanism", "technical_premise", "terminology", "boundary"}
+THINKING_DECISIONS = {"no_note", "footnote_needed", "reference_only", "rewrite_needed", "human_review"}
+AI_DEFENSIVE_PATTERNS = [
+    "只能说明", "不能证明", "仍需验证", "属于类比判断",
+    "本文承认", "需要指出的是", "并不意味着", "不等于",
+    "仅供参考", "有待进一步", "尚无定论", "不宜过度",
+    "本文无意", "笔者承认", "这并非", "不应被理解为",
+    "局限性在于", "方法论上", "研究设计的",
+]
+EVIDENCE_RELATION_PATTERNS = [
+    "支撑本文", "支持本文", "印证本文", "可作为依据", "提供依据",
+    "与本文观点一致", "可以证明", "直接支撑", "部分支撑",
+    "为本文提供", "作为本文", "该研究指出", "该文指出",
+    "本文引用", "引用该文", "参见", "详见",
+]
 AUTHENTICITY_STATUSES = {"verified", "human_review", "failed", "not_checked"}
 WRITING_POOL_DECISIONS = {"keep", "revise_note", "move_note", "drop_note", "return_paragraph_for_rewrite"}
 FINAL_DECISIONS = {
@@ -174,18 +190,59 @@ def pool_material_status(avg_chars: float) -> str:
     return "sufficient" if avg_chars >= 200 else "insufficient"
 
 
+def is_ai_defensive_note(text: str | None) -> bool:
+    text = (text or "").strip()
+    return any(pattern in text for pattern in AI_DEFENSIVE_PATTERNS)
+
+
+def is_reference_format_text(text: str | None) -> bool:
+    text = (text or "").strip()
+    if not text:
+        return False
+    if re.search(r"^(参见|详见|See|Cf\.)", text, flags=re.IGNORECASE):
+        return True
+    if re.search(r"《[^》]{2,80}》.*(载《|发表于|第.+页|卷|期)", text):
+        return True
+    if re.search(r"\[[JMDCP]\].*(19|20)\d{2}", text):
+        return True
+    if re.search(r"\[(\d{1,3})\]", text):
+        return True
+    return False
+
+
+def is_evidence_relation_text(text: str | None) -> bool:
+    text = (text or "").strip()
+    return any(pattern in text for pattern in EVIDENCE_RELATION_PATTERNS)
+
+
+def has_explanatory_content(text: str | None) -> bool:
+    text = re.sub(r"\s+", "", text or "")
+    if len(text) < 30:
+        return False
+    if is_ai_defensive_note(text) or is_reference_format_text(text) or is_evidence_relation_text(text):
+        return False
+    explanatory_markers = [
+        "是指", "所谓", "主要指", "包括", "区别在于", "可理解为",
+        "具体而言", "其含义", "其作用", "其前提", "在于",
+        "需要同时", "通常", "即", "并非", "不是",
+        "用于", "作用是", "帮助", "影响", "转化为", "共同",
+    ]
+    return any(marker in text for marker in explanatory_markers)
+
+
 def annotation_purpose_for(entry: dict, candidate: dict | None = None) -> str:
     candidate = candidate or {}
     strength = candidate.get("support_assessment", {}).get("strength", entry.get("evidence_status"))
+    reasoning = candidate.get("support_assessment", {}).get("reasoning", "")
     if strength == "conflict":
         return "counter_view"
-    if entry.get("claim_type") == "definition":
+    if entry.get("claim_type") == "definition" and has_explanatory_content(reasoning):
         return "clarification"
-    if entry.get("need_level") == "critical":
-        return "source_anchor"
-    if entry.get("evidence_status") == "partial_support":
+    if not has_explanatory_content(reasoning):
+        return "reference_only"
+    if entry.get("evidence_status") == "partial_support" or entry.get("need_level") == "critical":
         return "supplement"
-    return "evidence"
+    return "reference_only"
 
 
 def necessity_score(entry: dict, candidate: dict | None = None, material: dict | None = None) -> float:

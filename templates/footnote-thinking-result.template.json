@@ -1,0 +1,25 @@
+{
+  "result_id": "ft-thinking-result-001",
+  "request_id": "ft-thinking-001",
+  "status": "completed",
+  "results": [
+    {
+      "order": 1,
+      "claim_id": "c-001",
+      "decision": "footnote_needed",
+      "footnote_intent": "说明正文未展开的必要概念含义。",
+      "footnote_type": "concept",
+      "proposed_note_text": "该概念在本文中主要作为教学支架使用，作用是把抽象的结构规律转化为学生能够观察、比较和迁移的书写参照。",
+      "evidence_used": {
+        "chunk_id": "chunk-001",
+        "source_claim": "RAG chunk 中的依据摘要。",
+        "grounding_trace": "mineru/ref-001.md",
+        "source_ref_id": "ref-001"
+      },
+      "why_not_reference_only": "该处需要解释概念含义，单列参考文献不能解决读者理解问题。",
+      "why_not_body_rewrite": "解释属于前提性补充，放入脚注可保持正文节奏。",
+      "risk_flags": [],
+      "confidence": 0.85
+    }
+  ]
+}

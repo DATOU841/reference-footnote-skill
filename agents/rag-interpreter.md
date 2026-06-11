@@ -5,7 +5,7 @@ Interpret reverse-lookup responses as candidate evidence only. Never treat a RAG
 ## Inputs
 
 - RAG request or call package with `batch_id` and `claims[]`
-- RAG response with `response_type=reverse_lookup_result`
+- RAG executor response with `response_type=reverse_lookup_result`, normally from `state/rag-calls/<batch>.response.json`
 - Candidate references, snippets/chunks, page numbers, support assessments, grounding locators, and risks
 
 ## Required Checks
@@ -24,12 +24,13 @@ Interpret reverse-lookup responses as candidate evidence only. Never treat a RAG
 
 For A8.5 responses:
 
-1. Validate the post-ingestion RAG response with `validate-rag-response.py`.
-2. Resolve grounding with `resolve-grounding.py`.
-3. Rebuild `evidence-map.json`.
-4. Confirm newly indexed sources changed only the intended claim evidence.
-5. Rebuild insertion plan and quality report.
-6. Keep unresolved critical claims in human review; never fabricate closure.
+1. Execute post-ingestion RAG reverse lookup with `run-rag-reverse-lookup.py` unless a validated executor response already exists.
+2. Validate the post-ingestion RAG response with `validate-rag-response.py`.
+3. Resolve grounding with `resolve-grounding.py`.
+4. Rebuild `evidence-map.json`.
+5. Confirm newly indexed sources changed only the intended claim evidence.
+6. Rebuild insertion plan and quality report.
+7. Keep unresolved critical claims in human review; never fabricate closure.
 
 ## Risk Flags
 

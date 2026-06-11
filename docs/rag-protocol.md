@@ -1,6 +1,14 @@
 # RAG Reverse Lookup Protocol
 
-The skill only builds and validates reverse-lookup payloads. It does not query a live RAG service in 0.5.1-dev. RAG reverse lookup is blocked until initial library intake is complete, unless the user explicitly declared an existing RAG library.
+The skill builds, executes, and validates reverse-lookup payloads after 2.5 RAG ingestion is complete. It does not ingest into RAG. RAG reverse lookup is blocked until initial library intake is complete, unless the user explicitly declared an existing RAG library.
+
+## Executor
+
+`scripts/run-rag-reverse-lookup.py` reads `state/rag-requests/<batch>.json`, reads `config/rag-executor.yaml`, then writes `state/rag-calls/<batch>.response.json`.
+
+- `mode: mock` keeps local gates offline and can synthesize fixture responses.
+- `mode: live` requires `base_url`, `api_key_env`, and `model`.
+- missing live configuration blocks with `missing_rag_executor_config`; it is not converted into a user-facing response request.
 
 ## Request
 
@@ -28,9 +36,10 @@ Candidate support strength must be one of:
 
 - `strong_support`
 - `partial_support`
+- `analogy_only`
 - `background_only`
 - `conflict`
-- `no_support`
+- `no_support_found`
 
 ## Evidence Rules
 

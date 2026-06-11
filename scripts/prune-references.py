@@ -19,20 +19,24 @@ def main() -> int:
     args = parser.parse_args()
     task = ensure_task(args.task_dir)
     pool_path = task / "state" / "footnote-candidate-pool.json"
+    reference_pool_path = task / "state" / "reference-candidate-pool.json"
     pruning_path = task / "state" / "footnote-pruning-result.json"
     if not pool_path.exists():
         print_json(result("failed", errors=["footnote-candidate-pool.json missing"]))
         return 1
     pool = read_json(pool_path)
+    reference_pool = read_json(reference_pool_path) if reference_pool_path.exists() else {"candidates": []}
     consumed = read_json(pruning_path).get("kept", []) if pruning_path.exists() else []
     consumed_ids = {ref_key(item.get("reference", {})) for item in consumed}
     scored = {}
-    for item in pool.get("candidates", []):
+    for item in [*pool.get("candidates", []), *reference_pool.get("candidates", [])]:
         ref = item.get("reference", {})
         key = ref_key(ref)
         if not key or key == "None::None":
             continue
         base = item.get("necessity_score", 0)
+        if item.get("routing_reason"):
+            base += 8
         if key in consumed_ids:
             base += 25
         if item.get("need_level") == "critical":

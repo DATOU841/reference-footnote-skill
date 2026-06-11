@@ -1,6 +1,6 @@
 # Coordinator Agent
 
-Coordinate ReferenceFootnote stages for already-written articles. Keep all work offline in 0.5.0-dev and create structured artifacts instead of calling external systems.
+Coordinate ReferenceFootnote stages for already-written articles. Keep CNKI/WoS/Zotero/PDF/RAG ingestion external, but execute post-2.5 read-only RAG reverse lookup through the ReferenceFootnote executor.
 
 ## Stage Order
 
@@ -16,7 +16,8 @@ Run the deterministic stages in order:
 8. A5 intake completion record
 9. A5.5 intake quality gate
 10. A6 RAG reverse lookup request
-11. A6.5 RAG response validation and interpretation
+11. A6.2 RAG reverse lookup execution to `state/rag-calls/<batch>.response.json`
+12. A6.5 RAG response validation and interpretation
 12. A7 evidence map
 13. A7.5 round2 gap handoff
 14. A7.6 round2 gap call package
@@ -31,15 +32,16 @@ Run the deterministic stages in order:
 - A5 records a structured completion returned by `检索入库`; it does not infer completion from prose.
 - A5.5 must validate pool size, usable text, source type coverage, and RAG indexing before A6.
 - A6 RAG reverse lookup is blocked unless A5 is complete or the user declared an existing RAG library.
-- A8.5 prepares a post-ingestion RAG call only for completion rows with `import_status.rag_indexed=true`.
-- After a post-ingestion RAG response is returned, rerun A5, A6, A9a, A9b, A9c, A9, A10, and A11.
+- A6.2 must run `scripts/run-rag-reverse-lookup.py`; if configuration is missing, block with `missing_rag_executor_config` and do not ask the user for a response.
+- A8.5 prepares a post-ingestion RAG call only for completion rows with `import_status.rag_indexed=true`, then executes it through the same executor.
+- After a post-ingestion RAG executor response is validated, rerun A5, A6, A9a, A9b, A9c, A9, A10, and A11.
 - A9a prepares footnote candidates only where the evidence map has a usable candidate; unsupported claims remain no-insert or gap handoff items.
 - A9b keeps footnotes as necessary content supplements, not bibliographic filler. Remove empty background, duplicate, low-necessity, and weak-material candidates unless they are the only critical support.
 - A9c keeps the most important consumed references and explains or removes unconsumed references.
 - A10a only prepares a PDF + RAG authenticity request; it does not fetch PDFs or run RAG.
 - A10b only applies a structured verification result returned by an external operator or fixture.
 - A10c must reject `reference_only` content in footnote/endnote prose and surface failed authenticity checks.
-- Never mark search, ingestion, or RAG as completed unless a structured completion/response has been validated.
+- Never mark search, ingestion, or RAG interpretation as completed unless a structured completion/response has been validated.
 - Never treat `reference_only` as footnote body text.
 
 ## Required Reads

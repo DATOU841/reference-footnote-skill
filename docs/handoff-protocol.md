@@ -193,7 +193,7 @@ Top-level fields:
 | --- | --- |
 | `call_type` | `rag_reverse_lookup_after_ingestion` |
 | `target_system` | `RAG platform` |
-| `execution_status` | fixed `prepared_not_executed` |
-| `requires_external_rag_operator` | true |
+| `execution_status` | fixed `ready_for_referencefootnote_executor` |
+| `executor_script` | `scripts/run-rag-reverse-lookup.py` |
 | `claims[]` | only claims whose completion row has `import_status.rag_indexed=true` |
 | `return_contract` | required RAG response fields and risk policy |

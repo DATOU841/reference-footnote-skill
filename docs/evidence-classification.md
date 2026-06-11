@@ -26,6 +26,16 @@ Risk flags:
 
 Unsupported critical claims must not receive fabricated notes.
 
+## Thinking Layer Boundary
+
+RAG evidence classification answers whether a source can support a claim. It does not answer whether the reader needs a footnote. In 0.6.0-dev, `support_assessment.reasoning` is never used as footnote text. It is passed into S66-S68 as material for a thinking layer that must decide:
+
+- whether正文存在“文中未尽而必要解释”；
+- whether the item should be `footnote_needed`, `reference_only`, `rewrite_needed`, `no_note`, or `human_review`;
+- whether the proposed note is grounded in RAG evidence and still independent from reference formatting.
+
+Only S68 `validated_footnotes` may enter the footnote candidate pool. Evidence-only material remains reference planning material.
+
 ## Writer Evidence Type Mapping
 
 ReferenceFootnote also carries evidence types for `正文写作` consumption:

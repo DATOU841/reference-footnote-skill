@@ -1,6 +1,6 @@
 # State Machine
 
-ReferenceFootnote 0.5.2-dev uses a single-line, offline-first stage machine. The main status source is `state/referencefootnote-flow-status.json`; the main evidence source is `state/evidence-trace-ledger.json`.
+ReferenceFootnote 0.5.3-dev uses a single-line stage machine. The main status source is `state/referencefootnote-flow-status.json`; the main evidence source is `state/evidence-trace-ledger.json`.
 
 | Stage | Name | Main Output | Gate |
 | --- | --- | --- | --- |
@@ -10,7 +10,9 @@ ReferenceFootnote 0.5.2-dev uses a single-line, offline-first stage machine. The
 | S30 | search blueprint | `search-blueprint.json` | retrieval directions present |
 | S40 | intake handoff | `search-intake-requests/*.json`, `search-intake-calls/*.json` | call package prepared, not executed |
 | S45 | intake completion/gate | `intake-status.json`, `intake-quality-gate.json` | source pool quality checked |
-| S50 | sequential RAG reverse lookup | `rag-requests/*.json`, `evidence-interpretations/*.json` | per-claim RAG response interpreted |
+| S50a | build RAG request | `rag-requests/*.json` | post-2.5 request exists |
+| S50b | execute RAG reverse lookup | `rag-calls/*.response.json` | executor response exists or `missing_rag_executor_config` blocks |
+| S50c | validate RAG response | `evidence-interpretations/*.json` | per-claim RAG response interpreted |
 | S55 | grounding resolution | `grounding-resolution.json` | Markdown/parsed text/page-map/PDF fallback state resolved |
 | S60 | evidence trace ledger | `evidence-trace-ledger.json` | full-text order trace built |
 | S65 | evidence map/gap handoff | `evidence-map.json`, gap requests | unsupported needs routed |
@@ -24,4 +26,4 @@ ReferenceFootnote 0.5.2-dev uses a single-line, offline-first stage machine. The
 | S110 | final delivery gate | `final-gate-result.json` | ledger, cleanup, audit, full text all pass |
 | S120 | delivery package | `delivery/` | top-level package is not cluttered |
 
-Collaboration stages generate call packages or consume offline回执 only. The skill does not run real CNKI/WoS/Zotero/PDF acquisition/RAG import. Writing-pool review is independent of the `正文写作` skill and cannot generate an article from scratch.
+Collaboration stages generate search-intake call packages, but post-2.5 RAG reverse lookup is a ReferenceFootnote responsibility. The skill does not run real CNKI/WoS/Zotero/PDF acquisition/RAG import. Writing-pool review is independent of the `正文写作` skill and cannot generate an article from scratch.

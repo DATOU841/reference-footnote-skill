@@ -5,7 +5,19 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
-from reflib import ANNOTATION_PURPOSES, NOTE_TYPES, ensure_task, print_json, read_json, result, write_json
+from reflib import (
+    ANNOTATION_PURPOSES,
+    FOOTNOTE_BARRED_PURPOSES,
+    NOTE_TYPES,
+    ensure_task,
+    has_explanatory_content,
+    is_ai_defensive_note,
+    is_reference_format_text,
+    print_json,
+    read_json,
+    result,
+    write_json,
+)
 
 
 def prune_reason(item: dict, seen_claims: set[str]) -> str | None:
@@ -13,15 +25,20 @@ def prune_reason(item: dict, seen_claims: set[str]) -> str | None:
         return "invalid_note_type"
     if item.get("annotation_purpose") not in ANNOTATION_PURPOSES:
         return "invalid_annotation_purpose"
-    if item.get("annotation_purpose") == "reference_only" and item.get("note_type") in {"footnote", "endnote"}:
-        return "reference_only_barred_from_footnote_body"
+    if item.get("annotation_purpose") in FOOTNOTE_BARRED_PURPOSES:
+        return "evidence_purpose_barred_from_footnote"
+    note_text = item.get("candidate_note_text", "")
+    if is_ai_defensive_note(note_text):
+        return "ai_defensive_note"
+    if is_reference_format_text(note_text):
+        return "reference_format_in_footnote_body"
     if item.get("annotation_purpose") == "background" and item.get("necessity_score", 0) < 55:
         return "background_without_necessary_supplement"
     if item.get("claim_id") in seen_claims and item.get("need_level") != "critical":
         return "duplicate_claim_kept_stronger_candidate"
-    if item.get("material_flag") == "very_low" and item.get("need_level") != "critical":
+    if item.get("material_flag") == "very_low" and item.get("need_level") != "critical" and not item.get("thinking_evidence_used"):
         return "very_low_material_noncritical"
-    if item.get("necessity_score", 0) < 35:
+    if item.get("necessity_score", 0) < 35 and not item.get("thinking_evidence_used"):
         return "low_necessity_score"
     return None
 
@@ -59,6 +76,7 @@ def main() -> int:
         warnings.append("footnote_count_excessive")
     out_data = {
         "status": status,
+        "source_stage": pool.get("source_stage"),
         "target_final_count": args.target,
         "kept": kept,
         "removed": removed,

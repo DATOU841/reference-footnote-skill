@@ -1,0 +1,46 @@
+{
+  "request_id": "ft-thinking-001",
+  "article_id": "article-id",
+  "protocol_version": "1.0",
+  "execution_status": "prepared_not_executed",
+  "global_instruction": "大多数 claim 不需要脚注。只有正文确有未尽解释且读者必须知道时，才输出 footnote_needed。",
+  "items": [
+    {
+      "order": 1,
+      "claim_id": "c-001",
+      "paragraph_id": "p-001",
+      "sentence_id": "p-001-s-1",
+      "body_context": {
+        "target_sentence": "正文目标句。",
+        "preceding_context": "前一句。",
+        "following_context": "后一句。",
+        "paragraph_text": "完整段落。",
+        "chapter_title": "章节标题"
+      },
+      "claim_metadata": {
+        "claim_type": "theoretical_claim",
+        "need_level": "critical",
+        "citation_type": "secondary_source"
+      },
+      "rag_evidence": {
+        "support_strength": "strong_support",
+        "confidence": 0.85,
+        "chunk_id": "chunk-001",
+        "chunk_text": "RAG chunk 原文。",
+        "source_ref_id": "ref-001",
+        "grounding_status": "full_markdown_grounding",
+        "grounding_summary": "mineru/ref-001.md",
+        "resolved_source": {}
+      },
+      "consumable_literature": {
+        "topic": "目标论点",
+        "source_ref_id": "ref-001",
+        "source_type": "journal_article",
+        "key_concepts": []
+      },
+      "known_risks": [],
+      "instruction": "判断此处正文是否有文中未尽而必要的解释需求。"
+    }
+  ],
+  "skipped": []
+}

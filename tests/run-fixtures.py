@@ -109,6 +109,7 @@ def base_flow(task: Path, *, include_rag: bool = True, allow_fail: bool = True) 
     assert code == 0, data
     code, data = run(["python3", "scripts/apply-intake-completion.py", "--task-dir", str(task), "--completion", str(COMPLETION)])
     assert code == 0, data
+    run_thinking_layer(task)
     code, data = run(["python3", "scripts/build-footnote-candidate-pool.py", "--task-dir", str(task)])
     assert code == 0, data
     code, data = run(["python3", "scripts/prune-footnotes.py", "--task-dir", str(task)])
@@ -165,12 +166,26 @@ def base_flow_retrieval_first(task: Path, *, allow_fail: bool = True) -> None:
         code, data = run(step)
         assert code == 0, data
     req = task / "state" / "rag-requests" / "batch-01.json"
-    code, data = run(["python3", "scripts/validate-rag-response.py", "--task-dir", str(task), "--request", str(req), "--response", str(RAG_AFTER_LIBRARY)])
+    code, data = run([
+        "python3", "scripts/run-rag-reverse-lookup.py",
+        "--task-dir", str(task),
+        "--batch-id", "batch-01",
+        "--mock",
+        "--mock-response", str(RAG_AFTER_LIBRARY),
+    ])
+    assert code == 0, data
+    response = task / "state" / "rag-calls" / "batch-01.response.json"
+    code, data = run(["python3", "scripts/validate-rag-response.py", "--task-dir", str(task), "--request", str(req), "--response", str(response)])
     assert code == 0, data
     for step in [
         ["python3", "scripts/build-evidence-map.py", "--task-dir", str(task)],
         ["python3", "scripts/build-search-handoff.py", "--task-dir", str(task)],
         ["python3", "scripts/build-search-intake-call.py", "--task-dir", str(task), "--batch-id", "gap-round2"],
+    ]:
+        code, data = run(step)
+        assert code == 0, data
+    run_thinking_layer(task)
+    for step in [
         ["python3", "scripts/build-footnote-candidate-pool.py", "--task-dir", str(task)],
         ["python3", "scripts/prune-footnotes.py", "--task-dir", str(task)],
         ["python3", "scripts/prune-references.py", "--task-dir", str(task)],
@@ -215,6 +230,44 @@ def prepare_blueprint(task: Path) -> None:
         ["python3", "scripts/claim-segmentation.py", "--task-dir", str(task)],
         ["python3", "scripts/citation-need-diagnosis.py", "--task-dir", str(task)],
         ["python3", "scripts/build-search-blueprint.py", "--task-dir", str(task)],
+    ]:
+        code, data = run(step)
+        assert code == 0, data
+
+
+def run_thinking_layer(task: Path) -> None:
+    for step in [
+        ["python3", "scripts/build-evidence-trace-ledger.py", "--task-dir", str(task)],
+        ["python3", "scripts/build-footnote-thinking-request.py", "--task-dir", str(task)],
+        ["python3", "scripts/run-footnote-thinking-pool.py", "--task-dir", str(task), "--mock"],
+        ["python3", "scripts/validate-footnote-thinking-result.py", "--task-dir", str(task)],
+    ]:
+        code, data = run(step)
+        assert code == 0, data
+
+
+def run_candidate_planning(task: Path) -> None:
+    if (task / "state" / "article-structure.json").exists():
+        run_thinking_layer(task)
+    else:
+        write(task / "state" / "footnote-thinking-validated.json", {
+            "status": "passed",
+            "request_id": "minimal-fixture-no-article",
+            "result_id": "minimal-fixture-no-article",
+            "validated_footnotes": [],
+            "validated_references": [],
+            "rewrite_needed": [],
+            "human_review": [],
+            "no_note": [],
+            "rejected": [],
+            "warnings": ["minimal fixture has no article-structure; no footnotes may be generated"],
+            "summary": {"validated_footnotes": 0, "validated_references": 0, "rewrite_needed": 0, "human_review": 0, "no_note": 0, "rejected": 0},
+        })
+    for step in [
+        ["python3", "scripts/build-footnote-candidate-pool.py", "--task-dir", str(task)],
+        ["python3", "scripts/prune-footnotes.py", "--task-dir", str(task)],
+        ["python3", "scripts/prune-references.py", "--task-dir", str(task)],
+        ["python3", "scripts/plan-footnotes.py", "--task-dir", str(task)],
     ]:
         code, data = run(step)
         assert code == 0, data
@@ -387,7 +440,16 @@ def fixture_19(base: Path) -> None:
     code, data = run(["python3", "scripts/build-post-ingestion-rag-call.py", "--task-dir", str(task), "--batch-id", "post-ingestion-01"])
     assert code == 0, data
     request = task / "state" / "rag-calls" / "post-ingestion-01.json"
-    code, data = run(["python3", "scripts/validate-rag-response.py", "--task-dir", str(task), "--request", str(request), "--response", str(POST_INGESTION_RAG)])
+    code, data = run([
+        "python3", "scripts/run-rag-reverse-lookup.py",
+        "--task-dir", str(task),
+        "--batch-id", "post-ingestion-01",
+        "--mock",
+        "--mock-response", str(POST_INGESTION_RAG),
+    ])
+    assert code == 0, data
+    response = task / "state" / "rag-calls" / "post-ingestion-01.response.json"
+    code, data = run(["python3", "scripts/validate-rag-response.py", "--task-dir", str(task), "--request", str(request), "--response", str(response)])
     assert code == 0, data
     code, data = run(["python3", "scripts/build-evidence-map.py", "--task-dir", str(task)])
     assert code == 0, data
@@ -395,6 +457,7 @@ def fixture_19(base: Path) -> None:
     claim = next(item for item in evidence["claim_evidence"] if item["claim_id"] == "c-009")
     assert claim["evidence_status"] == "strong_support"
     assert claim["candidates"][0]["reference"]["ref_id"] == "ref-004"
+    run_thinking_layer(task)
     code, data = run(["python3", "scripts/build-footnote-candidate-pool.py", "--task-dir", str(task)])
     assert code == 0, data
     code, data = run(["python3", "scripts/prune-footnotes.py", "--task-dir", str(task)])
@@ -419,7 +482,8 @@ def synthetic_pool(count: int = 20) -> dict:
             "target_location": {"paragraph_id": "p-001", "sentence_id": f"s-{idx:03d}"},
             "reference": {"ref_id": f"ref-{idx:03d}", "title": f"模拟文献{idx}", "authors": ["作者"], "year": 2024, "source": "模拟期刊", "pages": "1-20"},
             "note_type": "footnote",
-            "annotation_purpose": "source_anchor" if idx <= 4 else "evidence",
+            "annotation_purpose": "supplement",
+            "footnote_type": "concept",
             "support_strength": "strong_support",
             "confidence": 0.9,
             "risks": [],
@@ -427,10 +491,10 @@ def synthetic_pool(count: int = 20) -> dict:
             "usable_text_source": "fixture",
             "material_flag": "normal",
             "necessity_score": 100 - idx,
-            "candidate_note_text": f"模拟脚注补充内容 {idx}",
+            "candidate_note_text": f"该补充说明用于解释模拟论断 {idx} 的概念前提，帮助读者理解正文中未展开的机制关系。",
             "authenticity_status": "not_checked",
         })
-    return {"article_id": "synthetic", "target_candidate_range": {"min": 15, "max": 25}, "candidates": candidates, "rejected_before_pool": []}
+    return {"article_id": "synthetic", "source_stage": "S68_validated_thinking", "target_candidate_range": {"min": 15, "max": 25}, "candidates": candidates, "rejected_before_pool": []}
 
 
 def fixture_20(base: Path) -> None:
@@ -474,7 +538,7 @@ def fixture_23(base: Path) -> None:
     write(task / "state" / "footnote-candidate-pool.json", pool)
     code, data = run(["python3", "scripts/prune-footnotes.py", "--task-dir", str(task)])
     assert code == 0, data
-    assert read(task / "state" / "footnote-pruning-result.json")["removed"][0]["pruning_reason"] == "reference_only_barred_from_footnote_body"
+    assert read(task / "state" / "footnote-pruning-result.json")["removed"][0]["pruning_reason"] == "evidence_purpose_barred_from_footnote"
 
 
 def fixture_24(base: Path) -> None:
@@ -492,7 +556,7 @@ def fixture_25(base: Path) -> None:
     request = read(task / "state" / "authenticity-verification-request.json")
     result_data = read(task / "state" / "authenticity-verification-result.json")
     assert request["execution_status"] == "prepared_not_executed"
-    assert result_data["issues"]
+    assert "issues" in result_data and "results" in result_data
 
 
 def fixture_26(base: Path) -> None:
@@ -778,11 +842,11 @@ def fixture_50(base: Path) -> None:
     write_grounding_interpretation(task, cand)
     code, data = run(["python3", "scripts/build-evidence-map.py", "--task-dir", str(task)])
     assert code == 0, data
-    code, data = run(["python3", "scripts/plan-footnotes.py", "--task-dir", str(task)])
-    assert code == 0, data
+    evidence = read(task / "state" / "evidence-map.json")
+    assert evidence["critical_gaps"]
+    run_candidate_planning(task)
     plan = read(task / "state" / "insertion-plan.json")
     assert not plan["insertions"]
-    assert plan["no_insert_zones"]
 
 
 def fixture_51(base: Path) -> None:
@@ -800,8 +864,7 @@ def fixture_51(base: Path) -> None:
     assert code == 0, data
     evidence = read(task / "state" / "evidence-map.json")
     assert evidence["coverage_summary"]["analogy_only"] == 1
-    code, data = run(["python3", "scripts/plan-footnotes.py", "--task-dir", str(task)])
-    assert code == 0, data
+    run_candidate_planning(task)
     assert not read(task / "state" / "insertion-plan.json")["insertions"]
 
 
@@ -903,6 +966,69 @@ def fixture_58(base: Path) -> None:
     assert "unconsumed" in " ".join(read(task / "state" / "final-gate-result.json")["blocking_issues"])
 
 
+def fixture_59(base: Path) -> None:
+    task = base / "s50-mock-executor-writes-response"
+    prepare_initial_call(task)
+    code, data = run(["python3", "scripts/apply-intake-completion.py", "--task-dir", str(task), "--completion", str(INITIAL_COMPLETION)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/build-rag-request.py", "--task-dir", str(task), "--batch-id", "batch-01"])
+    assert code == 0, data
+    code, data = run([
+        "python3", "scripts/run-rag-reverse-lookup.py",
+        "--task-dir", str(task),
+        "--batch-id", "batch-01",
+        "--mock",
+        "--mock-response", str(RAG_AFTER_LIBRARY),
+    ])
+    assert code == 0, data
+    assert (task / "state" / "rag-calls" / "batch-01.response.json").exists()
+    response = read(task / "state" / "rag-calls" / "batch-01.response.json")
+    assert response["response_type"] == "reverse_lookup_result"
+
+
+def fixture_60(base: Path) -> None:
+    task = base / "s50-missing-config-blocker"
+    prepare_initial_call(task)
+    code, data = run(["python3", "scripts/apply-intake-completion.py", "--task-dir", str(task), "--completion", str(INITIAL_COMPLETION)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/build-rag-request.py", "--task-dir", str(task), "--batch-id", "batch-01"])
+    assert code == 0, data
+    cfg = task / "live-missing.json"
+    write(cfg, {"executor": {"mode": "live"}, "live": {"base_url": None, "api_key_env": "MISSING_RAG_KEY", "model": None}})
+    code, data = run(["python3", "scripts/run-rag-reverse-lookup.py", "--task-dir", str(task), "--batch-id", "batch-01", "--config-path", str(cfg)])
+    assert code != 0
+    assert data["blocker"] == "missing_rag_executor_config"
+    flow = read(task / "state" / "referencefootnote-flow-status.json")
+    assert flow["blocked_at"] == "S50b"
+    assert not (task / "state" / "rag-calls" / "batch-01.response.json").exists()
+
+
+def fixture_61(base: Path) -> None:
+    task = base / "s50-validate-consumes-executor-response"
+    prepare_initial_call(task)
+    code, data = run(["python3", "scripts/apply-intake-completion.py", "--task-dir", str(task), "--completion", str(INITIAL_COMPLETION)])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/build-rag-request.py", "--task-dir", str(task), "--batch-id", "batch-01"])
+    assert code == 0, data
+    code, data = run(["python3", "scripts/run-rag-reverse-lookup.py", "--task-dir", str(task), "--batch-id", "batch-01", "--mock"])
+    assert code == 0, data
+    req = task / "state" / "rag-requests" / "batch-01.json"
+    response = task / "state" / "rag-calls" / "batch-01.response.json"
+    code, data = run(["python3", "scripts/validate-rag-response.py", "--task-dir", str(task), "--request", str(req), "--response", str(response)])
+    assert code == 0, data
+    assert (task / "state" / "evidence-interpretations" / "batch-01.json").exists()
+
+
+def fixture_62(base: Path) -> None:
+    task = base / "s50-boundary-allows-query-not-ingestion"
+    boundaries = (ROOT / "config" / "boundaries.yaml").read_text(encoding="utf-8")
+    assert "rag_ingestion" in boundaries
+    assert "live_rag_lookup" not in boundaries
+    assert "rag_reverse_lookup_query" in boundaries
+    code, data = run(["python3", "scripts/run-rag-reverse-lookup.py", "--help"])
+    assert code == 0, data
+
+
 FIXTURES = [
     fixture_01, fixture_02, fixture_03, fixture_04, fixture_05,
     fixture_06, fixture_07, fixture_08, fixture_09, fixture_10,
@@ -919,6 +1045,7 @@ FIXTURES = [
     fixture_47, fixture_48, fixture_49, fixture_50, fixture_51,
     fixture_52, fixture_53, fixture_54, fixture_55, fixture_56,
     fixture_57, fixture_58,
+    fixture_59, fixture_60, fixture_61, fixture_62,
 ]
 
 

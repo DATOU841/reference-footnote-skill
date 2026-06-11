@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build an offline post-ingestion RAG reverse-lookup call package."""
+"""Build post-ingestion RAG reverse-lookup metadata for the executor."""
 
 from __future__ import annotations
 
@@ -52,8 +52,8 @@ def main() -> int:
         "batch_id": args.batch_id,
         "source_skill": "参考文献补注",
         "target_system": "RAG platform",
-        "execution_status": "prepared_not_executed",
-        "requires_external_rag_operator": True,
+        "execution_status": "ready_for_referencefootnote_executor",
+        "executor_script": "scripts/run-rag-reverse-lookup.py",
         "input_completion_id": completion.get("completion_id"),
         "claims": targets,
         "return_contract": {

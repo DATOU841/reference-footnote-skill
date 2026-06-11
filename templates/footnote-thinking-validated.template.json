@@ -1,0 +1,20 @@
+{
+  "status": "passed",
+  "request_id": "ft-thinking-001",
+  "result_id": "ft-thinking-result-001",
+  "validated_footnotes": [],
+  "validated_references": [],
+  "rewrite_needed": [],
+  "human_review": [],
+  "no_note": [],
+  "rejected": [],
+  "warnings": [],
+  "summary": {
+    "validated_footnotes": 0,
+    "validated_references": 0,
+    "rewrite_needed": 0,
+    "human_review": 0,
+    "no_note": 0,
+    "rejected": 0
+  }
+}

@@ -1,6 +1,6 @@
 # Collaboration Flow
 
-`0.5.1-dev` uses a retrieval-first collaboration layer. ReferenceFootnote first derives article-level retrieval directions, then prepares an initial library-building package for `检索入库`. RAG reverse lookup happens only after structured ingestion completion and intake quality validation.
+`0.5.3-dev` uses a retrieval-first collaboration layer. ReferenceFootnote first derives article-level retrieval directions, then prepares an initial library-building package for `检索入库`. RAG reverse lookup happens only after structured ingestion completion and intake quality validation, and is then executed by ReferenceFootnote's own RAG executor.
 
 ## Flow
 
@@ -12,10 +12,11 @@
 6. Record completion with `apply-intake-completion.py`.
 7. Validate library quality with `validate-intake-quality.py`.
 8. Build RAG reverse lookup request with `build-rag-request.py`.
-9. Validate returned RAG response with `validate-rag-response.py`.
-10. Resolve Markdown/page-map grounding with `resolve-grounding.py`.
-11. Build evidence map and, if needed, create round2 gap requests with `build-search-handoff.py`.
-12. Generate footnote/reference plans, quality report, authenticity request, and delivery package.
+9. Execute read-only RAG reverse lookup with `run-rag-reverse-lookup.py`; the internal response is `state/rag-calls/<batch>.response.json`.
+10. Validate the executor response with `validate-rag-response.py`.
+11. Resolve Markdown/page-map grounding with `resolve-grounding.py`.
+12. Build evidence map and, if needed, create round2 gap requests with `build-search-handoff.py`.
+13. Generate footnote/reference plans, quality report, authenticity request, and delivery package.
 
 `tests/run-fixtures.py` includes offline retrieval-first fixtures. They verify that RAG is blocked before ingestion, initial library handoff packages are produced, intake quality gates pass/fail deterministically, and delivery includes blueprint and intake gate artifacts.
 
@@ -61,11 +62,11 @@ It writes:
 state/rag-calls/<batch>.json
 ```
 
-Only completion rows whose `import_status.rag_indexed=true` become RAG lookup targets. This keeps the second lookup tied to confirmed ingestion, not to search promises.
+Only completion rows whose `import_status.rag_indexed=true` become RAG lookup targets. This keeps the second lookup tied to confirmed ingestion, not to search promises. The package is executed by `run-rag-reverse-lookup.py`; it is not a user-facing回执 request.
 
 ## Boundary
 
-ReferenceFootnote may say "call package prepared" but must not say search or RAG has completed until the responsible system returns a structured completion or response. If ingestion already produced MinerU/MU Markdown or equivalent parsed text, use it as the default verification artifact; request PDF fallback only for page-map, OCR, or layout risks.
+ReferenceFootnote may say "search-intake call package prepared" but must not say search or ingestion has completed until `检索入库` returns structured completion. For RAG reverse lookup, ReferenceFootnote writes and consumes its own executor response. If executor configuration is missing, stop with `missing_rag_executor_config`; do not ask the user to supply a response. If ingestion already produced MinerU/MU Markdown or equivalent parsed text, use it as the default verification artifact; request PDF fallback only for page-map, OCR, or layout risks.
 
 ReferenceFootnote must not:
 
